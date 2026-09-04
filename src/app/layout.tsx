@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Newsreader } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import Navbar from '@/components/Navbar';
@@ -52,6 +53,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de" className={`${plusJakarta.variable} ${newsreader.variable} h-full antialiased`}>
+      <head>
+        <Script
+          id="google-adsense-verification"
+          async
+          strategy="beforeInteractive"
+          crossOrigin="anonymous"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5816871570097122"
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-white text-[#171717] font-sans">
         <FavoritesProvider>
           <Navbar />

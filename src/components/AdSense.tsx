@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Script from 'next/script';
 
 const ADSENSE_CLIENT =
   process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT || 'ca-pub-5816871570097122';
@@ -32,13 +31,6 @@ export default function AdSense({ slot, format = 'auto', className = '' }: AdSen
 
   return (
     <>
-      <Script
-        id="google-adsense"
-        async
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-      />
       {slot && (
         <ins
           className={`adsbygoogle block overflow-hidden ${className}`}
