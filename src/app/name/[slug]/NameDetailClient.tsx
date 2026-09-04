@@ -169,12 +169,12 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               <span
-                className={`text-xs px-3 py-0.5 rounded-full font-medium border ${
+                className={`text-xs font-medium ${
                   name.gender === 'girl'
-                    ? 'bg-[#FFF5F8] text-[#FF4F87] border-[#FFD6E3]'
+                    ? 'text-[#FF4F87]'
                     : name.gender === 'boy'
-                    ? 'bg-blue-50/70 text-blue-700 border-blue-100'
-                    : 'bg-purple-50/70 text-purple-700 border-purple-100'
+                    ? 'text-blue-700'
+                    : 'text-purple-700'
                 }`}
               >
                 {genderStr}
@@ -255,7 +255,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           {name.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs px-3 py-0.5 rounded-full bg-[#FFF5F8] border border-[#F0E4E7] text-[#777777]"
+              className="text-xs text-[#777777]"
             >
               {tag}
             </span>

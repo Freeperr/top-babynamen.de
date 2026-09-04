@@ -28,7 +28,7 @@ export default function JungennamenPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-10">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#FF4F87] px-3 py-1 rounded-full bg-[#FFF5F8] border border-[#FFD6E3] inline-block mb-3">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#FF4F87] inline-block mb-3">
           Jungennamen Kollektion
         </span>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-[#171717] tracking-tight mb-3">

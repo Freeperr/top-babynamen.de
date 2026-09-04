@@ -32,7 +32,7 @@ export default function SpecialNamesSection() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-3.5">
-                    <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#FFF5F8] text-[#FF4F87] border border-[#FFD6E3]">
+                    <span className="text-[11px] font-medium text-[#FF4F87]">
                       Seltenheit #{name.popularityRank}
                     </span>
                     <button

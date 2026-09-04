@@ -129,10 +129,10 @@ export default function SpeedChallenge() {
               {currentName.name}
             </h4>
             <span
-              className={`text-xs px-3 py-0.5 rounded-full font-medium border inline-block mb-4 ${
+              className={`text-xs font-medium inline-block mb-4 ${
                 currentName.gender === 'girl'
-                  ? 'bg-[#FFF5F8] text-[#FF4F87] border-[#FFD6E3]'
-                  : 'bg-blue-50/70 text-blue-700 border-blue-100'
+                  ? 'text-[#FF4F87]'
+                  : 'text-blue-700'
               }`}
             >
               {currentName.gender === 'girl' ? 'Mädchen' : 'Junge'} · {currentName.origin}

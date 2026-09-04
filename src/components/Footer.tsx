@@ -124,7 +124,6 @@ export default function Footer() {
         <div className="pt-8 border-t border-[#F2E3E8] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#777777]">
           <p>© {new Date().getFullYear()} top-babynamen.de – Alle Rechte vorbehalten.</p>
           <p className="flex items-center gap-1.5">
-            Gestaltet mit <Heart className="w-3.5 h-3.5 fill-[#FF4F87] text-[#FF4F87]" /> für junge Familien in Deutschland, Österreich und der Schweiz.
           </p>
         </div>
       </div>

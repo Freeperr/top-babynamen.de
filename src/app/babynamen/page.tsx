@@ -7,6 +7,7 @@ import { BABY_NAMES } from '@/data/names';
 import { filterNames } from '@/lib/nameService';
 import { Gender, NameFilters } from '@/types/name';
 import NameCard from '@/components/NameCard';
+import AdSense from '@/components/AdSense';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -79,7 +80,7 @@ function SearchPageContent() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
       {/* Header Banner */}
       <div className="text-center max-w-3xl mx-auto mb-10">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#FF4F87] px-3 py-1 rounded-full bg-[#FFF5F8] border border-[#FFD6E3] inline-block mb-3">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#FF4F87] inline-block mb-3">
           Große Namensdatenbank
         </span>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-[#171717] tracking-tight mb-3">
@@ -268,6 +269,10 @@ function SearchPageContent() {
       </div>
 
       {/* Results Header Count */}
+      <AdSense
+        slot={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_SLOT_NAMES || ''}
+        className="mx-auto mb-8 min-h-[90px] max-w-3xl"
+      />
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm font-semibold text-[#171717]">
           {filtered.length} {filtered.length === 1 ? 'Name gefunden' : 'Namen gefunden'}

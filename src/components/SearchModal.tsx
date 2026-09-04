@@ -129,12 +129,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           {name.name}
                         </span>
                         <span
-                          className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                          className={`text-[11px] font-medium ${
                             name.gender === 'girl'
-                              ? 'bg-[#FFF5F8] text-[#FF4F87] border border-[#FFD6E3]'
+                              ? 'text-[#FF4F87]'
                               : name.gender === 'boy'
-                              ? 'bg-blue-50 text-blue-600 border border-blue-100'
-                              : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                              ? 'text-blue-600'
+                              : 'text-emerald-600'
                           }`}
                         >
                           {name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex'}

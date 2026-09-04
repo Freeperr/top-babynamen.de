@@ -266,7 +266,7 @@ export default function NameDiscoveryWizard() {
                     >
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#FFF5F8] text-[#FF4F87] border border-[#FFD6E3]">
+                          <span className="text-xs font-semibold text-[#FF4F87]">
                             {score}% Treffer
                           </span>
                           <button

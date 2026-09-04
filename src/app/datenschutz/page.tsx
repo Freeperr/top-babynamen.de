@@ -53,7 +53,14 @@ export default function DatenschutzPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-bold text-[#171717] mb-2">4. Deine Rechte</h2>
+            <h2 className="text-base font-bold text-[#171717] mb-2">4. Google AdSense</h2>
+            <p>
+              Diese Website kann Google AdSense zur Einblendung von Werbung verwenden. Google kann dabei Cookies und ähnliche Technologien einsetzen, um Anzeigen bereitzustellen und ihre Leistung zu messen. Die Einbindung erfolgt erst nach deiner Einwilligung. Du kannst deine Einwilligung jederzeit durch das Löschen der Website-Daten in deinem Browser widerrufen.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-base font-bold text-[#171717] mb-2">5. Deine Rechte</h2>
             <p>
               Du hast jederzeit das Recht auf unentgeltliche Auskunft über deine gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder Löschung dieser Daten.
             </p>

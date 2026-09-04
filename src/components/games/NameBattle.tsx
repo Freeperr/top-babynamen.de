@@ -147,10 +147,10 @@ export default function NameBattle() {
                 {candidateA.name}
               </h3>
               <span
-                className={`text-xs px-2.5 py-0.5 rounded-full font-medium border inline-block mb-3 ${
+                className={`text-xs font-medium inline-block mb-3 ${
                   candidateA.gender === 'girl'
-                    ? 'bg-[#FFF5F8] text-[#FF4F87] border-[#FFD6E3]'
-                    : 'bg-blue-50/70 text-blue-700 border-blue-100'
+                    ? 'text-[#FF4F87]'
+                    : 'text-blue-700'
                 }`}
               >
                 {candidateA.gender === 'girl' ? 'Mädchen' : 'Junge'} · {candidateA.length} Buchstaben
@@ -185,10 +185,10 @@ export default function NameBattle() {
                 {candidateB.name}
               </h3>
               <span
-                className={`text-xs px-2.5 py-0.5 rounded-full font-medium border inline-block mb-3 ${
+                className={`text-xs font-medium inline-block mb-3 ${
                   candidateB.gender === 'girl'
-                    ? 'bg-[#FFF5F8] text-[#FF4F87] border-[#FFD6E3]'
-                    : 'bg-blue-50 text-blue-600 border-blue-100'
+                    ? 'text-[#FF4F87]'
+                    : 'text-blue-600'
                 }`}
               >
                 {candidateB.gender === 'girl' ? 'Mädchen' : 'Junge'} · {candidateB.length} Buchstaben

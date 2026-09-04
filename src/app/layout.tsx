@@ -4,6 +4,7 @@ import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import AdsConsent from '@/components/AdsConsent';
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: '--font-sans',
@@ -56,6 +57,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <AdsConsent />
         </FavoritesProvider>
       </body>
     </html>

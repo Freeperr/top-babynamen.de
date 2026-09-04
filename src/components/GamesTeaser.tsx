@@ -69,7 +69,7 @@ export default function GamesTeaser() {
                     <div className="w-9 h-9 rounded-xl bg-[#FFF5F8] border border-[#F0E4E7] flex items-center justify-center text-[#FF4F87]">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-[#FFF5F8] text-[#FF4F87] border border-[#FFD6E3]">
+                    <span className="text-[11px] font-medium text-[#FF4F87]">
                       {game.tag}
                     </span>
                   </div>
