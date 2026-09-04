@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-serif), "Newsreader", Georgia, serif;
+  
+  --color-baby-white: #ffffff;
+  --color-baby-soft: #fff5f8;
+  --color-baby-light: #ffd6e3;
+  --color-baby-pink: #ff6f9f;
+  --color-baby-darkpink: #ff4f87;
+  --color-baby-hoverpink: #e63d74;
+  --color-baby-text: #171717;
+  --color-baby-muted: #777777;
+  --color-baby-border: #f0e6e8;
+  --color-baby-border-subtle: #f8eef1;
+  --radius-card-sm: 16px;
+  --radius-card: 22px;
+  --radius-card-lg: 28px;
+}
+
+:root {
+  --bg-soft: #fff5f8;
+  --brand-pink: #ff6f9f;
+  --brand-pink-dark: #ff4f87;
+}
+
+/* Base styling */
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background-color: #ffffff;
+  color: #171717;
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* Custom card & button utilities */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 214, 227, 0.35);
+}
+
+.baby-card {
+  background: #ffffff;
+  border-radius: 22px;
+  border: 1px solid #f0e4e7;
+  box-shadow: 0 2px 14px -2px rgba(23, 23, 23, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.baby-card:hover {
+  transform: translateY(-3px);
+  border-color: #ffd6e3;
+  box-shadow: 0 10px 28px -4px rgba(255, 111, 159, 0.09);
+}
+
+.baby-card-soft {
+  background: #fff5f8;
+  border-radius: 22px;
+  border: 1px solid #ffd6e3;
+}
+
+.btn-primary {
+  background-color: #ff4f87;
+  color: #ffffff;
+  border-radius: 9999px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 10px rgba(255, 79, 135, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #e63d74;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(255, 79, 135, 0.28);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: #171717;
+  border: 1px solid #ffd6e3;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:hover {
+  background-color: #fff5f8;
+  border-color: #ff6f9f;
+  color: #ff4f87;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff5f8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffd6e3;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff6f9f;
+}
+
+/* Font utility classes */
+.font-editorial {
+  font-family: var(--font-serif), Georgia, serif;
+}
