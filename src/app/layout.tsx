@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans, Newsreader } from 'next/font/google';
+import { Plus_Jakarta_Sans, Newsreader, Caveat } from 'next/font/google';
 import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import Navbar from '@/components/Navbar';
@@ -19,6 +19,13 @@ const newsreader = Newsreader({
   display: 'swap',
   style: ['normal', 'italic'],
   weight: ['400', '500', '600'],
+});
+
+const caveat = Caveat({
+  variable: '--font-hand',
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -49,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={`${plusJakarta.variable} ${newsreader.variable} h-full antialiased`}>
+    <html lang="de" className={`${plusJakarta.variable} ${newsreader.variable} ${caveat.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
         <FavoritesProvider>
           <Navbar />

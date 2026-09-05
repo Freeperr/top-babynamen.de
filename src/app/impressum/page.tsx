@@ -33,9 +33,8 @@ export default function ImpressumPage() {
           <p className="font-medium text-ink">Diensteanbieter:</p>
           <p className="mt-2 font-medium text-ink">MVC – Hamburg</p>
           <p>Frank Vomberg</p>
-          <p>Phönixhof / Haus 11c</p>
-          <p>Ruhrstraße 11 c</p>
-          <p>22761 Hamburg</p>
+          <p>Hellgrundweg 109</p>
+          <p>22525 Hamburg</p>
           <p>Deutschland</p>
 
           <div className="mt-4 space-y-1">
@@ -72,9 +71,8 @@ export default function ImpressumPage() {
           <p className="mb-2">Verantwortlich für die Inhalte dieser Website ist:</p>
           <p className="font-medium text-ink">Frank Vomberg</p>
           <p>MVC – Hamburg</p>
-          <p>Phönixhof / Haus 11c</p>
-          <p>Ruhrstraße 11 c</p>
-          <p>22761 Hamburg</p>
+          <p>Hellgrundweg 109</p>
+          <p>22525 Hamburg</p>
           <p>Deutschland</p>
         </section>
 
