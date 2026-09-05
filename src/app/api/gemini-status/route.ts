@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { modelCandidates } from '@/lib/gemini';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -16,7 +17,7 @@ interface GeminiModel {
 
 export async function GET() {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
-  const model = process.env.GEMINI_MODEL?.trim() || 'gemini-2.5-flash';
+  const candidates = modelCandidates();
   const checks: StatusCheck[] = [];
 
   if (!apiKey) {
@@ -48,14 +49,15 @@ export async function GET() {
 
         const body = (await res.json().catch(() => null)) as { models?: GeminiModel[] } | null;
         const modelNames = (body?.models ?? []).map((m) => m.name ?? '');
-        const modelFound = modelNames.some((n) => n.includes(model));
+        const available = candidates.filter((c) => modelNames.some((n) => n.includes(c)));
         checks.push({
           key: 'model',
-          label: `Modell „${model}“`,
-          ok: modelFound,
-          detail: modelFound
-            ? 'Verfügbar und freigeschaltet.'
-            : `Nicht gefunden – z. B. verfügbar: ${modelNames.slice(0, 3).join(', ') || 'keine Angabe'}.`,
+          label: 'Verfügbare Modelle',
+          ok: available.length > 0,
+          detail:
+            available.length > 0
+              ? `Gefunden: ${available.join(', ')}.`
+              : `Keine der Kandidaten (${candidates.join(', ')}) gefunden – z. B. verfügbar: ${modelNames.slice(0, 3).join(', ') || 'keine Angabe'}.`,
         });
       } else {
         checks.push({
