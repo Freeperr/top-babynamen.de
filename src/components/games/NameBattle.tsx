@@ -9,19 +9,26 @@ import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
 const TOTAL_ROUNDS = 5;
+type BattleGender = 'girl' | 'boy';
 
 const genderLabel = (name: BabyName) =>
   name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex';
 
-function getRandomChallenger(winnerId: string): BabyName {
-  const remaining = ALL_NAMES.filter((n) => n.id !== winnerId);
+function getNamesForGender(gender: BattleGender) {
+  return ALL_NAMES.filter((name) => name.gender === gender);
+}
+
+function getRandomChallenger(winnerId: string, gender: BattleGender): BabyName {
+  const remaining = getNamesForGender(gender).filter((n) => n.id !== winnerId);
   return remaining[Math.floor(Math.random() * remaining.length)];
 }
 
 export default function NameBattle() {
+  const [gender, setGender] = useState<BattleGender>('girl');
+  const initialNames = getNamesForGender('girl');
   const [round, setRound] = useState(1);
-  const [candidateA, setCandidateA] = useState<BabyName>(ALL_NAMES[4]); // Mila
-  const [candidateB, setCandidateB] = useState<BabyName>(ALL_NAMES[3]); // Lina
+  const [candidateA, setCandidateA] = useState<BabyName>(initialNames[0]);
+  const [candidateB, setCandidateB] = useState<BabyName>(initialNames[1]);
   const [chosenWinner, setChosenWinner] = useState<'A' | 'B' | null>(null);
   const [historyWins, setHistoryWins] = useState<Record<string, number>>({});
   const [isFinished, setIsFinished] = useState(false);
@@ -30,8 +37,20 @@ export default function NameBattle() {
 
   const getNextPair = (winner: BabyName) => ({
     keep: winner,
-    challenger: getRandomChallenger(winner.id),
+    challenger: getRandomChallenger(winner.id, gender),
   });
+
+  const handleGenderChange = (nextGender: BattleGender) => {
+    const names = getNamesForGender(nextGender);
+    setGender(nextGender);
+    setRound(1);
+    setCandidateA(names[0]);
+    setCandidateB(names[1]);
+    setChosenWinner(null);
+    setHistoryWins({});
+    setIsFinished(false);
+    setChampion(null);
+  };
 
   const handleVote = (selected: 'A' | 'B') => {
     if (chosenWinner !== null) return;
@@ -69,9 +88,10 @@ export default function NameBattle() {
   };
 
   const handleRestart = () => {
+    const names = getNamesForGender(gender);
     setRound(1);
-    setCandidateA(ALL_NAMES[4]);
-    setCandidateB(ALL_NAMES[3]);
+    setCandidateA(names[0]);
+    setCandidateB(names[1]);
     setChosenWinner(null);
     setHistoryWins({});
     setIsFinished(false);
@@ -122,6 +142,23 @@ export default function NameBattle() {
 
   return (
     <div className="max-w-2xl mx-auto">
+      <div className="flex gap-2 mb-6" role="group" aria-label="Namensgeschlecht auswählen">
+        {([
+          ['girl', 'Mädchennamen'],
+          ['boy', 'Jungennamen'],
+        ] as const).map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => handleGenderChange(value)}
+            className={`btn flex-1 ${gender === value ? 'btn-primary' : 'btn-secondary'}`}
+            aria-pressed={gender === value}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       {!isFinished ? (
         <div>
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-line">

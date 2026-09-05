@@ -14,7 +14,7 @@ export default function GamesTeaser() {
     },
     {
       id: 'battle',
-      title: 'Name Battle',
+      title: 'Welcher Name klingt besser?',
       desc: 'Zwei Namen, eine Entscheidung – du bestimmst, wer weiterkommt.',
       href: '/spiele?tab=battle',
     },

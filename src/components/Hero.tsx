@@ -23,13 +23,13 @@ export default function Hero() {
   return (
     <section className="pt-12 sm:pt-16 pb-10 sm:pb-12">
       <motion.div
-        className="max-w-2xl mx-auto px-4 sm:px-6 text-left"
+        className="max-w-3xl mx-auto px-4 sm:px-6 text-left sm:-translate-x-8"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
       >
         <motion.h1
-          className="font-editorial text-[2rem] leading-[1.15] sm:text-5xl text-ink sm:-translate-x-8"
+          className="font-editorial text-[2.25rem] leading-[1.12] sm:text-6xl text-ink"
           variants={fadeUp}
         >
           Finde einen Namen,
@@ -38,7 +38,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="mt-4 text-ink-soft max-w-md text-[0.95rem] sm:-translate-x-8"
+          className="mt-4 text-ink-soft max-w-md text-[0.95rem]"
           variants={fadeUp}
         >
           Entdecke beliebte Namen, zeitlose Klassiker und besondere Namen, die
@@ -48,7 +48,7 @@ export default function Hero() {
         {/* Suche */}
         <motion.form
           onSubmit={handleSearchSubmit}
-          className="mt-8 flex items-stretch gap-2 max-w-md sm:-translate-x-8"
+          className="mt-8 flex items-stretch gap-2 max-w-md"
           role="search"
           variants={fadeUp}
         >
@@ -73,7 +73,7 @@ export default function Hero() {
         </motion.form>
 
         <motion.p
-          className="mt-6 text-sm text-fade flex items-center gap-x-6 gap-y-1 flex-wrap sm:-translate-x-8"
+          className="mt-6 text-sm text-fade flex items-center gap-x-6 gap-y-1 flex-wrap"
           variants={fadeUp}
         >
           <Link href="/maedchennamen" className="hover:text-ink transition-colors">
