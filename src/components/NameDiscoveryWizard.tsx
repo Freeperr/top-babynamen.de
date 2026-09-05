@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
@@ -101,7 +101,7 @@ export default function NameDiscoveryWizard() {
   };
 
   const calculateMatches = (finalAnswers: Answers) => {
-    const scored = BABY_NAMES.map((name) => {
+    const scored = ALL_NAMES.map((name) => {
       let score = 50;
 
       if (finalAnswers.gender === 'girl') {

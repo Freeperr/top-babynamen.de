@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Heart, Sparkles } from 'lucide-react';
 import type { DailyTopNames } from '@/lib/gemini';
+import { fadeUp, staggerContainer } from '@/lib/motion';
 
 const genderLabel = (gender: string) =>
   gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
@@ -39,7 +41,12 @@ export default function DailyTrendBox() {
 
   return (
     <section className="pb-2">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <motion.div
+        className="max-w-4xl mx-auto px-4 sm:px-6"
+        variants={fadeUp}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="rounded-2xl border border-line bg-surface shadow-[0_1px_0_0_#f0e9e1] overflow-hidden">
           <div className="px-5 sm:px-7 pt-6 pb-4 border-b border-line bg-paper-warm/60 flex flex-wrap items-center justify-between gap-2">
             <p className="flex items-center gap-2">
@@ -56,7 +63,11 @@ export default function DailyTrendBox() {
             )}
           </div>
 
-          <ul>
+          <motion.ul
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
             {data.names.map((item, index) => {
               const falling = item.change.startsWith('-');
               const changeColor = falling
@@ -65,8 +76,9 @@ export default function DailyTrendBox() {
                   ? 'text-fade'
                   : 'text-go';
               return (
-                <li
+                <motion.li
                   key={`${item.name}-${index}`}
+                  variants={fadeUp}
                   className="flex items-center gap-3 sm:gap-4 px-5 sm:px-7 py-3.5 border-b border-line last:border-b-0 transition-colors hover:bg-accent-pale"
                 >
                   <Heart
@@ -96,10 +108,10 @@ export default function DailyTrendBox() {
                   <span className={`text-xs shrink-0 ${changeColor}`}>
                     {item.change}
                   </span>
-                </li>
+                </motion.li>
               );
             })}
-          </ul>
+          </motion.ul>
 
           <div className="px-5 sm:px-7 py-3.5">
             <Link
@@ -111,7 +123,7 @@ export default function DailyTrendBox() {
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

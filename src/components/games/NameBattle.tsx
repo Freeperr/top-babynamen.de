@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Trophy, RotateCcw, Heart, ArrowRight } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
@@ -14,14 +14,14 @@ const genderLabel = (name: BabyName) =>
   name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex';
 
 function getRandomChallenger(winnerId: string): BabyName {
-  const remaining = BABY_NAMES.filter((n) => n.id !== winnerId);
+  const remaining = ALL_NAMES.filter((n) => n.id !== winnerId);
   return remaining[Math.floor(Math.random() * remaining.length)];
 }
 
 export default function NameBattle() {
   const [round, setRound] = useState(1);
-  const [candidateA, setCandidateA] = useState<BabyName>(BABY_NAMES[4]); // Mila
-  const [candidateB, setCandidateB] = useState<BabyName>(BABY_NAMES[3]); // Lina
+  const [candidateA, setCandidateA] = useState<BabyName>(ALL_NAMES[4]); // Mila
+  const [candidateB, setCandidateB] = useState<BabyName>(ALL_NAMES[3]); // Lina
   const [chosenWinner, setChosenWinner] = useState<'A' | 'B' | null>(null);
   const [historyWins, setHistoryWins] = useState<Record<string, number>>({});
   const [isFinished, setIsFinished] = useState(false);
@@ -52,7 +52,7 @@ export default function NameBattle() {
         for (const [nameStr, count] of Object.entries(updatedWins)) {
           if (count > maxVotes) {
             maxVotes = count;
-            const found = BABY_NAMES.find((n) => n.name === nameStr);
+            const found = ALL_NAMES.find((n) => n.name === nameStr);
             if (found) topName = found;
           }
         }
@@ -70,8 +70,8 @@ export default function NameBattle() {
 
   const handleRestart = () => {
     setRound(1);
-    setCandidateA(BABY_NAMES[4]);
-    setCandidateB(BABY_NAMES[3]);
+    setCandidateA(ALL_NAMES[4]);
+    setCandidateB(ALL_NAMES[3]);
     setChosenWinner(null);
     setHistoryWins({});
     setIsFinished(false);

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react';
 import { BabyName } from '@/types/name';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { Heart, X } from 'lucide-react';
 
 interface FavoritesContextType {
@@ -76,7 +76,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     }, 3000);
   };
 
-  const favorites = BABY_NAMES.filter((name) => favoriteIds.includes(name.id.toLowerCase()));
+  const favorites = ALL_NAMES.filter((name) => favoriteIds.includes(name.id.toLowerCase()));
 
   return (
     <FavoritesContext.Provider

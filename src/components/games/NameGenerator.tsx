@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Wand2, Heart, ArrowRight } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName, Gender, NameStyle } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
@@ -25,7 +25,7 @@ export default function NameGenerator() {
     setIsGenerating(true);
     setGeneratedResult(null);
 
-    let candidates = BABY_NAMES.filter((n) => {
+    let candidates = ALL_NAMES.filter((n) => {
       const matchGender =
         selectedGender === 'all' || n.gender === selectedGender || n.gender === 'unisex';
       const matchStyle =
@@ -36,15 +36,15 @@ export default function NameGenerator() {
     });
 
     if (candidates.length === 0) {
-      candidates = BABY_NAMES;
+      candidates = ALL_NAMES;
     }
 
     const winner = candidates[Math.floor(Math.random() * candidates.length)];
 
     let count = 0;
     const interval = setInterval(() => {
-      const randomIdx = Math.floor(Math.random() * BABY_NAMES.length);
-      setDisplayedName(BABY_NAMES[randomIdx].name);
+      const randomIdx = Math.floor(Math.random() * ALL_NAMES.length);
+      setDisplayedName(ALL_NAMES[randomIdx].name);
       count++;
 
       if (count > 14) {

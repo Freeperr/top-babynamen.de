@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, X, RotateCcw, ArrowRight } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName, Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
@@ -18,7 +18,7 @@ export default function SwipeGame() {
   const [swipedPasses, setSwipedPasses] = useState<BabyName[]>([]);
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  const filteredDeck = BABY_NAMES.filter(
+  const filteredDeck = ALL_NAMES.filter(
     (n) => selectedGender === 'all' || n.gender === selectedGender || n.gender === 'unisex'
   );
 

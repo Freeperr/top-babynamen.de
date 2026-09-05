@@ -2,9 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { getRareNames } from '@/lib/nameService';
 import { useFavorites } from '@/context/FavoritesContext';
+import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
 const genderLabel = (gender: string) =>
   gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
@@ -15,9 +17,15 @@ export default function CuratedInspirationSection() {
 
   return (
     <section className="py-12 sm:py-16 border-y border-line bg-paper-warm/40">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 grid gap-10 md:grid-cols-[2fr_3fr] md:gap-14">
+      <motion.div
+        className="max-w-4xl mx-auto px-4 sm:px-6 grid gap-10 md:grid-cols-[2fr_3fr] md:gap-14"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+      >
         {/* Editorial intro column */}
-        <div>
+        <motion.div variants={fadeUp}>
           <p className="eyebrow mb-3">Vorschläge der Redaktion</p>
           <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
             Namen, die nicht{' '}
@@ -34,10 +42,10 @@ export default function CuratedInspirationSection() {
             Seltene Namen entdecken
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
+        </motion.div>
 
         {/* Name rows */}
-        <ol className="border-t border-line">
+        <motion.ol className="border-t border-line" variants={fadeUp}>
           {names.map((name) => {
             const favorited = isFavorite(name.id);
             return (
@@ -89,8 +97,8 @@ export default function CuratedInspirationSection() {
               </li>
             );
           })}
-        </ol>
-      </div>
+        </motion.ol>
+      </motion.div>
     </section>
   );
 }

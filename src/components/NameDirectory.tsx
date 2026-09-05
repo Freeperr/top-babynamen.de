@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Search, SlidersHorizontal, RotateCcw } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { filterNames } from '@/lib/nameService';
 import { Gender, NameFilters } from '@/types/name';
 import NameRow from './NameRow';
@@ -43,7 +43,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
 
   const origins = useMemo(() => {
     const set = new Set<string>();
-    BABY_NAMES.forEach((n) => {
+    ALL_NAMES.forEach((n) => {
       n.origin.split('/').forEach((part) => set.add(part.trim()));
     });
     return Array.from(set).sort();

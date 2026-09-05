@@ -2,10 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { getTopNames } from '@/lib/nameService';
 import { Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
 type Tab = 'all' | Gender;
 
@@ -26,8 +28,17 @@ export default function TopNamesSection() {
 
   return (
     <section className="py-10 sm:py-14">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
+      <motion.div
+        className="max-w-4xl mx-auto px-4 sm:px-6"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+      >
+        <motion.div
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2"
+          variants={fadeUp}
+        >
           <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
             Unsere beliebtesten Namen
           </h2>
@@ -47,12 +58,15 @@ export default function TopNamesSection() {
               </button>
             ))}
           </div>
-        </div>
-        <p className="font-hand text-xl sm:text-2xl text-accent-deep mb-6">
+        </motion.div>
+        <motion.p
+          className="font-hand text-xl sm:text-2xl text-accent-deep mb-6"
+          variants={fadeUp}
+        >
           Gerade viel gesehen – von Eltern wie dir.
-        </p>
+        </motion.p>
 
-        <div className="border-t border-line">
+        <motion.div className="border-t border-line" variants={fadeUp}>
           {names.map((name, index) => {
             const favorited = isFavorite(name.id);
             return (
@@ -102,9 +116,9 @@ export default function TopNamesSection() {
               </div>
             );
           })}
-        </div>
+        </motion.div>
 
-        <div className="mt-6 flex justify-end">
+        <motion.div className="mt-6 flex justify-end" variants={fadeUp}>
           <Link
             href="/babynamen"
             className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
@@ -112,8 +126,8 @@ export default function TopNamesSection() {
             Alle Namen durchstöbern
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

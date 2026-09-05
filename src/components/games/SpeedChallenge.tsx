@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Timer, Heart, X, RotateCcw, ArrowRight } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
@@ -19,7 +19,7 @@ export default function SpeedChallenge() {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const [challengePool, setChallengePool] = useState<BabyName[]>(() =>
-    [...BABY_NAMES].sort(() => Math.random() - 0.5).slice(0, TOTAL_NAMES)
+    [...ALL_NAMES].sort(() => Math.random() - 0.5).slice(0, TOTAL_NAMES)
   );
 
   const currentName = challengePool[currentIndex];
@@ -62,7 +62,7 @@ export default function SpeedChallenge() {
   }, [isPlaying, isCompleted, handleDecision]);
 
   const handleStart = () => {
-    setChallengePool([...BABY_NAMES].sort(() => Math.random() - 0.5).slice(0, TOTAL_NAMES));
+    setChallengePool([...ALL_NAMES].sort(() => Math.random() - 0.5).slice(0, TOTAL_NAMES));
     setCurrentIndex(0);
     setTimeLeft(CHALLENGE_DURATION);
     setLikedNames([]);

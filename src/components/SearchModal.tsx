@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Search, X, ArrowRight } from 'lucide-react';
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
@@ -49,14 +49,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null;
 
   const results: BabyName[] = query.trim()
-    ? BABY_NAMES.filter(
+    ? ALL_NAMES.filter(
         (n) =>
           n.name.toLowerCase().includes(query.toLowerCase()) ||
           n.meaning.toLowerCase().includes(query.toLowerCase()) ||
           n.origin.toLowerCase().includes(query.toLowerCase()) ||
           n.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
       ).slice(0, 8)
-    : BABY_NAMES.slice(0, 6);
+    : ALL_NAMES.slice(0, 6);
 
   return (
     <div

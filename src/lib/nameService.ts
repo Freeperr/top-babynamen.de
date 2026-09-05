@@ -1,19 +1,19 @@
-import { BABY_NAMES } from '@/data/names';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName, Gender, NameFilters, NameStyle } from '@/types/name';
 
 export function getAllNames(): BabyName[] {
-  return [...BABY_NAMES];
+  return [...ALL_NAMES];
 }
 
 export function getNameById(id: string): BabyName | undefined {
   const cleanId = id.toLowerCase().trim();
-  return BABY_NAMES.find(
+  return ALL_NAMES.find(
     (n) => n.id.toLowerCase() === cleanId || n.name.toLowerCase() === cleanId
   );
 }
 
 export function getTopNames(limit = 10, gender?: Gender): BabyName[] {
-  let list = [...BABY_NAMES];
+  let list = [...ALL_NAMES];
   if (gender) {
     list = list.filter((n) => n.gender === gender || n.gender === 'unisex');
   }
@@ -23,31 +23,31 @@ export function getTopNames(limit = 10, gender?: Gender): BabyName[] {
 export function getTrendingNames(category: 'rising' | 'falling' | 'new' | 'comeback'): BabyName[] {
   switch (category) {
     case 'rising':
-      return BABY_NAMES.filter((n) => n.trendDirection === 'up' && n.trendPercentage >= 10).sort(
+      return ALL_NAMES.filter((n) => n.trendDirection === 'up' && n.trendPercentage >= 10).sort(
         (a, b) => b.trendPercentage - a.trendPercentage
       );
     case 'falling':
-      return BABY_NAMES.filter((n) => n.trendDirection === 'down' || n.trendPercentage <= 0).sort(
+      return ALL_NAMES.filter((n) => n.trendDirection === 'down' || n.trendPercentage <= 0).sort(
         (a, b) => a.trendPercentage - b.trendPercentage
       );
     case 'new':
-      return BABY_NAMES.filter((n) => n.trendDirection === 'new' || n.styles.includes('rare')).slice(0, 6);
+      return ALL_NAMES.filter((n) => n.trendDirection === 'new' || n.styles.includes('rare')).slice(0, 6);
     case 'comeback':
-      return BABY_NAMES.filter((n) => n.trendDirection === 'comeback' || n.tags.includes('Comeback')).slice(0, 6);
+      return ALL_NAMES.filter((n) => n.trendDirection === 'comeback' || n.tags.includes('Comeback')).slice(0, 6);
     default:
-      return BABY_NAMES.slice(0, 6);
+      return ALL_NAMES.slice(0, 6);
   }
 }
 
 export function getRareNames(limit = 6): BabyName[] {
-  return BABY_NAMES.filter((n) => n.styles.includes('rare') || n.popularityRank > 50).slice(0, limit);
+  return ALL_NAMES.filter((n) => n.styles.includes('rare') || n.popularityRank > 50).slice(0, limit);
 }
 
 export function getSimilarNames(nameId: string): BabyName[] {
   const current = getNameById(nameId);
   if (!current) return [];
 
-  return BABY_NAMES.filter(
+  return ALL_NAMES.filter(
     (n) =>
       n.id !== current.id &&
       (current.similarNames.includes(n.id) ||
@@ -57,7 +57,7 @@ export function getSimilarNames(nameId: string): BabyName[] {
 }
 
 export function getRandomNames(count = 2, gender?: Gender | 'all'): BabyName[] {
-  let pool = [...BABY_NAMES];
+  let pool = [...ALL_NAMES];
   if (gender && gender !== 'all') {
     pool = pool.filter((n) => n.gender === gender || n.gender === 'unisex');
   }
@@ -70,7 +70,7 @@ export function getRandomNames(count = 2, gender?: Gender | 'all'): BabyName[] {
 }
 
 export function filterNames(filters: NameFilters): BabyName[] {
-  let result = [...BABY_NAMES];
+  let result = [...ALL_NAMES];
 
   if (filters.query && filters.query.trim() !== '') {
     const q = filters.query.toLowerCase().trim();
