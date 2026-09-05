@@ -36,6 +36,13 @@ export default function Footer() {
             <Link href="/datenschutz" className="hover:text-ink transition-colors">
               Datenschutz
             </Link>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event('open-cookie-consent'))}
+              className="hover:text-ink transition-colors"
+            >
+              Einwilligung verwalten
+            </button>
           </nav>
         </div>
 

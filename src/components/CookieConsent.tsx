@@ -12,14 +12,29 @@ export default function CookieConsent() {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
+    const open = () => {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* localStorage unavailable */
+      }
+      setShowDetails(false);
+      setVisible(true);
+    };
+
+    window.addEventListener('open-cookie-consent', open);
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) return;
+      if (stored) return () => window.removeEventListener('open-cookie-consent', open);
     } catch {
       /* localStorage unavailable */
     }
     const t = setTimeout(() => setVisible(true), 1200);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('open-cookie-consent', open);
+    };
   }, []);
 
   const save = (value: Exclude<ConsentChoice, null>) => {
