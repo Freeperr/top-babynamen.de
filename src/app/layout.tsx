@@ -48,6 +48,10 @@ export const metadata: Metadata = {
     locale: 'de_DE',
     type: 'website',
   },
+  icons: {
+    icon: [{ url: '/favicon.png', sizes: 'any', type: 'image/png' }],
+    apple: [{ url: '/favicon.png', sizes: '180x180', type: 'image/png' }],
+  },
 };
 
 export default function RootLayout({
