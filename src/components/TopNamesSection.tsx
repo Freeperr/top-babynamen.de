@@ -60,7 +60,7 @@ export default function TopNamesSection() {
           </div>
         </motion.div>
         <motion.p
-          className="font-hand text-xl sm:text-2xl text-accent-deep mb-6"
+          className="font-editorial text-xl sm:text-2xl text-accent-deep mb-6"
           variants={fadeUp}
         >
           Gerade viel gesehen – von Eltern wie dir.

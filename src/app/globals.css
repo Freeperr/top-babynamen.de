@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm, muted editorial palette */
-  --color-paper: #faf8f5;
-  --color-paper-warm: #f5efe9;
-  --color-surface: #ffffff;
-  --color-ink: #2b2622;
-  --color-ink-soft: #57514c;
-  --color-fade: #8b837b;
-  --color-line: #e8e1d9;
-  --color-line-strong: #d8cfc6;
-  --color-accent: #ad5066;
-  --color-accent-deep: #8e3e52;
-  --color-accent-soft: #f7eceb;
-  --color-accent-pale: #fcf7f5;
-  --color-go: #5c7a63;
-  --color-warn: #8a6d3b;
+  /* Light baby-blue palette */
+  --color-paper: #eef8ff;
+  --color-paper-warm: #dff1ff;
+  --color-surface: #f9fdff;
+  --color-ink: #17324d;
+  --color-ink-soft: #49657a;
+  --color-fade: #7892a5;
+  --color-line: #c7e1f2;
+  --color-line-strong: #a9cee3;
+  --color-accent: #4c9bc5;
+  --color-accent-deep: #26769f;
+  --color-accent-soft: #e1f3fb;
+  --color-accent-pale: #f3fbff;
+  --color-go: #4f8a78;
+  --color-warn: #9a7b45;
 }
 
 /* next/font defined these as --font-sans / --font-serif on <html>.
@@ -24,7 +24,6 @@
 @theme inline {
   --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif: var(--font-serif), "Newsreader", Georgia, "Times New Roman", serif;
-  --font-hand: var(--font-hand), "Caveat", "Segoe Script", "Comic Sans MS", cursive;
 }
 
 :root {
@@ -55,8 +54,8 @@ p {
 }
 
 ::selection {
-  background: #f2d4da;
-  color: #4a2027;
+  background: #cdeafd;
+  color: #17324d;
 }
 
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
@@ -87,11 +86,6 @@ a {
     font-family: var(--font-serif), Georgia, serif;
     font-weight: 400;
     letter-spacing: -0.01em;
-  }
-
-  .font-hand {
-    font-family: var(--font-hand), "Caveat", cursive;
-    letter-spacing: 0.01em;
   }
 
   .eyebrow {
@@ -195,7 +189,7 @@ a {
 
   select.input {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238b837b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%237892a5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.85rem center;
     padding-right: 2.25rem;

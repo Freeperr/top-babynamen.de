@@ -51,7 +51,7 @@ export default function DailyTrendBox() {
           <div className="px-5 sm:px-7 pt-6 pb-4 border-b border-line bg-paper-warm/60 flex flex-wrap items-center justify-between gap-2">
             <p className="flex items-center gap-2">
               <Heart className="w-4 h-4 text-accent fill-accent" aria-hidden="true" />
-              <span className="font-hand text-2xl text-accent-deep leading-none">
+              <span className="font-editorial text-2xl text-accent-deep leading-none">
                 Heute im Trend
               </span>
             </p>
