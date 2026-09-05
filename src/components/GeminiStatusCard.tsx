@@ -16,6 +16,7 @@ interface TestData {
   reply: string | null;
   checks: StatusCheck[];
   checkedAt: string;
+  sentAt?: string;
   lastDailyUpdate: string | null;
 }
 
@@ -100,6 +101,11 @@ export default function GeminiStatusCard() {
                 Antwort der KI (test):
               </p>
               <p className="font-editorial text-lg text-ink leading-snug">&bdquo;{data.reply}&ldquo;</p>
+              {data.sentAt && (
+                <p className="text-[11px] text-ink-soft mt-2">
+                  Gesendet vom Server: {data.sentAt} Uhr
+                </p>
+              )}
             </div>
           )}
 

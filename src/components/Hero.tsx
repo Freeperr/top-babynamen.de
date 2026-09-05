@@ -36,8 +36,7 @@ export default function Hero() {
           className="font-editorial text-[2rem] leading-[1.15] sm:text-5xl text-ink"
           variants={fadeUp}
         >
-          Ein Name, der sich{' '}
-          <em className="text-accent italic">richtig anfühlt.</em>
+          Finde einen Namen, der <em className="text-accent italic">passt.</em>
         </motion.h1>
 
         <motion.p
@@ -51,8 +50,8 @@ export default function Hero() {
           className="mt-4 text-ink-soft max-w-md mx-auto text-[0.95rem]"
           variants={fadeUp}
         >
-          Beliebte Namen, schöne Klassiker und besondere Entdeckungen –
-          ganz einfach zum Durchstöbern.
+          Entdecke beliebte Namen, zeitlose Klassiker und besondere Namen, die
+          man nicht jeden Tag hört.
         </motion.p>
 
         {/* Suche */}
