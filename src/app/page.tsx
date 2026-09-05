@@ -1,5 +1,6 @@
 import React from 'react';
 import Hero from '@/components/Hero';
+import DailyTrendBox from '@/components/DailyTrendBox';
 import TopNamesSection from '@/components/TopNamesSection';
 import CuratedInspirationSection from '@/components/CuratedInspirationSection';
 import NameDiscoveryWizard from '@/components/NameDiscoveryWizard';
@@ -10,6 +11,9 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen">
       {/* 1. Ruhiger, fokussierter Hero */}
       <Hero />
+
+      {/* 1b. Täglich frisch zusammengestellte Favoriten des Tages */}
+      <DailyTrendBox />
 
       {/* 2. Top-Namen der Woche (Kompakte 5 Einträge, viel Weißraum) */}
       <TopNamesSection />

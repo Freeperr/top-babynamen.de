@@ -1,4 +1,4 @@
-import { NameSeed } from './nameSeed';
+﻿import { NameSeed } from './nameSeed';
 
 export const PART1: NameSeed[] = [
   {
@@ -209,7 +209,7 @@ export const PART1: NameSeed[] = [
     description:
       'Frieda gehört zu den Namen mit Vintage-Charme, die längst wieder im Kommen sind. Der alte deutsche Name klingt bodenständig, warm und wunderbar unaufgeregt.',
     rank: 45,
-    styles: ['classic', 'rare', 'comeback'],
+    styles: ['classic', 'rare', 'timeless'],
     tags: ['Vintage', 'Althochdeutsch', 'Im Trend', 'Warm'],
     similar: ['mathilde', 'greta', 'rosalie', 'amelie'],
     pairs: [
@@ -350,7 +350,7 @@ export const PART1: NameSeed[] = [
     description:
       'Greta ist die nordische Kurzform von Margarete und damit eine Perle unter den Vornamen. Kurz, knapp und mit klarem skandinavischem Profil.',
     rank: 55,
-    styles: ['modern', 'short', 'comeback'],
+    styles: ['modern', 'short', 'timeless'],
     tags: ['Kurz', 'Skandinavisch', 'Im Trend', 'Klar'],
     similar: ['frieda', 'mathilde', 'ronja', 'estrid'],
     pairs: [
@@ -367,7 +367,7 @@ export const PART1: NameSeed[] = [
     description:
       'Margarete ist die klassische Form des Perlennamens und besticht mit edlem, fast herrschaftlichem Klang. Wer ihn kurz machen mag, hat Grete oder Marga.',
     rank: 110,
-    styles: ['classic', 'vintage'],
+    styles: ['classic', 'rare'],
     tags: ['Griechisch', 'Vintage', 'Edel', 'Vollständig'],
     similar: ['margot', 'margaux', 'greta', 'klara'],
     pairs: [
@@ -523,7 +523,7 @@ export const PART1: NameSeed[] = [
     description:
       'Wilma ist die kurze Form von Wilhelmina und klingt mit ihrem altdeutschen Ursprung angenehm bodenständig. Ein Name mit Charakter und Standvermögen.',
     rank: 240,
-    styles: ['classic', 'rare', 'comeback'],
+    styles: ['classic', 'rare', 'timeless'],
     tags: ['Vintage', 'Rare', 'Deutsch', 'Kurz'],
     similar: ['vilma', 'willemina', 'hedda', 'tilde'],
     pairs: [
@@ -1185,7 +1185,7 @@ export const PART1: NameSeed[] = [
     description:
       'Gustav kommt aus dem Altnordischen und klingt behäbig-warm wie eine große Familie. Ein Name im Vintage-Trend mit Gemütlichkeit.',
     rank: 49,
-    styles: ['classic', 'rare', 'comeback'],
+    styles: ['classic', 'rare', 'timeless'],
     tags: ['Vintage', 'Skandinavisch', 'Im Trend'],
     similar: ['gustav', 'gusti', 'wilhelm', 'otto'],
     pairs: [
@@ -1254,7 +1254,7 @@ export const PART1: NameSeed[] = [
     description:
       'Franz ist kurz, männlich und in Süddeutschland zuhause. Ein Name mit Künstlerseele und urbaner Lässigkeit.',
     rank: 74,
-    styles: ['classic', 'rare', 'comeback'],
+    styles: ['classic', 'rare', 'timeless'],
     tags: ['Kurz', 'Süddeutsch', 'Im Trend'],
     similar: ['franziskus', 'franzi', 'frank', 'francesco'],
     pairs: [
@@ -1272,7 +1272,7 @@ export const PART1: NameSeed[] = [
     description:
       'Otto erlebt als Vintage-Name ein starkes Comeback und klingt durchweg sympathisch-mundartlich. Kürzer geht ein Name kaum – und runder auch nicht.',
     rank: 40,
-    styles: ['classic', 'short', 'comeback'],
+    styles: ['classic', 'short', 'timeless'],
     tags: ['Kurz', 'Vintage', 'Im Trend', 'Deutsch'],
     similar: ['otto', 'otti', 'philipp', 'karl'],
     pairs: [
@@ -1308,7 +1308,7 @@ export const PART1: NameSeed[] = [
     description:
       'Bruno ist ein warmer, gestandener Name mit freundlicher Wucht. In Zeiten der Vintage-Welle gewinnt er zunehmend junge Fans.',
     rank: 47,
-    styles: ['classic', 'short', 'comeback'],
+    styles: ['classic', 'short', 'timeless'],
     tags: ['Kurz', 'Vintage', 'Im Trend', 'Dasympathisch'],
     similar: ['bruno', 'brun', 'brian', 'otto'],
     pairs: [

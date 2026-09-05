@@ -130,9 +130,9 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
       <header className="border-b border-line pb-8 mb-8">
         <div className="flex items-center gap-2 flex-wrap mb-3">
           <span className="text-sm text-ink-soft">{genderStr}</span>
-          <span aria-hidden="true" className="text-fade">·</span>
+          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
           <span className="text-sm text-ink-soft">{name.origin}</span>
-          <span aria-hidden="true" className="text-fade">·</span>
+          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
           <span className="text-sm text-ink-soft">Rang #{name.popularityRank}</span>
         </div>
 

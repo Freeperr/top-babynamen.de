@@ -48,7 +48,7 @@ export default function TopNamesSection() {
             ))}
           </div>
         </div>
-        <p className="text-sm text-fade mb-6">
+        <p className="font-hand text-xl sm:text-2xl text-accent-deep mb-6">
           Gerade viel gesehen – von Eltern wie dir.
         </p>
 

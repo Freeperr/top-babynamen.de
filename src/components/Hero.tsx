@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search } from 'lucide-react';
+import { Search, Heart } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Hero() {
@@ -27,6 +27,10 @@ export default function Hero() {
           Ein Name, der sich{' '}
           <em className="text-accent italic">richtig anfühlt.</em>
         </h1>
+
+        <p className="font-hand text-xl sm:text-2xl text-accent mt-1.5">
+          – ganz gleich, ob klassisch oder besonders.
+        </p>
 
         <p className="mt-4 text-ink-soft max-w-md mx-auto text-[0.95rem]">
           Beliebte Namen, schöne Klassiker und besondere Entdeckungen –
@@ -63,11 +67,11 @@ export default function Hero() {
           <Link href="/maedchennamen" className="hover:text-ink transition-colors">
             Mädchennamen
           </Link>
-          <span aria-hidden="true">·</span>
+          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
           <Link href="/jungennamen" className="hover:text-ink transition-colors">
             Jungennamen
           </Link>
-          <span aria-hidden="true">·</span>
+          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
           <Link href="/babynamen" className="hover:text-ink transition-colors">
             Alle Namen
           </Link>

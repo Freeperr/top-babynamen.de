@@ -28,11 +28,9 @@ function buildFallback(): DailyTopNames {
   return {
     date: today(),
     generated: false,
-    names: top.map((name) => ({
+    names: top.map((name): DailyName => ({
       name: name.name,
-      gender: name.gender === 'girl' || name.gender === 'boy' || name.gender === 'unisex'
-        ? name.gender
-        : 'unisex',
+      gender: name.gender,
       rank: name.popularityRank,
       change: name.weeklyChange ?? '→',
       reason: `${name.origin} · ${name.meaning.split(',')[0]}`,
@@ -47,7 +45,7 @@ function normalize(raw: unknown): DailyName[] {
   return list
     .filter((x): x is Record<string, unknown> => !!x && typeof x === 'object')
     .slice(0, NAMES_WANTED)
-    .map((x, i) => {
+    .map((x, i): DailyName => {
       const gender = String(x.gender ?? '');
       return {
         name: String(x.name ?? ''),
