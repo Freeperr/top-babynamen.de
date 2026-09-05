@@ -40,13 +40,6 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="font-hand text-xl sm:text-2xl text-accent mt-1.5"
-          variants={fadeUp}
-        >
-          – ganz gleich, ob klassisch oder besonders.
-        </motion.p>
-
-        <motion.p
           className="mt-4 text-ink-soft max-w-md mx-auto text-[0.95rem]"
           variants={fadeUp}
         >
@@ -92,7 +85,6 @@ export default function Hero() {
           <Link href="/jungennamen" className="hover:text-ink transition-colors">
             Jungennamen
           </Link>
-          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
           <Link href="/babynamen" className="hover:text-ink transition-colors">
             Alle Namen
           </Link>
