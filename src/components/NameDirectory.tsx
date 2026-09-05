@@ -7,6 +7,7 @@ import { ALL_NAMES } from '@/data/namesExtended';
 import { filterNames } from '@/lib/nameService';
 import { Gender, NameFilters } from '@/types/name';
 import NameRow from './NameRow';
+import GeminiStatusCard from '@/components/GeminiStatusCard';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -49,7 +50,10 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
     return Array.from(set).sort();
   }, []);
 
+  const isGeminiTest = query.trim().toLowerCase() === 'geminitest';
+
   const filtered = useMemo(() => {
+    if (isGeminiTest) return [];
     const filters: NameFilters = {
       query,
       gender: selectedGender,
@@ -271,30 +275,36 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
       </div>
 
       {/* Results */}
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm text-ink-soft">
-          {filtered.length} {filtered.length === 1 ? 'Name gefunden' : 'Namen gefunden'}
-        </p>
-      </div>
-
-      {filtered.length > 0 ? (
-        <div className="border-t border-line">
-          {filtered.map((name) => (
-            <NameRow key={name.id} name={name} />
-          ))}
-        </div>
+      {isGeminiTest ? (
+        <GeminiStatusCard />
       ) : (
-        <div className="max-w-md mx-auto bg-surface border border-line rounded-2xl p-10 text-center my-8">
-          <h3 className="text-xl text-ink mb-2">Keine Namen gefunden</h3>
-          <p className="text-sm text-ink-soft mb-6">
-            Für diese Kombination gibt es gerade keine Treffer. Versuche, die
-            Suche anzupassen oder die Filter zurückzusetzen.
-          </p>
-          <button onClick={handleResetFilters} className="btn btn-secondary">
-            <RotateCcw className="w-3.5 h-3.5" />
-            Filter zurücksetzen
-          </button>
-        </div>
+        <>
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-sm text-ink-soft">
+              {filtered.length} {filtered.length === 1 ? 'Name gefunden' : 'Namen gefunden'}
+            </p>
+          </div>
+
+          {filtered.length > 0 ? (
+            <div className="border-t border-line">
+              {filtered.map((name) => (
+                <NameRow key={name.id} name={name} />
+              ))}
+            </div>
+          ) : (
+            <div className="max-w-md mx-auto bg-surface border border-line rounded-2xl p-10 text-center my-8">
+              <h3 className="text-xl text-ink mb-2">Keine Namen gefunden</h3>
+              <p className="text-sm text-ink-soft mb-6">
+                Für diese Kombination gibt es gerade keine Treffer. Versuche, die
+                Suche anzupassen oder die Filter zurückzusetzen.
+              </p>
+              <button onClick={handleResetFilters} className="btn btn-secondary">
+                <RotateCcw className="w-3.5 h-3.5" />
+                Filter zurücksetzen
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

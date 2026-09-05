@@ -6,6 +6,7 @@ import { Search, X, ArrowRight } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import GeminiStatusCard from '@/components/GeminiStatusCard';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -48,15 +49,19 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   if (!isOpen) return null;
 
-  const results: BabyName[] = query.trim()
-    ? ALL_NAMES.filter(
-        (n) =>
-          n.name.toLowerCase().includes(query.toLowerCase()) ||
-          n.meaning.toLowerCase().includes(query.toLowerCase()) ||
-          n.origin.toLowerCase().includes(query.toLowerCase()) ||
-          n.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
-      ).slice(0, 8)
-    : ALL_NAMES.slice(0, 6);
+  const isGeminiTest = query.trim().toLowerCase() === 'geminitest';
+
+  const results: BabyName[] = isGeminiTest
+    ? []
+    : query.trim()
+      ? ALL_NAMES.filter(
+          (n) =>
+            n.name.toLowerCase().includes(query.toLowerCase()) ||
+            n.meaning.toLowerCase().includes(query.toLowerCase()) ||
+            n.origin.toLowerCase().includes(query.toLowerCase()) ||
+            n.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
+        ).slice(0, 8)
+      : ALL_NAMES.slice(0, 6);
 
   return (
     <div
@@ -108,7 +113,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
         {/* Results */}
         <div className="max-h-[380px] overflow-y-auto py-1">
-          {results.length > 0 ? (
+          {isGeminiTest ? (
+            <GeminiStatusCard />
+          ) : results.length > 0 ? (
             results.map((name) => {
               const favorited = isFavorite(name.id);
               return (
@@ -178,14 +185,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
         {/* Footer */}
         <div className="px-5 py-3 border-t border-line flex items-center justify-between text-sm">
-          <Link
-            href={`/babynamen?q=${encodeURIComponent(query)}`}
-            onClick={onClose}
-            className="inline-flex items-center gap-1 text-ink-soft hover:text-accent-deep transition-colors"
-          >
-            Alle Suchergebnisse ansehen
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          {!isGeminiTest && (
+            <Link
+              href={`/babynamen?q=${encodeURIComponent(query)}`}
+              onClick={onClose}
+              className="inline-flex items-center gap-1 text-ink-soft hover:text-accent-deep transition-colors"
+            >
+              Alle Suchergebnisse ansehen
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
           <span className="text-xs text-fade hidden sm:inline">Tipp: ESC schließt</span>
         </div>
       </div>
