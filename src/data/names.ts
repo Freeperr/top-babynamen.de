@@ -1461,5 +1461,3 @@ export const BABY_NAMES: BabyName[] = [
     pronunciation: '[valɛnˈtiːn]',
   }
 ];
-
-export const DEMO_DATA_NOTICE = "✨ Hinweis: Alle Rankings und wöchentlichen Trends basieren auf Demo-Daten zur Veranschaulichung moderner Community-Analysen.";

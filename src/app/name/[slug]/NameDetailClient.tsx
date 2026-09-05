@@ -2,19 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import {
-  Heart,
-  Volume2,
-  Share2,
-  TrendingUp,
-  ArrowLeft,
-  Users,
-  Compass,
-  Check,
-} from 'lucide-react';
+import { Heart, Volume2, ArrowLeft, Check } from 'lucide-react';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
-import NameCard from '@/components/NameCard';
+import NameRow from '@/components/NameRow';
 
 interface NameDetailClientProps {
   name: BabyName;
@@ -75,7 +66,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
             y1={padding}
             x2={width - padding}
             y2={padding}
-            stroke="#F0E4E7"
+            stroke="var(--color-line)"
             strokeDasharray="4 4"
           />
           <line
@@ -83,27 +74,20 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
             y1={height - padding}
             x2={width - padding}
             y2={height - padding}
-            stroke="#F0E4E7"
+            stroke="var(--color-line)"
             strokeDasharray="4 4"
           />
 
           <polygon
             points={`${getX(0)},${height - padding} ${points} ${getX(data.length - 1)},${height - padding}`}
-            fill="url(#pinkGradient)"
-            opacity="0.25"
+            fill="var(--color-accent)"
+            opacity="0.08"
           />
-
-          <defs>
-            <linearGradient id="pinkGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#FF4F87" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#FFF5F8" stopOpacity="0" />
-            </linearGradient>
-          </defs>
 
           <polyline
             fill="none"
-            stroke="#FF4F87"
-            strokeWidth="3"
+            stroke="var(--color-accent)"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
             points={points}
@@ -113,33 +97,12 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
             const x = getX(i);
             const y = getY(d.rank);
             return (
-              <g key={d.year} className="group cursor-pointer">
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="4.5"
-                  fill="#FFFFFF"
-                  stroke="#FF4F87"
-                  strokeWidth="2.5"
-                />
-                <text
-                  x={x}
-                  y={y - 10}
-                  textAnchor="middle"
-                  fill="#171717"
-                  fontSize="11"
-                  fontWeight="600"
-                >
+              <g key={d.year}>
+                <circle cx={x} cy={y} r="4" fill="var(--color-surface)" stroke="var(--color-accent)" strokeWidth="2" />
+                <text x={x} y={y - 10} textAnchor="middle" fill="var(--color-ink-soft)" fontSize="11">
                   #{d.rank}
                 </text>
-                <text
-                  x={x}
-                  y={height - 10}
-                  textAnchor="middle"
-                  fill="#777777"
-                  fontSize="11"
-                  fontWeight="400"
-                >
+                <text x={x} y={height - 10} textAnchor="middle" fill="var(--color-fade)" fontSize="11">
                   {d.year}
                 </text>
               </g>
@@ -151,212 +114,190 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       {/* Back link */}
       <div className="mb-6">
         <Link
           href="/babynamen"
-          className="inline-flex items-center gap-1.5 text-xs text-[#777777] hover:text-[#FF4F87] transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Zurück zur Übersicht</span>
+          Zurück zur Übersicht
         </Link>
       </div>
 
-      {/* Hero Name Card */}
-      <div className="bg-white rounded-[26px] border border-[#F0E4E7] p-8 sm:p-12 shadow-xs mb-10">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
-          <div>
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span
-                className={`text-xs font-medium ${
-                  name.gender === 'girl'
-                    ? 'text-[#FF4F87]'
-                    : name.gender === 'boy'
-                    ? 'text-blue-700'
-                    : 'text-purple-700'
-                }`}
-              >
-                {genderStr}
-              </span>
-              <span className="text-xs text-[#777777]">
-                {name.length} Buchstaben · {name.syllables} {name.syllables === 1 ? 'Silbe' : 'Silben'}
-              </span>
-              <span className="text-xs font-semibold text-[#FF6F9F]">
-                Aktuell Rang #{name.popularityRank}
-              </span>
-            </div>
+      {/* Header */}
+      <header className="border-b border-line pb-8 mb-8">
+        <div className="flex items-center gap-2 flex-wrap mb-3">
+          <span className="text-sm text-ink-soft">{genderStr}</span>
+          <span aria-hidden="true" className="text-fade">·</span>
+          <span className="text-sm text-ink-soft">{name.origin}</span>
+          <span aria-hidden="true" className="text-fade">·</span>
+          <span className="text-sm text-ink-soft">Rang #{name.popularityRank}</span>
+        </div>
 
-            <div className="flex items-center gap-4">
-              <h1 className="font-editorial text-5xl sm:text-7xl font-normal text-[#171717] tracking-tight">
-                {name.name}
-              </h1>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+          <h1 className="font-editorial text-[clamp(2.5rem,8vw,4.5rem)] leading-none text-ink">
+            {name.name}
+          </h1>
 
-              <button
-                onClick={handleSpeech}
-                className="p-3 rounded-full bg-[#FFF5F8] border border-[#F0E4E7] hover:border-[#FFD6E3] text-[#FF4F87] transition-all hover:scale-105 active:scale-95 shadow-2xs"
-                title="Aussprache anhören"
-              >
-                <Volume2 className={`w-5 h-5 ${isPlayingAudio ? 'animate-pulse' : ''}`} />
-              </button>
-            </div>
-            {name.pronunciation && (
-              <p className="text-xs text-[#777777] font-mono mt-1">
-                Lautschrift: {name.pronunciation}
-              </p>
-            )}
-          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleSpeech}
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-accent-deep hover:border-accent transition-colors"
+              title={`Aussprache von ${name.name} anhören`}
+            >
+              <Volume2 className={`w-4 h-4 ${isPlayingAudio ? 'animate-pulse text-accent' : ''}`} />
+            </button>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 w-full sm:w-auto">
             <button
               onClick={handleShare}
-              className="p-3 rounded-full bg-white border border-[#F0E4E7] hover:border-[#FF6F9F] text-[#777777] hover:text-[#FF4F87] transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-accent-deep hover:border-accent transition-colors"
               title="Link kopieren"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-go" /> : <ShareIcon />}
             </button>
 
             <button
               onClick={(e) => toggleFavorite(name, e)}
-              className={`flex-1 sm:flex-initial btn-primary px-6 py-3 text-sm font-medium flex items-center justify-center gap-2 ${
-                favorited ? 'bg-emerald-600 hover:bg-emerald-700' : ''
-              }`}
+              className={`btn px-5 py-2.5 ${favorited ? 'bg-accent-soft text-accent-deep border border-line-strong' : 'btn-primary'}`}
             >
-              <Heart className={`w-4 h-4 ${favorited ? 'fill-white' : ''}`} />
-              <span>{favorited ? 'In Favoriten gespeichert' : '♡ Zu meinen Favoriten'}</span>
+              <Heart className={`w-4 h-4 ${favorited ? 'fill-accent-deep' : 'fill-none'}`} />
+              {favorited ? 'Gespeichert' : 'Als Favorit speichern'}
             </button>
           </div>
         </div>
 
-        {/* Meaning Highlight Box */}
-        <div className="bg-[#FFF5F8] rounded-[20px] border border-[#F0E4E7] p-6 mb-8">
-          <span className="text-[11px] font-semibold text-[#FF4F87] uppercase tracking-wider block mb-1">
-            Bedeutung
-          </span>
-          <p className="font-editorial text-2xl sm:text-3xl text-[#171717] leading-snug">
-            &bdquo;{name.meaning}&ldquo;
+        {name.pronunciation && (
+          <p className="mt-3 text-xs text-fade font-mono">
+            Aussprache: {name.pronunciation}
           </p>
-        </div>
+        )}
+      </header>
 
-        {/* Detailed Explanation */}
-        <div className="mb-8">
-          <h3 className="text-base font-semibold text-[#171717] mb-2">
-            Über den Namen {name.name}
-          </h3>
-          <p className="text-base text-[#171717]/80 leading-relaxed font-normal">
-            {name.description}
-          </p>
-        </div>
+      {/* Meaning */}
+      <blockquote className="mb-8">
+        <p className="font-editorial text-2xl sm:text-3xl text-ink leading-snug">
+          &bdquo;{name.meaning}&ldquo;
+        </p>
+        <p className="eyebrow mt-2">Bedeutung</p>
+      </blockquote>
 
-        {/* Tags */}
-        <div className="flex items-center gap-2 flex-wrap pt-4 border-t border-[#F0E4E7]">
-          <span className="text-xs text-[#777777]">Kategorien:</span>
-          {name.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs text-[#777777]"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Grid: Herkunft & Passt zu */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <div className="bg-white rounded-[24px] border border-[#F0E4E7] p-6 sm:p-8 flex flex-col justify-between">
-          <div>
-            <div className="w-9 h-9 rounded-xl bg-[#FFF5F8] border border-[#F0E4E7] flex items-center justify-center text-[#FF4F87] mb-4">
-              <Compass className="w-4 h-4" />
-            </div>
-            <h3 className="text-lg font-semibold text-[#171717] mb-1">
-              Herkunft
-            </h3>
-            <p className="text-sm font-medium text-[#FF4F87] mb-2">
-              {name.origin}
+      {/* Main + aside */}
+      <div className="grid gap-10 md:grid-cols-[1fr_240px] md:gap-12">
+        <div className="min-w-0">
+          <section className="mb-8">
+            <h2 className="text-lg text-ink mb-2">Über den Namen {name.name}</h2>
+            <p className="text-ink-soft text-[0.975rem] leading-relaxed">
+              {name.description}
             </p>
-            <p className="text-sm text-[#777777] leading-relaxed">
-              Der Name {name.name} ist historisch tief im {name.origin}en Sprachraum verwurzelt und trägt eine lange Tradition.
-            </p>
-          </div>
+          </section>
 
           {name.funFact && (
-            <div className="mt-6 pt-4 border-t border-[#F0E4E7] text-xs text-[#777777]">
-              <strong className="text-[#171717]">Schon gewusst?</strong> {name.funFact}
+            <p className="mb-8 text-sm text-ink-soft bg-paper-warm border border-line rounded-xl px-5 py-4">
+              <strong className="text-ink">Schon gewusst?</strong> {name.funFact}
+            </p>
+          )}
+
+          {name.tags.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap mb-8 text-sm">
+              <span className="text-fade">Kategorien:</span>
+              {name.tags.map((tag) => (
+                <span key={tag} className="text-ink-soft">
+                  {tag}
+                </span>
+              ))}
             </div>
+          )}
+
+          {renderPopularityChart() && (
+            <section>
+              <h2 className="text-lg text-ink mb-1">Beliebtheit über die Jahre</h2>
+              <p className="text-xs text-fade mb-4">
+                Rang-Entwicklung in den deutschen Namensstatistiken.
+              </p>
+              {renderPopularityChart()}
+            </section>
           )}
         </div>
 
-        <div className="bg-white rounded-[24px] border border-[#F0E4E7] p-6 sm:p-8 flex flex-col justify-between">
-          <div>
-            <div className="w-9 h-9 rounded-xl bg-[#FFF5F8] border border-[#F0E4E7] flex items-center justify-center text-[#FF4F87] mb-4">
-              <Users className="w-4 h-4" />
+        <aside className="md:border-l md:border-line md:pl-8">
+          <h2 className="text-lg text-ink mb-4">Steckbrief</h2>
+          <dl className="space-y-3 text-sm">
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="text-fade">Herkunft</dt>
+              <dd className="text-ink text-right">{name.origin}</dd>
             </div>
-            <h3 className="text-lg font-semibold text-[#171717] mb-1">
-              Passt zu
-            </h3>
-            <p className="text-xs text-[#777777] mb-4">
-              Harmonische Kombinationen für Geschwister oder Zweitnamen:
-            </p>
-
-            <div className="space-y-2">
-              {name.compatiblePairs.map((pair, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#FFF5F8] border border-[#F0E4E7]"
-                >
-                  <span className="font-editorial text-base font-normal text-[#171717]">
-                    {name.name} &amp; {pair.name}
-                  </span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-white text-[#FF4F87] border border-[#F0E4E7]">
-                    {pair.relation}
-                  </span>
-                </div>
-              ))}
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="text-fade">Geschlecht</dt>
+              <dd className="text-ink text-right">
+                {name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex'}
+              </dd>
             </div>
-          </div>
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="text-fade">Beliebtheit</dt>
+              <dd className="text-ink text-right">Rang #{name.popularityRank}</dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="text-fade">Buchstaben</dt>
+              <dd className="text-ink text-right">{name.length}</dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="text-fade">Silben</dt>
+              <dd className="text-ink text-right">{name.syllables}</dd>
+            </div>
+          </dl>
 
-          <div className="mt-6 pt-4 border-t border-[#F0E4E7] text-xs text-[#777777]">
-            Harmonisch abgestimmt nach Rhythmus und Sprachklang.
-          </div>
-        </div>
+          {name.compatiblePairs.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-line">
+              <h3 className="text-lg text-ink mb-3">Passt zu</h3>
+              <ul className="space-y-2">
+                {name.compatiblePairs.map((pair, idx) => (
+                  <li key={idx} className="flex items-center justify-between gap-3">
+                    <span className="font-editorial text-lg text-ink">
+                      {name.name} &amp; {pair.name}
+                    </span>
+                    <span className="text-xs text-fade">{pair.relation}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </aside>
       </div>
 
-      {/* Popularity Trend Graph */}
-      <div className="bg-white rounded-[26px] border border-[#F0E4E7] p-6 sm:p-8 mb-10 shadow-2xs">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-xl font-semibold text-[#171717]">
-              Beliebtheit über die Jahre
-            </h3>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
-            <TrendingUp className="w-3.5 h-3.5" />
-            <span>Aktuell #{name.popularityRank}</span>
-          </div>
-        </div>
-
-        <p className="text-xs text-[#777777] mb-6">
-          Rang-Entwicklung in den deutschen Namensstatistiken (2018–2024).
-        </p>
-
-        {renderPopularityChart()}
-      </div>
-
-      {/* Ähnliche Namen */}
+      {/* Similar names */}
       {similarNames.length > 0 && (
-        <div>
-          <h3 className="text-2xl font-semibold text-[#171717] mb-6 tracking-tight">
-            Ähnliche Namen wie {name.name}
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="mt-12 pt-8 border-t border-line">
+          <h2 className="text-lg text-ink mb-2">Ähnliche Namen wie {name.name}</h2>
+          <p className="text-sm text-fade mb-4">
+            Gleiche Herkunft, ähnlicher Klang oder vergleichbare Beliebtheit.
+          </p>
+          <div className="border-t border-line">
             {similarNames.map((sim) => (
-              <NameCard key={sim.id} name={sim} />
+              <NameRow key={sim.id} name={sim} />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+      <path d="m16 6-4-4-4 4" />
+      <path d="M12 2v13" />
+    </svg>
   );
 }

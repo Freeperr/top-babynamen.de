@@ -19,67 +19,59 @@ export default function Hero() {
   };
 
   return (
-    <section className="pt-20 pb-16 sm:pt-28 sm:pb-24">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        {/* Headline */}
-        <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight text-[#171717] leading-[1.12] mb-5">
-          Finde einen Namen, <br />
-          <span className="font-editorial italic font-normal text-[#FF4F87]">
-            den du lieben wirst.
-          </span>
+    <section className="pt-12 sm:pt-16 pb-10 sm:pb-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+        <p className="eyebrow mb-4">Namen zum Stöbern</p>
+
+        <h1 className="font-editorial text-[2rem] leading-[1.15] sm:text-5xl text-ink">
+          Ein Name, der sich{' '}
+          <em className="text-accent italic">richtig anfühlt.</em>
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg text-[#777777] max-w-xl mx-auto mb-9 leading-relaxed">
-          Beliebte Klassiker, moderne Lieblinge und seltene Babynamen – übersichtlich und mit Ruhe kuratiert.
+        <p className="mt-4 text-ink-soft max-w-md mx-auto text-[0.95rem]">
+          Beliebte Namen, schöne Klassiker und besondere Entdeckungen –
+          ganz einfach zum Durchstöbern.
         </p>
 
-        {/* Focused Search Bar */}
-        <div className="max-w-xl mx-auto mb-6">
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex items-center bg-white rounded-full p-1.5 sm:p-2 border border-[#E8DDE0] shadow-[0_2px_12px_rgba(23,23,23,0.03)] focus-within:border-[#FF6F9F] focus-within:ring-3 focus-within:ring-[#FFD6E3]/30 transition-all duration-200"
-          >
-            <div className="pl-4 pr-2 text-[#888888] shrink-0">
-              <Search className="w-4 h-4 text-[#FF6F9F]" />
-            </div>
+        {/* Suche */}
+        <form
+          onSubmit={handleSearchSubmit}
+          className="mt-8 flex items-stretch gap-2 max-w-md mx-auto"
+          role="search"
+        >
+          <label className="sr-only" htmlFor="hero-search">
+            Namen suchen
+          </label>
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-fade absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
+              id="hero-search"
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Welchen Namen suchst du? (z.B. Emma, Noah)..."
-              className="w-full bg-transparent py-2 sm:py-2.5 text-sm sm:text-base text-[#171717] placeholder:text-[#888888] focus:outline-none"
+              placeholder="Nach einem Namen suchen …"
+              className="input pl-10"
+              autoComplete="off"
             />
-            <button
-              type="submit"
-              className="btn-primary px-6 sm:px-7 py-2.5 sm:py-3 text-xs sm:text-sm font-medium shrink-0"
-            >
-              Suchen
-            </button>
-          </form>
-        </div>
+          </div>
+          <button type="submit" className="btn btn-primary px-5">
+            Suchen
+          </button>
+        </form>
 
-        {/* Clear 3 primary categories - no clutter */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
-          <Link
-            href="/maedchennamen"
-            className="px-4 py-1.5 rounded-full bg-[#FFF5F8] border border-[#F0E4E7] text-[#171717] hover:border-[#FF6F9F] hover:text-[#FF4F87] transition-all"
-          >
+        <p className="mt-6 text-sm text-fade flex items-center justify-center gap-x-2 gap-y-1 flex-wrap">
+          <Link href="/maedchennamen" className="hover:text-ink transition-colors">
             Mädchennamen
           </Link>
-          <Link
-            href="/jungennamen"
-            className="px-4 py-1.5 rounded-full bg-[#FFF5F8] border border-[#F0E4E7] text-[#171717] hover:border-[#FF6F9F] hover:text-[#FF4F87] transition-all"
-          >
+          <span aria-hidden="true">·</span>
+          <Link href="/jungennamen" className="hover:text-ink transition-colors">
             Jungennamen
           </Link>
-          <Link
-            href="/spiele"
-            className="px-4 py-1.5 rounded-full bg-[#FFF5F8] border border-[#F0E4E7] text-[#171717] hover:border-[#FF6F9F] hover:text-[#FF4F87] transition-all"
-          >
-            Namensspiele
+          <span aria-hidden="true">·</span>
+          <Link href="/babynamen" className="hover:text-ink transition-colors">
+            Alle Namen
           </Link>
-        </div>
+        </p>
       </div>
     </section>
   );

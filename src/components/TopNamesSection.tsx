@@ -2,136 +2,133 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Heart, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { getTopNames } from '@/lib/nameService';
 import { Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 
+type Tab = 'all' | Gender;
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'all', label: 'Alle' },
+  { id: 'girl', label: 'Mädchen' },
+  { id: 'boy', label: 'Jungen' },
+];
+
+const genderLabel = (gender: Gender) =>
+  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
+
 export default function TopNamesSection() {
-  const [activeTab, setActiveTab] = useState<'all' | Gender>('all');
+  const [activeTab, setActiveTab] = useState<Tab>('all');
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const names = getTopNames(5, activeTab === 'all' ? undefined : activeTab);
 
   return (
-    <section className="py-12 sm:py-16 bg-white">
+    <section className="py-10 sm:py-14">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        {/* Header & Tabs */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4 pb-4 border-b border-[#F0E4E7]">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[#171717] tracking-tight">
-              Aktuell besonders beliebt
-            </h2>
-            <p className="text-[#777777] text-sm mt-1">
-              Die beliebtesten Namen, die gerade entdeckt werden.
-            </p>
-          </div>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
+          <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
+            Unsere beliebtesten Namen
+          </h2>
 
-          {/* Simple Clean Tabs */}
-          <div className="flex items-center gap-1 p-1 bg-[#FFF5F8] rounded-full border border-[#F0E4E7] self-start sm:self-auto">
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all ${
-                activeTab === 'all'
-                  ? 'bg-white text-[#FF4F87] shadow-2xs'
-                  : 'text-[#777777] hover:text-[#171717]'
-              }`}
-            >
-              Alle
-            </button>
-            <button
-              onClick={() => setActiveTab('girl')}
-              className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all ${
-                activeTab === 'girl'
-                  ? 'bg-white text-[#FF4F87] shadow-2xs'
-                  : 'text-[#777777] hover:text-[#171717]'
-              }`}
-            >
-              Mädchen
-            </button>
-            <button
-              onClick={() => setActiveTab('boy')}
-              className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all ${
-                activeTab === 'boy'
-                  ? 'bg-white text-[#FF4F87] shadow-2xs'
-                  : 'text-[#777777] hover:text-[#171717]'
-              }`}
-            >
-              Jungen
-            </button>
+          <div className="flex items-center gap-4 text-sm">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`py-1 border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'border-accent text-ink font-medium'
+                    : 'border-transparent text-ink-soft hover:text-ink'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
+        <p className="text-sm text-fade mb-6">
+          Gerade viel gesehen – von Eltern wie dir.
+        </p>
 
-        {/* Clean, quiet row list */}
-        <div className="divide-y divide-[#F0E4E7]/70">
+        <div className="border-t border-line">
           {names.map((name, index) => {
             const favorited = isFavorite(name.id);
-            const rank = index + 1;
-            const rankStr = rank < 10 ? `0${rank}` : `${rank}`;
-
             return (
               <div
                 key={name.id}
-                className="py-4 flex items-center justify-between gap-4 group hover:bg-[#FFF5F8]/40 px-3 rounded-xl transition-colors"
+                className="flex items-center gap-3 sm:gap-5 py-4 border-b border-line group transition-colors hover:bg-accent-pale px-2 -mx-2 rounded-lg"
               >
-                {/* Left: Rank & Name */}
+                <span className="font-mono text-xs text-fade w-7 shrink-0">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+
                 <Link
                   href={`/name/${name.id}`}
-                  className="flex items-center gap-4 flex-1 min-w-0"
+                  className="flex-1 min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-0.5"
                 >
-                  <span className="font-mono text-xs font-semibold text-[#FF6F9F] w-5 shrink-0">
-                    {rankStr}
+                  <span className="font-editorial text-[1.6rem] leading-tight text-ink group-hover:text-accent-deep transition-colors">
+                    {name.name}
                   </span>
-
-                  <div className="min-w-0 flex flex-col sm:flex-row sm:items-center sm:gap-3">
-                    <span className="font-editorial text-xl sm:text-2xl font-normal text-[#171717] group-hover:text-[#FF4F87] transition-colors">
-                      {name.name}
-                    </span>
-                    <span className="text-xs text-[#777777] truncate">
-                      {name.origin} · &bdquo;{name.meaning}&ldquo;
-                    </span>
-                  </div>
+                  <span className="text-sm text-fade truncate">
+                    {genderLabel(name.gender)} · {name.origin}
+                  </span>
                 </Link>
 
-                {/* Right: Trend & Favorite */}
-                <div className="flex items-center gap-3 shrink-0">
-                  {name.weeklyChange && (
-                    <span className="text-xs font-medium text-emerald-700 hidden sm:inline">
-                      {name.weeklyChange}
-                    </span>
-                  )}
-
-                  <button
-                    onClick={(e) => toggleFavorite(name, e)}
-                    className={`p-2 rounded-full border transition-all active:scale-90 ${
-                      favorited
-                        ? 'bg-[#FFF5F8] border-[#FF6F9F] text-[#FF4F87]'
-                        : 'bg-white border-[#F0E4E7] text-[#777777] hover:text-[#FF4F87] hover:border-[#FFD6E3]'
+                {name.weeklyChange && (
+                  <span
+                    className={`text-xs hidden sm:inline shrink-0 ${
+                      name.trendDirection === 'down'
+                        ? 'text-warn'
+                        : 'text-go'
                     }`}
-                    title="Favorisieren"
                   >
-                    <Heart
-                      className={`w-4 h-4 ${favorited ? 'fill-[#FF4F87]' : ''}`}
-                    />
-                  </button>
-                </div>
+                    {name.weeklyChange}
+                  </span>
+                )}
+
+                <button
+                  onClick={(e) => toggleFavorite(name, e)}
+                  className={`shrink-0 flex items-center justify-center w-9 h-9 rounded-full border transition-colors active:scale-90 ${
+                    favorited
+                      ? 'bg-accent-soft border-line-strong text-accent-deep'
+                      : 'border-transparent text-fade hover:text-accent-deep hover:bg-accent-soft'
+                  }`}
+                  aria-label={favorited ? `${name.name} von Favoriten entfernen` : `${name.name} zu Favoriten hinzufügen`}
+                >
+                  <HeartIcon filled={favorited} />
+                </button>
               </div>
             );
           })}
         </div>
 
-        {/* Quiet Footer Link */}
-        <div className="mt-6 pt-4 flex items-center justify-between text-xs text-[#777777]">
-          <span>Basierend auf aktuellen Auswertungen.</span>
+        <div className="mt-6 flex justify-end">
           <Link
             href="/babynamen"
-            className="font-medium text-[#FF4F87] hover:underline inline-flex items-center gap-1"
+            className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
           >
-            <span>Alle beliebten Namen</span>
+            Alle Namen durchstöbern
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>
     </section>
+  );
+}
+
+function HeartIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={`w-4 h-4 ${filled ? 'fill-accent-deep text-accent-deep' : 'fill-none text-current'}`}
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </svg>
   );
 }

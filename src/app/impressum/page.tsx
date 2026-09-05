@@ -9,153 +9,156 @@ export const metadata = {
 
 export default function ImpressumPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+    <article className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       <div className="mb-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs text-[#777777] hover:text-[#FF4F87] transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Zurück zur Startseite</span>
+          Zurück zur Startseite
         </Link>
       </div>
 
-      <div className="bg-white rounded-[24px] border border-[#F0E4E7] p-8 sm:p-14 shadow-xs">
-        <h1 className="font-editorial text-4xl sm:text-5xl font-normal text-[#171717] tracking-tight mb-8">
+      <header className="mb-10">
+        <p className="eyebrow mb-3">Rechtliches</p>
+        <h1 className="font-editorial text-[clamp(2rem,5vw,3rem)] leading-tight text-ink">
           Impressum
         </h1>
+      </header>
 
-        <div className="space-y-8 text-sm text-[#171717]/85 leading-relaxed">
-          {/* Angaben gemäß § 5 DDG */}
-          <section>
-            <h2 className="text-base font-semibold text-[#171717] mb-3">
-              Angaben gemäß § 5 DDG
-            </h2>
-            <div className="space-y-1 text-[#171717]/80">
-              <p className="font-medium text-[#171717]">Inhaltlich verantwortlich und Diensteanbieter:</p>
-              <p>MVC – Hamburg</p>
-              <p>Frank Vomberg</p>
-              <p>Phönixhof / Haus 11c</p>
-              <p>Ruhrstraße 11 c</p>
-              <p>22761 Hamburg</p>
-              <p>Deutschland</p>
-            </div>
-            <div className="mt-3 space-y-1 text-[#171717]/80">
-              <p><strong>Telefon:</strong> +49 (0)40 3616679-41</p>
-              <p>
-                <strong>E-Mail:</strong>{' '}
-                <a href="mailto:info@mvc-hamburg.de" className="text-[#FF4F87] hover:underline">
-                  info@mvc-hamburg.de
-                </a>
-              </p>
-              <p>
-                <strong>Website:</strong>{' '}
-                <a
-                  href="http://www.mvc-hamburg.de"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#FF4F87] hover:underline"
-                >
-                  www.mvc-hamburg.de
-                </a>
-              </p>
-            </div>
-            <div className="mt-3">
-              <p><strong>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:</strong> DE 245982133</p>
-            </div>
-          </section>
+      <div className="space-y-8 text-[0.95rem] text-ink-soft leading-relaxed">
+        <section>
+          <h2 className="text-base text-ink mb-3">Angaben gemäß § 5 DDG</h2>
+          <p className="font-medium text-ink">Diensteanbieter:</p>
+          <p className="mt-2 font-medium text-ink">MVC – Hamburg</p>
+          <p>Frank Vomberg</p>
+          <p>Phönixhof / Haus 11c</p>
+          <p>Ruhrstraße 11 c</p>
+          <p>22761 Hamburg</p>
+          <p>Deutschland</p>
 
-          {/* Verantwortlich für die Inhalte */}
-          <section className="pt-6 border-t border-[#F0E4E7]">
-            <h2 className="text-base font-semibold text-[#171717] mb-3">
-              Verantwortlich für die Inhalte
-            </h2>
-            <p className="mb-2 text-[#171717]/80">
-              Verantwortlich für die redaktionellen Inhalte dieser Website ist:
+          <div className="mt-4 space-y-1">
+            <p>
+              <strong className="text-ink">Telefon:</strong> +49 (0)40 3616679-41
             </p>
-            <div className="space-y-0.5 text-[#171717]/80">
-              <p>Frank Vomberg</p>
-              <p>MVC – Hamburg</p>
-              <p>Phönixhof / Haus 11c</p>
-              <p>Ruhrstraße 11 c</p>
-              <p>22761 Hamburg</p>
-            </div>
-          </section>
-
-          {/* Konzeption und technische Umsetzung */}
-          <section className="pt-6 border-t border-[#F0E4E7]">
-            <h2 className="text-base font-semibold text-[#171717] mb-2">
-              Konzeption und technische Umsetzung
-            </h2>
-            <p className="text-[#171717]/80">
-              Ploog Webdesign<br />
-              E-Mail:{' '}
-              <a href="mailto:info@ploog-webdesign.de" className="text-[#FF4F87] hover:underline">
-                info@ploog-webdesign.de
+            <p>
+              <strong className="text-ink">E-Mail:</strong>{' '}
+              <a href="mailto:info@mvc-hamburg.de" className="underline underline-offset-2 hover:text-accent-deep">
+                info@mvc-hamburg.de
               </a>
             </p>
-          </section>
-
-          {/* Online-Vermarktung */}
-          <section className="pt-6 border-t border-[#F0E4E7]">
-            <h2 className="text-base font-semibold text-[#171717] mb-2">
-              Online-Vermarktung
-            </h2>
-            <p className="text-[#171717]/80 mb-2">
-              Die Online-Vermarktung von <strong>top-babynamen.de</strong> erfolgt durch die <strong>vertical network media GmbH</strong>.
-            </p>
-            <p className="text-[#171717]/80">
-              Bei Interesse an Werbemöglichkeiten auf top-babynamen.de oder innerhalb des Netzwerks wenden Sie sich bitte an:<br />
-              E-Mail:{' '}
-              <a href="mailto:vermarktung@verticalnetwork.de" className="text-[#FF4F87] hover:underline">
-                vermarktung@verticalnetwork.de
+            <p>
+              <strong className="text-ink">Website:</strong>{' '}
+              <a
+                href="http://www.mvc-hamburg.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-accent-deep"
+              >
+                www.mvc-hamburg.de
               </a>
             </p>
-          </section>
+          </div>
 
-          {/* Über top-babynamen.de */}
-          <section className="pt-6 border-t border-[#F0E4E7]">
-            <h2 className="text-base font-semibold text-[#171717] mb-2">
-              Über top-babynamen.de
-            </h2>
-            <p className="text-[#171717]/80 mb-2">
-              top-babynamen.de bietet einen Überblick über häufig vergebene Babynamen in verschiedenen europäischen Ländern.
-            </p>
-            <p className="text-[#171717]/80">
-              Die Informationen basieren unter anderem auf öffentlich zugänglichen Namensstatistiken der jeweiligen Länder, eigenen Recherchen sowie weiteren öffentlich zugänglichen Quellen.
-            </p>
-          </section>
+          <p className="mt-4">
+            <strong className="text-ink">Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:</strong>{' '}
+            DE 245982133
+          </p>
+        </section>
 
-          {/* Haftung für Inhalte */}
-          <section className="pt-6 border-t border-[#F0E4E7]">
-            <h2 className="text-base font-semibold text-[#171717] mb-2">
-              Haftung für Inhalte
-            </h2>
-            <p className="text-[#171717]/80 mb-2">
-              Die Inhalte dieser Website wurden nach bestem Wissen und mit größtmöglicher Sorgfalt erstellt. Eine Gewähr für die Richtigkeit, Vollständigkeit und Aktualität der bereitgestellten Informationen kann jedoch nicht übernommen werden.
-            </p>
-            <p className="text-[#171717]/80">
-              Die Nutzung der bereitgestellten Informationen erfolgt auf eigene Verantwortung.
-            </p>
-          </section>
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-3">Verantwortlich für die Inhalte</h2>
+          <p className="mb-2">Verantwortlich für die Inhalte dieser Website ist:</p>
+          <p className="font-medium text-ink">Frank Vomberg</p>
+          <p>MVC – Hamburg</p>
+          <p>Phönixhof / Haus 11c</p>
+          <p>Ruhrstraße 11 c</p>
+          <p>22761 Hamburg</p>
+          <p>Deutschland</p>
+        </section>
 
-          {/* Haftung für externe Links */}
-          <section className="pt-6 border-t border-[#F0E4E7]">
-            <h2 className="text-base font-semibold text-[#171717] mb-2">
-              Haftung für externe Links
-            </h2>
-            <p className="text-[#171717]/80 mb-2">
-              Diese Website enthält gegebenenfalls Links zu externen Websites Dritter. Auf deren Inhalte haben wir keinen Einfluss. Für die Inhalte der verlinkten externen Seiten ist stets der jeweilige Betreiber verantwortlich.
-            </p>
-            <p className="text-[#171717]/80 mb-2">
-              Zum Zeitpunkt der Verlinkung waren keine rechtswidrigen Inhalte erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar.
-            </p>
-            <p className="text-[#171717]/80">
-              Sollten uns Rechtsverletzungen auf verlinkten Seiten bekannt werden, werden die betreffenden Links nach entsprechender Prüfung entfernt.
-            </p>
-          </section>
-        </div>
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Konzeption, Gestaltung und technische Umsetzung</h2>
+          <p className="mb-2">
+            Die Konzeption, Gestaltung und technische Umsetzung von{' '}
+            <strong className="text-ink">top-babynamen.de</strong> erfolgte durch:
+          </p>
+          <p className="font-medium text-ink">Freeperr / freeperr.dev</p>
+          <p>
+            E-Mail:{' '}
+            <a href="mailto:business@freeperr.dev" className="underline underline-offset-2 hover:text-accent-deep">
+              business@freeperr.dev
+            </a>
+          </p>
+          <p className="mt-2">
+            Bei der Entwicklung der Website wurden teilweise KI-gestützte Werkzeuge und
+            Technologien eingesetzt.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Online-Vermarktung</h2>
+          <p className="mb-2">
+            Die Online-Vermarktung von <strong className="text-ink">top-babynamen.de</strong> erfolgt
+            durch:
+          </p>
+          <p className="font-medium text-ink">vertical network media GmbH</p>
+          <p className="mb-2">
+            Bei Interesse an Werbemöglichkeiten auf top-babynamen.de oder innerhalb des Netzwerks:
+          </p>
+          <p>
+            <strong className="text-ink">E-Mail:</strong>{' '}
+            <a href="mailto:vermarktung@verticalnetwork.de" className="underline underline-offset-2 hover:text-accent-deep">
+              vermarktung@verticalnetwork.de
+            </a>
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Über top-babynamen.de</h2>
+          <p className="mb-2">
+            <strong className="text-ink">top-babynamen.de</strong> bietet Informationen und
+            Übersichten rund um Babynamen. Dazu gehören unter anderem beliebte und häufig
+            vergebene Vornamen sowie Informationen zu deren Verbreitung und Verwendung.
+          </p>
+          <p>
+            Die Informationen basieren unter anderem auf öffentlich zugänglichen
+            Namensstatistiken, eigenen Recherchen sowie weiteren öffentlich zugänglichen Quellen.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Haftung für Inhalte</h2>
+          <p className="mb-2">
+            Die Inhalte dieser Website werden mit größtmöglicher Sorgfalt erstellt. Eine Gewähr für
+            die Richtigkeit, Vollständigkeit und Aktualität der bereitgestellten Informationen kann
+            jedoch nicht übernommen werden.
+          </p>
+          <p className="mb-2">
+            Insbesondere bei Namensstatistiken und Ranglisten können sich Daten im Laufe der Zeit
+            ändern oder je nach Quelle und Erhebungsmethode unterscheiden.
+          </p>
+          <p>Die Nutzung der bereitgestellten Informationen erfolgt auf eigene Verantwortung.</p>
+        </section>
+
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Haftung für externe Links</h2>
+          <p className="mb-2">
+            Diese Website kann Links zu externen Websites Dritter enthalten. Auf deren Inhalte
+            haben wir keinen Einfluss. Für die Inhalte der verlinkten Websites ist grundsätzlich
+            der jeweilige Betreiber verantwortlich.
+          </p>
+          <p className="mb-2">
+            Zum Zeitpunkt der Verlinkung waren keine rechtswidrigen Inhalte erkennbar.
+          </p>
+          <p className="mb-2">
+            Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete
+            Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Sollten uns konkrete
+            Rechtsverletzungen bekannt werden, werden entsprechende Links nach Prüfung entfernt.
+          </p>
+        </section>
       </div>
-    </div>
+    </article>
   );
 }

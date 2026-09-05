@@ -2,16 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  ArrowLeft,
-  RotateCcw,
-  Heart,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { BABY_NAMES } from '@/data/names';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
-import confetti from 'canvas-confetti';
 
 interface Answers {
   gender: string;
@@ -31,6 +25,15 @@ const INITIAL_ANSWERS: Answers = {
   vibe: '',
 };
 
+const QUESTIONS_LENGTH = 5;
+
+function matchLabel(score: number): string {
+  if (score >= 95) return 'Sehr passend';
+  if (score >= 90) return 'Passt gut';
+  if (score >= 85) return 'Interessant';
+  return 'Einen Blick wert';
+}
+
 export default function NameDiscoveryWizard() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -42,51 +45,46 @@ export default function NameDiscoveryWizard() {
     {
       id: 'gender',
       title: 'Für wen suchst du einen Namen?',
-      subtitle: 'Wähle das Geschlecht aus',
       options: [
-        { label: 'Ein kleines Mädchen', value: 'girl', hint: 'Sanft, klangvoll & feminin' },
-        { label: 'Einen kleinen Jungen', value: 'boy', hint: 'Kräftig, modern & herzlich' },
-        { label: 'Egal / Überraschung', value: 'any', hint: 'Mädchen, Jungen & Unisex-Namen' },
+        { label: 'Ein kleines Mädchen', value: 'girl', hint: 'Sanft und klangvoll' },
+        { label: 'Einen kleinen Jungen', value: 'boy', hint: 'Kräftig und herzlich' },
+        { label: 'Egal / Überraschung', value: 'any', hint: 'Alle Namen zeigen' },
       ],
     },
     {
       id: 'style',
-      title: 'Welcher Stil entspricht eurem Geschmack?',
-      subtitle: 'Klassisch oder eher zeitgemäß modern?',
+      title: 'Welcher Stil gefällt euch?',
       options: [
-        { label: 'Modern & trendbewusst', value: 'modern', hint: 'Aktuell im Trend, frisch' },
-        { label: 'Klassisch & zeitlos', value: 'classic', hint: 'Traditionsreich, edel' },
-        { label: 'International & weltoffen', value: 'international', hint: 'Leicht weltweit auszusprechen' },
+        { label: 'Modern & frisch', value: 'modern', hint: 'Aktuell und geläufig' },
+        { label: 'Klassisch & zeitlos', value: 'classic', hint: 'Bewährt seit Jahrzehnten' },
+        { label: 'International', value: 'international', hint: 'Leicht auszusprechen' },
       ],
     },
     {
       id: 'length',
-      title: 'Wie lang soll der Name sein?',
-      subtitle: 'Kurz und knackig oder klangvoll lang?',
+      title: 'Wie lang darf der Name sein?',
       options: [
-        { label: 'Kurz (3–4 Buchstaben)', value: 'short', hint: 'z.B. Emma, Noah, Mia, Mats' },
-        { label: 'Mittellang (5–6 Buchstaben)', value: 'medium', hint: 'z.B. Emilia, Elias, Clara' },
-        { label: 'Ganz egal wie lang', value: 'any', hint: 'Der Klang ist das Wichtigste' },
+        { label: 'Kurz (3–4 Buchstaben)', value: 'short', hint: 'Emma, Noah, Mia' },
+        { label: 'Mittellang (5–6 Buchstaben)', value: 'medium', hint: 'Emilia, Elias, Clara' },
+        { label: 'Egal', value: 'any', hint: 'Der Klang zählt' },
       ],
     },
     {
       id: 'popularity',
       title: 'Wie bekannt soll der Name sein?',
-      subtitle: 'Ein beliebter Liebling oder ein seltener Geheimtipp?',
       options: [
-        { label: 'Sehr beliebt & bekannt', value: 'popular', hint: 'Bewährt in den Top-Listen' },
-        { label: 'Selten & besonders', value: 'rare', hint: 'Einzigartig, nicht auf jedem Spielplatz' },
+        { label: 'Sehr beliebt', value: 'popular', hint: 'Oben auf den Listen' },
+        { label: 'Selten & besonders', value: 'rare', hint: 'Nicht auf jedem Spielplatz' },
         { label: 'Ausgewogen', value: 'balanced', hint: 'Bekannt, aber nicht überlaufen' },
       ],
     },
     {
       id: 'vibe',
       title: 'Welche Stimmung soll der Name haben?',
-      subtitle: 'Was soll man fühlen, wenn man ihn hört?',
       options: [
-        { label: 'Sanft & melodisch', value: 'gentle', hint: 'Warme Vokale, fließend' },
-        { label: 'Kraftvoll & mutig', value: 'strong', hint: 'Charakterstark, markant' },
-        { label: 'Naturverbunden & lichtvoll', value: 'nature', hint: 'Licht, Frühling, Meer' },
+        { label: 'Sanft & melodisch', value: 'gentle', hint: 'Warme Vokale, fließender Klang' },
+        { label: 'Kraftvoll & mutig', value: 'strong', hint: 'Markant und charakterstark' },
+        { label: 'Naturverbunden', value: 'nature', hint: 'Licht, Frühling, Meer' },
       ],
     },
   ];
@@ -132,22 +130,12 @@ export default function NameDiscoveryWizard() {
       if (finalAnswers.vibe === 'strong' && (name.meaning.includes('Krieger') || name.meaning.includes('Beschützer') || name.tags.includes('Stark'))) score += 12;
       if (finalAnswers.vibe === 'nature' && (name.meaning.includes('Licht') || name.meaning.includes('Blume') || name.tags.includes('Naturverbunden'))) score += 12;
 
-      const normalizedScore = Math.min(Math.max(score, 65), 99);
-      return { name, score: normalizedScore };
+      return { name, score: Math.min(Math.max(score, 65), 99) };
     });
 
     scored.sort((a, b) => b.score - a.score);
     setResults(scored.slice(0, 4));
     setCurrentStep(questions.length);
-
-    try {
-      confetti({
-        particleCount: 30,
-        spread: 60,
-        origin: { y: 0.6 },
-        colors: ['#FF6F9F', '#FF4F87', '#FFD6E3'],
-      });
-    } catch {}
   };
 
   const handleReset = () => {
@@ -156,187 +144,149 @@ export default function NameDiscoveryWizard() {
     setResults([]);
   };
 
+  const genderLabel = (name: BabyName) =>
+    name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex';
+
+  const progress = Math.min(100, ((currentStep + 1) / questions.length) * 100);
+
   return (
-    <section className="py-14 sm:py-20 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        {/* Container Card */}
-        <div className="bg-[#FFF5F8]/70 rounded-[28px] border border-[#F0E4E7] p-8 sm:p-14 shadow-xs">
+    <section className="py-12 sm:py-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="bg-paper-warm border border-line rounded-2xl p-6 sm:p-10">
           {!isOpen ? (
-            /* Intro State */
-            <div className="text-center max-w-xl mx-auto py-4">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-[#171717] tracking-tight mb-3">
-                Noch keinen Namen gefunden?
+            <div className="text-center max-w-lg mx-auto py-4">
+              <p className="eyebrow mb-3">Noch unschlüssig?</p>
+              <h2 className="font-editorial text-3xl sm:text-4xl text-ink mb-3">
+                Fünf Fragen zur Namenswahl
               </h2>
-              <p className="text-base text-[#777777] mb-8 leading-relaxed">
-                Beantworte ein paar Fragen und wir finden Namen, die zu dir passen.
+              <p className="text-ink-soft text-[0.95rem] mb-8">
+                Beantworte ein paar kurze Fragen – als Inspiration, nicht als Regel.
               </p>
-              <button
-                onClick={() => setIsOpen(true)}
-                className="btn-primary px-8 py-3.5 text-base font-medium inline-flex items-center gap-2"
-              >
-                <span>Namen für mich finden</span>
+              <button onClick={() => setIsOpen(true)} className="btn btn-primary px-7 py-2.5">
+                Namen für mich finden
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           ) : currentStep < questions.length ? (
-            /* Active Wizard Question */
             <div>
-              {/* Header & step counter */}
-              <div className="flex items-center justify-between mb-8 pb-3 border-b border-[#F0E4E7]">
-                <span className="text-xs font-semibold text-[#FF4F87]">
-                  Frage {currentStep + 1} von {questions.length}
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs text-fade">
+                  Frage {currentStep + 1} von {QUESTIONS_LENGTH}
                 </span>
-                <div className="flex items-center gap-2">
-                  {currentStep > 0 && (
-                    <button
-                      onClick={() => setCurrentStep(currentStep - 1)}
-                      className="p-1.5 rounded-full hover:bg-white text-[#777777] hover:text-[#171717] transition-colors"
-                      title="Zurück"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                  )}
-                  <button
-                    onClick={handleReset}
-                    className="text-xs text-[#777777] hover:text-[#FF4F87] px-2.5 py-1 rounded-full hover:bg-white transition-colors"
-                  >
-                    Zurücksetzen
-                  </button>
-                </div>
+                <button
+                  onClick={handleReset}
+                  className="text-xs text-fade hover:text-ink transition-colors"
+                >
+                  Zurücksetzen
+                </button>
               </div>
 
-              {/* Step indicator bar */}
-              <div className="w-full bg-white h-1.5 rounded-full overflow-hidden mb-8 border border-[#F0E4E7]">
+              <div className="w-full bg-surface h-1 rounded-full overflow-hidden mb-8">
                 <div
-                  className="h-full bg-[#FF4F87] rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${((currentStep + 1) / questions.length) * 100}%` }}
+                  className="h-full bg-accent transition-all duration-300 ease-out"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
 
-              {/* Question Text */}
-              <div className="mb-8 text-center max-w-lg mx-auto">
-                <h3 className="text-2xl sm:text-3xl font-semibold text-[#171717] mb-2">
-                  {questions[currentStep].title}
-                </h3>
-                <p className="text-sm text-[#777777]">
-                  {questions[currentStep].subtitle}
-                </p>
-              </div>
+              <h3 className="font-editorial text-2xl sm:text-3xl text-ink mb-6 text-center">
+                {questions[currentStep].title}
+              </h3>
 
-              {/* Options Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-2xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {questions[currentStep].options.map((opt) => (
                   <button
                     key={opt.value}
                     onClick={() =>
                       handleSelectOption(questions[currentStep].id as keyof Answers, opt.value)
                     }
-                    className="p-5 rounded-[18px] bg-white border border-[#F0E4E7] hover:border-[#FF6F9F] hover:shadow-xs text-left transition-all duration-200 group active:scale-98"
+                    className="bg-surface border border-line-strong rounded-xl p-4 text-left hover:border-accent transition-colors group"
                   >
-                    <div className="font-semibold text-sm text-[#171717] group-hover:text-[#FF4F87] mb-1 transition-colors">
+                    <div className="text-sm font-medium text-ink group-hover:text-accent-deep">
                       {opt.label}
                     </div>
-                    <p className="text-xs text-[#777777] leading-relaxed">
-                      {opt.hint}
-                    </p>
+                    <p className="mt-0.5 text-xs text-fade">{opt.hint}</p>
                   </button>
                 ))}
               </div>
             </div>
           ) : (
-            /* Results Presentation */
-            <div className="animate-in fade-in duration-300">
-              <div className="text-center max-w-lg mx-auto mb-8">
-                <h3 className="text-3xl font-semibold text-[#171717] mb-2">
+            <div className="rise">
+              <div className="text-center max-w-lg mx-auto mb-7">
+                <h3 className="font-editorial text-2xl sm:text-3xl text-ink mb-2">
                   Deine Namensauswahl
                 </h3>
-                <p className="text-sm text-[#777777]">
-                  Diese Namen passen am besten zu deinen Wünschen:
+                <p className="text-sm text-ink-soft">
+                  Das passt am besten zu deinen Antworten:
                 </p>
               </div>
 
-              {/* Results Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <div className="border-t border-line">
                 {results.map(({ name, score }) => {
                   const favorited = isFavorite(name.id);
                   return (
                     <div
                       key={name.id}
-                      className="bg-white p-6 rounded-[20px] border border-[#F0E4E7] hover:border-[#FFD6E3] hover:shadow-sm transition-all flex flex-col justify-between"
+                      className={`flex items-center gap-3 sm:gap-5 py-4 border-b border-line group hover:bg-surface transition-colors px-2 -mx-2 ${
+                        score >= 95 ? 'rounded-lg' : ''
+                      }`}
                     >
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-semibold text-[#FF4F87]">
-                            {score}% Treffer
-                          </span>
-                          <button
-                            onClick={(e) => toggleFavorite(name, e)}
-                            className={`p-2 rounded-full border transition-colors ${
-                              favorited
-                                ? 'bg-[#FFF5F8] border-[#FF6F9F] text-[#FF4F87]'
-                                : 'bg-white border-[#F0E4E7] text-[#777777] hover:text-[#FF4F87]'
-                            }`}
-                            title="Speichern"
-                          >
-                            <Heart
-                              className={`w-4 h-4 ${favorited ? 'fill-[#FF4F87]' : ''}`}
-                            />
-                          </button>
-                        </div>
-
-                        <div className="flex items-baseline justify-between mb-1">
-                          <h4 className="font-editorial text-3xl font-normal text-[#171717]">
+                      <Link href={`/name/${name.id}`} className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                          <span className="font-editorial text-[1.4rem] sm:text-[1.6rem] leading-tight text-ink group-hover:text-accent-deep transition-colors">
                             {name.name}
-                          </h4>
-                          <span className="text-xs text-[#777777]">
-                            {name.gender === 'girl'
-                              ? 'Mädchen'
-                              : name.gender === 'boy'
-                              ? 'Junge'
-                              : 'Unisex'}
+                          </span>
+                          <span className="text-sm text-ink-soft">
+                            {genderLabel(name)} · {name.origin}
                           </span>
                         </div>
-
-                        <p className="text-xs font-medium text-[#FF6F9F] uppercase tracking-wider mb-2">
-                          Herkunft: {name.origin}
-                        </p>
-                        <p className="text-sm text-[#171717]/85 mb-4">
+                        <p className="text-sm text-fade truncate mt-0.5">
                           &bdquo;{name.meaning}&ldquo;
                         </p>
-                      </div>
+                      </Link>
 
-                      <div className="pt-3 border-t border-[#F0E4E7] flex items-center justify-between">
-                        <span className="text-xs text-[#777777]">
-                          Popularität: #{name.popularityRank}
-                        </span>
-                        <Link
-                          href={`/name/${name.id}`}
-                          className="btn-primary text-xs px-4 py-1.5 font-medium inline-flex items-center gap-1"
+                      <span className="shrink-0 text-xs text-accent-deep bg-accent-pale border border-line rounded-full px-2.5 py-1">
+                        {matchLabel(score)}
+                      </span>
+
+                      <button
+                        onClick={(e) => toggleFavorite(name, e)}
+                        className={`shrink-0 flex items-center justify-center w-9 h-9 rounded-full border transition-colors active:scale-90 ${
+                          favorited
+                            ? 'bg-accent-soft border-line-strong text-accent-deep'
+                            : 'border-transparent text-fade hover:text-accent-deep hover:bg-accent-soft'
+                        }`}
+                        aria-label={
+                          favorited
+                            ? `${name.name} von Favoriten entfernen`
+                            : `${name.name} zu Favoriten hinzufügen`
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          className={`w-4 h-4 ${favorited ? 'fill-accent-deep text-accent-deep' : 'fill-none text-current'}`}
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          <span>Mehr erfahren</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
-                      </div>
+                          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                        </svg>
+                      </button>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Actions Footer */}
-              <div className="flex items-center justify-center gap-3 flex-wrap pt-2">
+              <div className="flex items-center justify-center gap-3 flex-wrap mt-7">
                 <button
                   onClick={handleReset}
-                  className="px-5 py-2 rounded-full bg-white border border-[#F0E4E7] text-[#171717] hover:text-[#FF4F87] font-medium text-xs sm:text-sm inline-flex items-center gap-1.5 hover:bg-[#FFF5F8] transition-colors"
+                  className="btn btn-secondary"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Noch einmal</span>
+                  Noch einmal
                 </button>
-                <Link
-                  href="/babynamen"
-                  className="btn-primary px-5 py-2 text-xs sm:text-sm font-medium inline-flex items-center gap-1.5"
-                >
-                  <span>Alle Namen durchsuchen</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                <Link href="/babynamen" className="btn btn-primary">
+                  Alle Namen durchsuchen
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>

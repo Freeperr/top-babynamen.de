@@ -16,153 +16,134 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 24);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { name: 'Startseite', href: '/' },
-    { name: 'Babynamen', href: '/babynamen' },
+    { name: 'Beliebte Namen', href: '/' },
+    { name: 'Namen finden', href: '/babynamen' },
     { name: 'Mädchennamen', href: '/maedchennamen' },
     { name: 'Jungennamen', href: '/jungennamen' },
     { name: 'Namensspiele', href: '/spiele' },
-    { name: 'Favoriten', href: '/favoriten', count: favoritesCount },
   ];
+
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
     <>
       <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'glass-nav py-3.5 shadow-[0_2px_14px_rgba(23,23,23,0.03)]'
-            : 'bg-white/95 py-4 border-b border-transparent'
+        className={`sticky top-0 z-40 transition-colors duration-200 ${
+          isScrolled || isMobileMenuOpen
+            ? 'bg-paper/95 border-b border-line'
+            : 'bg-paper'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-full bg-[#FFF5F8] border border-[#FFD6E3] flex items-center justify-center text-[#FF4F87] transition-transform">
-              <Heart className="w-3.5 h-3.5 fill-[#FF4F87] text-[#FF4F87]" />
-            </div>
-            <span className="text-lg font-semibold tracking-tight text-[#171717]">
-              top-babynamen<span className="text-[#FF4F87]">.de</span>
+        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+          {/* Wordmark */}
+          <Link href="/" className="shrink-0 whitespace-nowrap">
+            <span className="font-editorial text-[1.25rem] text-ink leading-none">
+              Top-Babynamen
+              <span className="text-accent text-[0.95rem]">.de</span>
             </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`relative px-3.5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                    isActive
-                      ? 'text-[#FF4F87] bg-[#FFF5F8]'
-                      : 'text-[#777777] hover:text-[#171717] hover:bg-[#FFF5F8]/60'
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5">
-                    {link.name}
-                    {typeof link.count === 'number' && link.count > 0 && (
-                      <span className="w-4 h-4 flex items-center justify-center text-[10px] font-bold bg-[#FF4F87] text-white rounded-full">
-                        {link.count}
-                      </span>
-                    )}
-                  </span>
-                </Link>
-              );
-            })}
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm transition-colors py-1 border-b-2 ${
+                  isActive(link.href)
+                    ? 'text-ink border-accent font-medium'
+                    : 'text-ink-soft border-transparent hover:text-ink'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </nav>
 
-          {/* Right Action Icons & Button */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Right actions */}
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs text-[#777777] bg-[#FFF5F8] border border-[#F0E4E7] hover:border-[#FFD6E3] hover:text-[#171717] transition-all"
-              title="Suche öffnen"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-ink-soft hover:text-ink transition-colors"
+              title="Suche öffnen (Ctrl/⌘ + K)"
             >
-              <Search className="w-3.5 h-3.5 text-[#FF6F9F]" />
-              <span>Suchen</span>
+              <Search className="w-4 h-4" />
+              <span className="hidden sm:inline">Suchen</span>
             </button>
 
             <Link
-              href="/babynamen"
-              className="btn-primary px-5 py-2 text-xs sm:text-sm font-medium"
+              href="/favoriten"
+              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                isActive('/favoriten')
+                  ? 'text-accent-deep'
+                  : 'text-ink-soft hover:text-ink'
+              }`}
+              aria-label="Favoriten ansehen"
             >
-              Namen entdecken
+              <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-accent text-accent' : ''}`} />
+              {favoritesCount > 0 && (
+                <span className="text-xs text-fade">{favoritesCount}</span>
+              )}
+              <span className="hidden sm:inline">Favoriten</span>
             </Link>
-          </div>
 
-          {/* Mobile Right Icons */}
-          <div className="flex lg:hidden items-center gap-2">
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="p-2 rounded-full text-[#777777] hover:text-[#FF4F87] bg-[#FFF5F8] border border-[#F0E4E7] transition-colors"
-              aria-label="Suche öffnen"
-            >
-              <Search className="w-4 h-4 text-[#FF6F9F]" />
-            </button>
-
+            {/* Mobile menu toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full text-[#171717] bg-[#FFF5F8] border border-[#F0E4E7] hover:bg-[#FFD6E3]/40 transition-colors"
+              className="lg:hidden p-2 -mr-1 rounded-lg text-ink-soft hover:text-ink hover:bg-paper-warm transition-colors"
               aria-label="Menü umschalten"
+              aria-expanded={isMobileMenuOpen}
             >
-              {isMobileMenuOpen ? <X className="w-4 h-4 text-[#FF4F87]" /> : <Menu className="w-4 h-4" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown Drawer */}
+        {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-[#F0E4E7] bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6">
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                      isActive
-                        ? 'bg-[#FFF5F8] text-[#FF4F87]'
-                        : 'text-[#171717] hover:bg-[#FFF5F8]/60'
-                    }`}
-                  >
-                    <span>{link.name}</span>
-                    {typeof link.count === 'number' && link.count > 0 && (
-                      <span className="w-5 h-5 flex items-center justify-center text-xs font-bold bg-[#FF4F87] text-white rounded-full">
-                        {link.count}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
-
-              <div className="pt-3">
+          <nav className="lg:hidden border-t border-line bg-paper">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col">
+              {navLinks.map((link, i) => (
                 <Link
-                  href="/babynamen"
+                  key={link.href}
+                  href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="btn-primary w-full py-2.5 text-center text-sm font-medium"
+                  className={`py-3 text-base border-b border-line/60 ${
+                    i === navLinks.length - 1 ? 'border-b-0' : ''
+                  } ${
+                    isActive(link.href)
+                      ? 'text-accent-deep font-medium'
+                      : 'text-ink hover:text-ink-soft'
+                  }`}
                 >
-                  Namen entdecken
+                  {link.name}
                 </Link>
-              </div>
+              ))}
+              <Link
+                href="/favoriten"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-3 text-base text-ink hover:text-ink-soft flex items-center gap-2"
+              >
+                <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-accent text-accent' : ''}`} />
+                Favoriten
+                {favoritesCount > 0 && (
+                  <span className="text-xs text-fade">{favoritesCount}</span>
+                )}
+              </Link>
             </div>
-          </div>
+          </nav>
         )}
       </header>
 
-      {/* Global Quick Search Modal */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );

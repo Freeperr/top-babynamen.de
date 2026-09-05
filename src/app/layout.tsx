@@ -4,12 +4,13 @@ import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import CookieConsent from '@/components/CookieConsent';
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: '--font-sans',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const newsreader = Newsreader({
@@ -21,22 +22,20 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: 'top-babynamen.de – Schöne Babynamen entdecken & finden',
+  title: 'top-babynamen.de – Beliebte und besondere Babynamen',
   description:
-    'Finde den perfekten Namen für dein Baby. Zeitlose Klassiker, moderne Lieblinge und seltene Namen mit Herkunft, Bedeutung und spielerischem Namensfinder.',
+    'Beliebte Babynamen, schöne Klassiker und seltene Entdeckungen – mit Herkunft, Bedeutung und kleinen Namensspielen zum Stöbern.',
   keywords: [
     'Babynamen',
     'Mädchennamen',
     'Jungennamen',
-    'Beliebte Babynamen',
-    'Seltene Namen',
-    'Namensfinder',
+    'Beliebte Vornamen',
+    'Vornamen mit Bedeutung',
   ],
-  authors: [{ name: 'top-babynamen.de' }],
   openGraph: {
-    title: 'top-babynamen.de – Finde einen Namen, den du lieben wirst',
+    title: 'top-babynamen.de – Namen, die man sich merkt',
     description:
-      'Entdecke beliebte, seltene und besondere Babynamen – liebevoll kuratiert und spielerisch inspiriert.',
+      'Von beliebten Klassikern bis zu seltenen Entdeckungen: Stöbere durch Namen, schau dir Bedeutung und Herkunft an und speichere deine Favoriten.',
     url: 'https://top-babynamen.de',
     siteName: 'top-babynamen.de',
     locale: 'de_DE',
@@ -51,11 +50,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de" className={`${plusJakarta.variable} ${newsreader.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-[#171717] font-sans">
+      <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
         <FavoritesProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <CookieConsent />
         </FavoritesProvider>
       </body>
     </html>

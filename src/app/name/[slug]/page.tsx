@@ -1,6 +1,5 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { Metadata } from 'next';
 import { getNameById, getAllNames, getSimilarNames } from '@/lib/nameService';
 import NameDetailClient from './NameDetailClient';

@@ -2,13 +2,15 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Heart, Sparkles, Trash2, Share2, Swords, ArrowRight, Check } from 'lucide-react';
+import { Heart, Trash2, Share2, Check, Swords, ArrowRight } from 'lucide-react';
 import { useFavorites } from '@/context/FavoritesContext';
-import NameCard from '@/components/NameCard';
+import NameRow from '@/components/NameRow';
+
+type GenderFilter = 'all' | 'girl' | 'boy';
 
 export default function FavoritenPage() {
   const { favorites, clearFavorites } = useFavorites();
-  const [filterGender, setFilterGender] = useState<'all' | 'girl' | 'boy'>('all');
+  const [filterGender, setFilterGender] = useState<GenderFilter>('all');
   const [copied, setCopied] = useState(false);
 
   const filteredFavorites = favorites.filter((n) => {
@@ -27,91 +29,76 @@ export default function FavoritenPage() {
     }
   };
 
+  const counts = {
+    all: favorites.length,
+    girl: favorites.filter((f) => f.gender === 'girl' || f.gender === 'unisex').length,
+    boy: favorites.filter((f) => f.gender === 'boy' || f.gender === 'unisex').length,
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       {/* Header */}
-      <div className="max-w-2xl mx-auto text-center mb-10">
-        <div className="w-14 h-14 rounded-full bg-[#FFF5F8] border border-[#FFD6E3] flex items-center justify-center text-[#FF4F87] mx-auto mb-3 shadow-2xs">
-          <Heart className="w-7 h-7 fill-[#FF4F87]" />
-        </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-[#171717] tracking-tight mb-2">
+      <div className="mb-10">
+        <p className="eyebrow mb-3">Deine Auswahl</p>
+        <h1 className="font-editorial text-[clamp(1.9rem,4vw,3rem)] leading-tight text-ink">
           Meine Namen
         </h1>
-        <p className="text-base sm:text-lg text-[#777777]">
-          Deine gespeicherten Favoriten.
+        <p className="mt-3 text-ink-soft text-[0.95rem]">
+          Alles, was dir gefallen hat, an einem Ort.
         </p>
       </div>
 
       {favorites.length > 0 ? (
         <div>
-          {/* Action Toolbar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-[22px] bg-[#FFF5F8] border border-[#FFD6E3] mb-8">
-            {/* Filter pills */}
-            <div className="flex items-center gap-1.5 self-start sm:self-auto">
-              <span className="text-xs font-bold text-[#777777] mr-1">Filter:</span>
-              <button
-                onClick={() => setFilterGender('all')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                  filterGender === 'all'
-                    ? 'bg-[#FF4F87] text-white'
-                    : 'bg-white text-[#171717] border border-[#FFD6E3]'
-                }`}
-              >
-                Alle ({favorites.length})
-              </button>
-              <button
-                onClick={() => setFilterGender('girl')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                  filterGender === 'girl'
-                    ? 'bg-[#FF4F87] text-white'
-                    : 'bg-white text-[#171717] border border-[#FFD6E3]'
-                }`}
-              >
-                Mädchen
-              </button>
-              <button
-                onClick={() => setFilterGender('boy')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                  filterGender === 'boy'
-                    ? 'bg-[#FF4F87] text-white'
-                    : 'bg-white text-[#171717] border border-[#FFD6E3]'
-                }`}
-              >
-                Jungen
-              </button>
+          {/* Toolbar */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-line pb-5 mb-4">
+            <div className="flex items-center gap-2 flex-wrap">
+              {[
+                { id: 'all' as const, label: 'Alle', count: counts.all },
+                { id: 'girl' as const, label: 'Mädchen', count: counts.girl },
+                { id: 'boy' as const, label: 'Jungen', count: counts.boy },
+              ].map((g) => (
+                <button
+                  key={g.id}
+                  onClick={() => setFilterGender(g.id)}
+                  className={`px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                    filterGender === g.id
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
+                  }`}
+                >
+                  {g.label} ({g.count})
+                </button>
+              ))}
             </div>
 
-            {/* Action buttons */}
-            <div className="flex items-center gap-2 self-end sm:self-auto">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={handleShare}
-                className="px-3.5 py-1.5 rounded-full bg-white border border-[#FFD6E3] hover:border-[#FF6F9F] text-xs font-semibold text-[#171717] flex items-center gap-1.5 transition-colors"
+                className="btn btn-secondary text-xs px-3 py-1.5"
                 title="Liste kopieren"
               >
                 {copied ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-emerald-600">Kopiert!</span>
+                    <Check className="w-3.5 h-3.5 text-go" />
+                    <span className="text-go">Kopiert!</span>
                   </>
                 ) : (
                   <>
-                    <Share2 className="w-3.5 h-3.5 text-[#FF6F9F]" />
+                    <Share2 className="w-3.5 h-3.5" />
                     <span>Liste teilen</span>
                   </>
                 )}
               </button>
 
-              <Link
-                href="/spiele?tab=battle"
-                className="px-3.5 py-1.5 rounded-full bg-[#FF4F87] text-white text-xs font-semibold flex items-center gap-1.5 shadow-2xs hover:bg-[#e63d74] transition-colors"
-              >
+              <Link href="/spiele?tab=battle" className="btn btn-primary text-xs px-3 py-1.5">
                 <Swords className="w-3.5 h-3.5" />
-                <span>Battle spielen</span>
+                Battle spielen
               </Link>
 
               <button
                 onClick={clearFavorites}
-                className="p-1.5 rounded-full hover:bg-white text-[#777777] hover:text-red-500 transition-colors"
+                className="btn btn-ghost text-xs px-2 py-1.5"
                 title="Alle Favoriten leeren"
               >
                 <Trash2 className="w-4 h-4" />
@@ -119,31 +106,35 @@ export default function FavoritenPage() {
             </div>
           </div>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {filteredFavorites.map((name) => (
-              <NameCard key={name.id} name={name} showTrend />
-            ))}
-          </div>
+          {/* List */}
+          {filteredFavorites.length > 0 ? (
+            <div className="border-t border-line">
+              {filteredFavorites.map((name) => (
+                <NameRow key={name.id} name={name} />
+              ))}
+            </div>
+          ) : (
+            <p className="py-10 text-center text-sm text-fade">
+              Für diese Auswahl gibt es gerade keine Namen.
+            </p>
+          )}
         </div>
       ) : (
-        /* Empty State */
-        <div className="max-w-md mx-auto bg-white rounded-[28px] border border-[#FFD6E3] p-10 sm:p-14 text-center shadow-sm my-6">
-          <div className="w-16 h-16 rounded-full bg-[#FFF5F8] border border-[#FFD6E3] flex items-center justify-center text-[#FF4F87] mx-auto mb-4">
-            <Heart className="w-8 h-8 text-[#FF6F9F]" />
+        /* Empty state */
+        <div className="max-w-md mx-auto bg-surface border border-line rounded-2xl p-10 sm:p-12 text-center my-6">
+          <div className="w-12 h-12 rounded-full bg-accent-soft text-accent-deep flex items-center justify-center mx-auto mb-4">
+            <Heart className="w-6 h-6" />
           </div>
-          <h3 className="text-2xl font-bold text-[#171717] mb-2">
+          <h3 className="font-editorial text-2xl text-ink mb-2">
             Noch keine Namen gespeichert.
           </h3>
-          <p className="text-sm text-[#777777] mb-8 leading-relaxed">
-            Entdecke jetzt Namen und speichere deine Favoriten mit einem Klick auf das kleine Herz.
+          <p className="text-sm text-ink-soft mb-8">
+            Stöbere durch die Namenslisten und tippe auf das Herz, um Namen zu
+            sammeln.
           </p>
-          <Link
-            href="/babynamen"
-            className="btn-primary px-8 py-3 text-sm font-semibold inline-flex items-center gap-2 shadow-sm"
-          >
-            <span>Namen entdecken</span>
-            <Sparkles className="w-4 h-4" />
+          <Link href="/babynamen" className="btn btn-primary px-6 py-2.5">
+            Namen entdecken
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       )}

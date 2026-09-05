@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Wand2, Sparkles, Heart, ArrowRight } from 'lucide-react';
+import { Wand2, Heart, ArrowRight } from 'lucide-react';
 import { BABY_NAMES } from '@/data/names';
 import { BabyName, Gender, NameStyle } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
-import confetti from 'canvas-confetti';
+
+const genderLabel = (gender: string) =>
+  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
 
 export default function NameGenerator() {
   const [selectedGender, setSelectedGender] = useState<Gender | 'all'>('all');
@@ -23,7 +25,6 @@ export default function NameGenerator() {
     setIsGenerating(true);
     setGeneratedResult(null);
 
-    // Filter candidates based on selected options
     let candidates = BABY_NAMES.filter((n) => {
       const matchGender =
         selectedGender === 'all' || n.gender === selectedGender || n.gender === 'unisex';
@@ -40,7 +41,6 @@ export default function NameGenerator() {
 
     const winner = candidates[Math.floor(Math.random() * candidates.length)];
 
-    // Slot-machine cycling effect
     let count = 0;
     const interval = setInterval(() => {
       const randomIdx = Math.floor(Math.random() * BABY_NAMES.length);
@@ -52,47 +52,37 @@ export default function NameGenerator() {
         setDisplayedName(winner.name);
         setGeneratedResult(winner);
         setIsGenerating(false);
-
-        try {
-          confetti({
-            particleCount: 35,
-            spread: 60,
-            origin: { y: 0.6 },
-            colors: ['#FF6F9F', '#FF4F87', '#FFD6E3'],
-          });
-        } catch {}
       }
     }, 90);
   };
 
   return (
     <div className="max-w-xl mx-auto">
-      {/* Options Panel */}
-      <div className="bg-white rounded-[28px] border border-[#FFD6E3] p-6 sm:p-8 shadow-sm mb-8">
-        <h3 className="text-xl font-bold text-[#171717] mb-5 text-center flex items-center justify-center gap-2">
-          <Wand2 className="w-5 h-5 text-[#FF4F87]" />
-          <span>Generiere deinen Traumnamen</span>
+      {/* Options */}
+      <div className="bg-surface rounded-2xl border border-line p-6 sm:p-8 mb-6">
+        <h3 className="font-editorial text-xl text-ink mb-5 text-center inline-flex items-center justify-center gap-2 w-full">
+          <Wand2 className="w-5 h-5 text-accent" />
+          Lass dir einen Namen vorschlagen
         </h3>
 
-        {/* Gender Choice */}
         <div className="mb-5">
-          <label className="text-xs font-bold uppercase tracking-wider text-[#777777] block mb-2">
-            Geschlecht:
-          </label>
+          <label className="eyebrow block mb-2">Geschlecht</label>
           <div className="grid grid-cols-4 gap-2">
-            {[
-              { id: 'all' as const, label: 'Egal' },
-              { id: 'girl' as const, label: 'Mädchen' },
-              { id: 'boy' as const, label: 'Junge' },
-              { id: 'unisex' as const, label: 'Unisex' },
-            ].map((g) => (
+            {(
+              [
+                { id: 'all' as const, label: 'Egal' },
+                { id: 'girl' as const, label: 'Mädchen' },
+                { id: 'boy' as const, label: 'Junge' },
+                { id: 'unisex' as const, label: 'Unisex' },
+              ]
+            ).map((g) => (
               <button
                 key={g.id}
                 onClick={() => setSelectedGender(g.id)}
-                className={`py-2 text-xs font-semibold rounded-full border transition-all ${
+                className={`py-2 text-xs font-medium rounded-lg border transition-colors ${
                   selectedGender === g.id
-                    ? 'bg-[#FF4F87] text-white border-[#FF4F87] shadow-2xs'
-                    : 'bg-[#FFF5F8] text-[#171717] border-[#FFD6E3] hover:border-[#FF6F9F]'
+                    ? 'bg-accent text-white border-accent'
+                    : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
                 }`}
               >
                 {g.label}
@@ -101,26 +91,25 @@ export default function NameGenerator() {
           </div>
         </div>
 
-        {/* Style Choice */}
         <div className="mb-6">
-          <label className="text-xs font-bold uppercase tracking-wider text-[#777777] block mb-2">
-            Stil &amp; Charakter:
-          </label>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-            {[
-              { id: 'all', label: 'Alle' },
-              { id: 'modern', label: 'Modern' },
-              { id: 'rare', label: 'Selten' },
-              { id: 'classic', label: 'Klassisch' },
-              { id: 'international', label: 'International' },
-            ].map((s) => (
+          <label className="eyebrow block mb-2">Stil</label>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            {(
+              [
+                { id: 'all', label: 'Alle' },
+                { id: 'modern', label: 'Modern' },
+                { id: 'rare', label: 'Selten' },
+                { id: 'classic', label: 'Klassisch' },
+                { id: 'international', label: 'International' },
+              ] as const
+            ).map((s) => (
               <button
                 key={s.id}
                 onClick={() => setSelectedStyle(s.id)}
-                className={`py-2 text-xs font-semibold rounded-full border transition-all ${
+                className={`py-2 text-xs font-medium rounded-lg border transition-colors ${
                   selectedStyle === s.id
-                    ? 'bg-[#FF4F87] text-white border-[#FF4F87] shadow-2xs'
-                    : 'bg-[#FFF5F8] text-[#171717] border-[#FFD6E3] hover:border-[#FF6F9F]'
+                    ? 'bg-accent text-white border-accent'
+                    : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
                 }`}
               >
                 {s.label}
@@ -129,30 +118,26 @@ export default function NameGenerator() {
           </div>
         </div>
 
-        {/* Generate Button */}
         <button
           onClick={handleGenerate}
           disabled={isGenerating}
-          className="btn-primary w-full py-3.5 text-base font-bold flex items-center justify-center gap-2 shadow-lg disabled:opacity-75 cursor-pointer"
+          className="btn btn-primary w-full py-3 disabled:opacity-60"
         >
-          <Sparkles className={`w-5 h-5 ${isGenerating ? 'animate-spin' : ''}`} />
-          <span>{isGenerating ? 'Mische Namensideen...' : 'Namen generieren'}</span>
+          {isGenerating ? 'Mische Ideen …' : 'Namen vorschlagen'}
         </button>
       </div>
 
-      {/* Big Animated Result Card */}
-      <div className="relative bg-gradient-to-br from-[#FFF5F8] to-white rounded-[28px] border-2 border-[#FFD6E3] p-8 sm:p-12 text-center shadow-[0_16px_45px_rgba(255,111,159,0.12)]">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#FF6F9F]">
-          Generiertes Ergebnis
-        </span>
+      {/* Result */}
+      <div className="bg-paper-warm border border-line rounded-2xl p-8 sm:p-12 text-center">
+        <span className="eyebrow">Vorschlag</span>
 
         <div className="my-6 min-h-[70px] flex items-center justify-center">
           <motion.h4
             key={displayedName}
-            initial={{ scale: 0.85, opacity: 0.7 }}
+            initial={{ scale: 0.95, opacity: 0.7 }}
             animate={{ scale: 1, opacity: 1 }}
-            className={`font-editorial text-5xl sm:text-6xl font-normal tracking-tight ${
-              isGenerating ? 'text-[#FF4F87] blur-xs' : 'text-[#171717]'
+            className={`font-editorial text-4xl sm:text-6xl tracking-tight break-words ${
+              isGenerating ? 'text-accent' : 'text-ink'
             }`}
           >
             {displayedName}
@@ -161,36 +146,29 @@ export default function NameGenerator() {
 
         {generatedResult && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="border-t border-[#FFD6E3] pt-6"
+            className="border-t border-line pt-6"
           >
-            <p className="text-sm font-semibold text-[#FF4F87] mb-1">
-              {generatedResult.origin} · {generatedResult.gender === 'girl' ? 'Mädchen' : generatedResult.gender === 'boy' ? 'Junge' : 'Unisex'}
+            <p className="text-sm text-ink-soft mb-1">
+              {generatedResult.origin} · {genderLabel(generatedResult.gender)}
             </p>
-            <p className="text-sm text-[#777777] max-w-sm mx-auto mb-6">
+            <p className="text-sm text-ink-soft max-w-sm mx-auto mb-6">
               &bdquo;{generatedResult.meaning}&ldquo;
             </p>
 
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-3 flex-wrap">
               <button
                 onClick={() => toggleFavorite(generatedResult)}
-                className={`btn-primary px-6 py-2.5 text-sm font-semibold inline-flex items-center gap-2 ${
-                  isFavorite(generatedResult.id) ? 'bg-emerald-600 hover:bg-emerald-700' : ''
-                }`}
+                className="btn btn-primary inline-flex items-center gap-2"
               >
-                <Heart className={`w-4 h-4 ${isFavorite(generatedResult.id) ? 'fill-white' : ''}`} />
-                <span>
-                  {isFavorite(generatedResult.id) ? 'Gespeichert' : 'Favorisieren'}
-                </span>
+                <Heart className={`w-4 h-4 ${isFavorite(generatedResult.id) ? 'fill-current' : ''}`} />
+                {isFavorite(generatedResult.id) ? 'Gespeichert' : 'Favorisieren'}
               </button>
 
-              <Link
-                href={`/name/${generatedResult.id}`}
-                className="px-5 py-2.5 rounded-full bg-white border border-[#FFD6E3] text-[#171717] hover:text-[#FF4F87] text-sm font-semibold inline-flex items-center gap-1.5 shadow-2xs"
-              >
-                <span>Namensprofil</span>
-                <ArrowRight className="w-4 h-4" />
+              <Link href={`/name/${generatedResult.id}`} className="btn btn-secondary">
+                Namensprofil
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </motion.div>
