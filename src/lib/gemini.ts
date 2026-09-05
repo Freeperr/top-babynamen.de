@@ -19,6 +19,10 @@ const NAMES_WANTED = 5;
 
 let cache: { at: number; data: DailyTopNames } | null = null;
 
+export function getLastDailyUpdateAt(): number | null {
+  return cache ? cache.at : null;
+}
+
 function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
