@@ -3,10 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-
-type ConsentChoice = 'all' | 'essential' | null;
-
-const STORAGE_KEY = 'top_babynamen_cookie_consent_v1';
+import {
+  getStoredConsent,
+  storeConsent,
+  revokeConsent,
+  applyConsent,
+  type ConsentChoice,
+} from '@/lib/consent';
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -14,23 +17,19 @@ export default function CookieConsent() {
 
   useEffect(() => {
     const open = () => {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        /* localStorage unavailable */
-      }
+      revokeConsent();
       setShowDetails(false);
       setVisible(true);
     };
 
     window.addEventListener('open-cookie-consent', open);
 
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) return () => window.removeEventListener('open-cookie-consent', open);
-    } catch {
-      /* localStorage unavailable */
+    const stored = getStoredConsent();
+    if (stored) {
+      applyConsent(stored);
+      return () => window.removeEventListener('open-cookie-consent', open);
     }
+
     const t = setTimeout(() => setVisible(true), 1200);
     return () => {
       clearTimeout(t);
@@ -38,12 +37,9 @@ export default function CookieConsent() {
     };
   }, []);
 
-  const save = (value: Exclude<ConsentChoice, null>) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, value);
-    } catch {
-      /* ignore */
-    }
+  const save = (value: ConsentChoice) => {
+    storeConsent(value);
+    applyConsent(value);
     setVisible(false);
   };
 

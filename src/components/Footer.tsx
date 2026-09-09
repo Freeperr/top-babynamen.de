@@ -30,6 +30,9 @@ export default function Footer() {
             <Link href="/spiele" className="hover:text-ink transition-colors">
               Namensspiele
             </Link>
+            <Link href="/beliebte-namen-weltweit" className="hover:text-ink transition-colors">
+              Weltweit
+            </Link>
             <Link href="/favoriten" className="hover:text-ink transition-colors">
               Favoriten
             </Link>

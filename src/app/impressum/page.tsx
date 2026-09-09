@@ -96,24 +96,6 @@ export default function ImpressumPage() {
         </section>
 
         <section className="pt-6 border-t border-line">
-          <h2 className="text-base text-ink mb-2">Online-Vermarktung</h2>
-          <p className="mb-2">
-            Die Online-Vermarktung von <strong className="text-ink">babynamen.me</strong> erfolgt
-            durch:
-          </p>
-          <p className="font-medium text-ink">vertical network media GmbH</p>
-          <p className="mb-2">
-            Bei Interesse an Werbemöglichkeiten auf babynamen.me oder innerhalb des Netzwerks:
-          </p>
-          <p>
-            <strong className="text-ink">E-Mail:</strong>{' '}
-            <a href="mailto:vermarktung@verticalnetwork.de" className="underline underline-offset-2 hover:text-blue-deep">
-              vermarktung@verticalnetwork.de
-            </a>
-          </p>
-        </section>
-
-        <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">Über babynamen.me</h2>
           <p className="mb-2">
             <strong className="text-ink">babynamen.me</strong> bietet Informationen und
@@ -123,6 +105,26 @@ export default function ImpressumPage() {
           <p>
             Die Informationen basieren unter anderem auf öffentlich zugänglichen
             Namensstatistiken, eigenen Recherchen sowie weiteren öffentlich zugänglichen Quellen.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Hinweis zu Namensranglisten und Statistiken</h2>
+          <p className="mb-2">
+            Die auf <strong className="text-ink">babynamen.me</strong> dargestellten Ranglisten,
+            Platzierungen und Statistiken zu Vornamen dienen ausschließlich der Information.
+          </p>
+          <p className="mb-2">
+            Die genaue Platzierung oder Beliebtheit eines Namens kann je nach Quelle, Land,
+            Zeitraum, Erhebungsmethode und Datenbasis unterschiedlich ausfallen. Insbesondere bei
+            einzelnen Namen kann es daher zu Abweichungen zwischen verschiedenen Quellen und
+            Statistiken kommen.
+          </p>
+          <p>
+            Wir übernehmen keine Gewähr für die vollständige Genauigkeit, Aktualität oder
+            Übereinstimmung der dargestellten Ranglisten mit anderen öffentlich verfügbaren
+            Namensstatistiken. Für mögliche Abweichungen oder Unterschiede zwischen verschiedenen
+            Quellen wird keine Verantwortung übernommen.
           </p>
         </section>
 

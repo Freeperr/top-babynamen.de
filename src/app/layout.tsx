@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Spectral, Schibsted_Grotesk, Caveat } from 'next/font/google';
 import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
@@ -62,6 +63,20 @@ export default function RootLayout({
   return (
     <html lang="de" className={`${schibsted.variable} ${spectral.variable} ${caveat.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
+        <Script id="consent-mode-init" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){ window.dataLayer.push(arguments); }
+            window.gtag = gtag;
+            gtag('consent', 'default', {
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              analytics_storage: 'denied',
+              wait_for_update: 500
+            });
+          `}
+        </Script>
         <FavoritesProvider>
           <Navbar />
           <main className="flex-1">{children}</main>

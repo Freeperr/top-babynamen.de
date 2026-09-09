@@ -29,6 +29,7 @@ export default function Navbar() {
     { name: 'Mädchennamen', href: '/maedchennamen' },
     { name: 'Jungennamen', href: '/jungennamen' },
     { name: 'Namensspiele', href: '/spiele' },
+    { name: 'Weltweit', href: '/beliebte-namen-weltweit' },
   ];
 
   const isActive = (href: string) =>
