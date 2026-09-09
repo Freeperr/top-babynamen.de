@@ -3,13 +3,46 @@
 import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Trophy, RotateCcw, Heart, ArrowRight, Sparkles } from 'lucide-react';
+import { Trophy, RotateCcw, Heart, ArrowRight, Sparkles, CalendarDays } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName, Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 import { genderNoun, originPhrase } from '@/lib/format';
 
 const TOTAL_ROUNDS = 5;
+
+interface BattleNamePayload {
+  name: string;
+  gender: Gender;
+  origin: string;
+  meaning: string;
+  length: number;
+  id: string;
+}
+
+function toBabyName(n: BattleNamePayload): BabyName {
+  const existing = ALL_NAMES.find((x) => x.id === n.id);
+  if (existing) return existing;
+  return {
+    name: n.name,
+    gender: n.gender,
+    origin: n.origin ?? '',
+    meaning: n.meaning ?? '',
+    length: n.length,
+    id: n.id,
+    popularityRank: 50,
+    trendPercentage: 0,
+    trendDirection: 'neutral' as const,
+    styles: [],
+    tags: [],
+    description: '',
+    similarNames: [],
+    compatiblePairs: [],
+    popularityHistory: [],
+    syllables: 1,
+    firstLetter: n.name[0] ?? 'A',
+  };
+}
 
 function getRandomFromPool(gender: Gender | 'all'): BabyName {
   const pool = ALL_NAMES.filter((n) =>
@@ -20,7 +53,9 @@ function getRandomFromPool(gender: Gender | 'all'): BabyName {
 
 function getRandomChallenger(winnerId: string, gender: Gender | 'all'): BabyName {
   const remaining = ALL_NAMES.filter(
-    (n) => n.id !== winnerId && (gender === 'all' ? true : n.gender === gender || n.gender === 'unisex')
+    (n) =>
+      n.id !== winnerId &&
+      (gender === 'all' ? true : n.gender === gender || n.gender === 'unisex')
   );
   if (remaining.length === 0) return getRandomFromPool(gender);
   return remaining[Math.floor(Math.random() * remaining.length)];
@@ -36,15 +71,47 @@ export default function NameBattle() {
   const [isFinished, setIsFinished] = useState(false);
   const [champion, setChampion] = useState<BabyName | null>(null);
   const [secretInput, setSecretInput] = useState('');
-  const [showAiButton, setShowAiButton] = useState(false);
+  const [showAiButtons, setShowAiButtons] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
+  const [dailyNames, setDailyNames] = useState<BabyName[]>([]);
+  const [isDailyMode, setIsDailyMode] = useState(false);
+  const [dailyDate, setDailyDate] = useState('');
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleSecretInput = (value: string) => {
     setSecretInput(value);
     if (value.toLowerCase().includes('geminitest')) {
-      setShowAiButton(true);
+      setShowAiButtons(true);
     }
+  };
+
+  const startFreshBattle = useCallback(() => {
+    if (isDailyMode && dailyNames.length >= 2) {
+      const a = dailyNames[Math.floor(Math.random() * dailyNames.length)];
+      let b = dailyNames[Math.floor(Math.random() * dailyNames.length)];
+      while (b.id === a.id) b = dailyNames[Math.floor(Math.random() * dailyNames.length)];
+      setCandidateA(a);
+      setCandidateB(b);
+    } else {
+      const a = getRandomFromPool(gender);
+      let b = getRandomFromPool(gender);
+      while (b.id === a.id) b = getRandomFromPool(gender);
+      setCandidateA(a);
+      setCandidateB(b);
+    }
+    setChosenWinner(null);
+    setHistoryWins({});
+    setIsFinished(false);
+    setChampion(null);
+    setRound(1);
+  }, [gender, isDailyMode, dailyNames]);
+
+  const handleGenderChange = (g: Gender | 'all') => {
+    setGender(g);
+    setIsDailyMode(false);
+    setDailyNames([]);
+    setDailyDate('');
+    startFreshBattle();
   };
 
   const handleAiUpdate = async () => {
@@ -52,42 +119,12 @@ export default function NameBattle() {
     try {
       const res = await fetch(`/api/battle-names?gender=${gender}`);
       const data = await res.json();
-      if (data.ok && data.names?.length === 2) {
-        const fallbackA: BabyName = {
-          name: data.names[0].name,
-          gender: data.names[0].gender,
-          origin: data.names[0].origin,
-          meaning: data.names[0].meaning,
-          length: data.names[0].length,
-          id: data.names[0].id,
-          popularityRank: 50,
-          trendPercentage: 0,
-          trendDirection: 'neutral' as const,
-          styles: [],
-          tags: [],
-          description: '',
-          similarNames: [],
-          compatiblePairs: [],
-          popularityHistory: [],
-          syllables: 1,
-          firstLetter: data.names[0].name[0] ?? 'A',
-        };
-        const fallbackB: BabyName = {
-          ...fallbackA,
-          name: data.names[1].name,
-          gender: data.names[1].gender,
-          origin: data.names[1].origin,
-          meaning: data.names[1].meaning,
-          length: data.names[1].length,
-          id: data.names[1].id,
-          firstLetter: data.names[1].name[0] ?? 'B',
-        };
-
-        const realA = ALL_NAMES.find((n) => n.id === fallbackA.id) ?? fallbackA;
-        const realB = ALL_NAMES.find((n) => n.id === fallbackB.id) ?? fallbackB;
-
-        setCandidateA(realA);
-        setCandidateB(realB);
+      if (data.ok && Array.isArray(data.names) && data.names.length >= 2) {
+        setIsDailyMode(false);
+        setDailyNames([]);
+        setDailyDate('');
+        setCandidateA(toBabyName(data.names[0]));
+        setCandidateB(toBabyName(data.names[1]));
         setChosenWinner(null);
         setRound(1);
         setHistoryWins({});
@@ -100,28 +137,41 @@ export default function NameBattle() {
     setAiLoading(false);
   };
 
-  const startFreshBattle = useCallback(() => {
-    const a = getRandomFromPool(gender);
-    let b = getRandomFromPool(gender);
-    while (b.id === a.id) b = getRandomFromPool(gender);
-    setCandidateA(a);
-    setCandidateB(b);
-    setChosenWinner(null);
-    setHistoryWins({});
-    setIsFinished(false);
-    setChampion(null);
-    setRound(1);
-  }, [gender]);
-
-  const handleGenderChange = (g: Gender | 'all') => {
-    setGender(g);
-    startFreshBattle();
+  const handleDailyUpdate = async () => {
+    setAiLoading(true);
+    try {
+      const res = await fetch(`/api/battle-names?source=daily&gender=${gender}`);
+      const data = await res.json();
+      if (data.ok && Array.isArray(data.names) && data.names.length >= 2) {
+        const pool = data.names.map(toBabyName);
+        setDailyNames(pool);
+        setIsDailyMode(true);
+        setDailyDate(data.date ?? '');
+        setCandidateA(pool[0]);
+        setCandidateB(pool[1]);
+        setChosenWinner(null);
+        setRound(1);
+        setHistoryWins({});
+        setIsFinished(false);
+        setChampion(null);
+      }
+    } catch {
+      // silently fail, keep current names
+    }
+    setAiLoading(false);
   };
 
-  const getNextPair = (winner: BabyName) => ({
-    keep: winner,
-    challenger: getRandomChallenger(winner.id, gender),
-  });
+  const getNextPair = (winner: BabyName) => {
+    if (isDailyMode && dailyNames.length >= 2) {
+      const usable = dailyNames.filter((n) => n.id !== winner.id);
+      const challenger =
+        usable.length > 0
+          ? usable[Math.floor(Math.random() * usable.length)]
+          : getRandomFromPool(gender);
+      return { keep: winner, challenger };
+    }
+    return { keep: winner, challenger: getRandomChallenger(winner.id, gender) };
+  };
 
   const handleVote = (selected: 'A' | 'B') => {
     if (chosenWinner !== null) return;
@@ -162,11 +212,7 @@ export default function NameBattle() {
     startFreshBattle();
   };
 
-  const renderFighter = (
-    label: string,
-    candidate: BabyName,
-    winner: 'A' | 'B'
-  ) => {
+  const renderFighter = (label: string, candidate: BabyName, winner: 'A' | 'B') => {
     const isWinning = chosenWinner === winner;
     const isLosing = chosenWinner !== null && chosenWinner !== winner;
     return (
@@ -210,13 +256,11 @@ export default function NameBattle() {
         <div>
           {/* Gender filter */}
           <div className="flex items-center justify-center gap-2 mb-6">
-            {(
-              [
-                { id: 'all' as const, label: 'Alle' },
-                { id: 'girl' as const, label: 'Mädchen' },
-                { id: 'boy' as const, label: 'Jungen' },
-              ]
-            ).map((g) => (
+            {[
+              { id: 'all' as const, label: 'Alle' },
+              { id: 'girl' as const, label: 'Mädchen' },
+              { id: 'boy' as const, label: 'Jungen' },
+            ].map((g) => (
               <button
                 key={g.id}
                 onClick={() => handleGenderChange(g.id)}
@@ -241,16 +285,25 @@ export default function NameBattle() {
               className="w-full text-xs text-fade bg-transparent border-none outline-none text-center placeholder:text-transparent"
               aria-hidden="true"
             />
-            {showAiButton && (
+            {showAiButtons && (
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex justify-center"
+                className="flex flex-wrap items-center justify-center gap-2 mt-1"
               >
+                <button
+                  onClick={handleDailyUpdate}
+                  disabled={aiLoading}
+                  className="btn btn-secondary text-xs gap-1.5"
+                >
+                  <CalendarDays className={`w-3.5 h-3.5 ${aiLoading ? 'animate-pulse' : ''}`} />
+                  {aiLoading ? 'KI lädt …' : `Täglich frisch aktualisieren${dailyDate ? ` (${dailyDate})` : ''}`}
+                </button>
+
                 <button
                   onClick={handleAiUpdate}
                   disabled={aiLoading}
-                  className="btn btn-secondary text-xs gap-1.5 mt-1"
+                  className="btn btn-secondary text-xs gap-1.5"
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${aiLoading ? 'animate-spin' : ''}`} />
                   {aiLoading ? 'KI lädt neue Namen …' : 'Namen per KI aktualisieren'}
