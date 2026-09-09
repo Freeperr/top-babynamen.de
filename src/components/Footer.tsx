@@ -36,6 +36,9 @@ export default function Footer() {
             <Link href="/datenschutz" className="hover:text-ink transition-colors">
               Datenschutz
             </Link>
+            <Link href="/impressum" className="hover:text-ink transition-colors">
+              Impressum
+            </Link>
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event('open-cookie-consent'))}
@@ -47,14 +50,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-5 border-t border-line/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-fade">
-          <p className="flex items-center gap-3">
+          <p>
             © {new Date().getFullYear()} babynamen.me
-            <Link
-              href="/impressum"
-              className="inline-flex items-center px-3 py-1.5 rounded-lg border border-line-strong text-xs text-ink-soft hover:border-blue hover:text-blue-deep transition-colors"
-            >
-              Impressum
-            </Link>
           </p>
           <p className="flex items-center gap-1.5"></p>
         </div>
