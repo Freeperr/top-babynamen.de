@@ -31,46 +31,46 @@ export default function ImpressumPage() {
         <section>
           <h2 className="text-base text-ink mb-3">Angaben gemäß § 5 DDG</h2>
           <p className="font-medium text-ink">Diensteanbieter:</p>
-          <p className="mt-2 font-medium text-ink">MVC – Hamburg</p>
-          <p>Frank Vomberg</p>
+          <p className="mt-2 font-medium text-ink">PROMOTION UNION GMBH</p>
           <p>Hellgrundweg 109</p>
           <p>22525 Hamburg</p>
           <p>Deutschland</p>
+          <p className="mt-2">
+            Vertreten durch: Herrn Frank Vomberg
+          </p>
 
           <div className="mt-4 space-y-1">
             <p>
-              <strong className="text-ink">Telefon:</strong> +49 (0)40 3616679-41
-            </p>
-            <p>
               <strong className="text-ink">E-Mail:</strong>{' '}
-              <a href="mailto:info@mvc-hamburg.de" className="underline underline-offset-2 hover:text-blue-deep">
-                info@mvc-hamburg.de
+              <a href="mailto:info@promotionunion.de" className="underline underline-offset-2 hover:text-blue-deep">
+                info@promotionunion.de
               </a>
             </p>
             <p>
-              <strong className="text-ink">Website:</strong>{' '}
-              <a
-                href="http://www.mvc-hamburg.de"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-2 hover:text-blue-deep"
-              >
-                www.mvc-hamburg.de
-              </a>
+              <strong className="text-ink">Telefon:</strong> 040 3616679/00
+            </p>
+            <p>
+              <strong className="text-ink">Telefax:</strong> 040 3616679/68
             </p>
           </div>
 
           <p className="mt-4">
             <strong className="text-ink">Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:</strong>{' '}
-            DE 245982133
+            DE243027167
+          </p>
+          <p>
+            <strong className="text-ink">Sitz der Gesellschaft:</strong> Hamburg
+          </p>
+          <p>
+            <strong className="text-ink">Registergericht:</strong> Amtsgericht Hamburg, HRB 94862
           </p>
         </section>
 
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-3">Verantwortlich für die Inhalte</h2>
           <p className="mb-2">Verantwortlich für die Inhalte dieser Website ist:</p>
-          <p className="font-medium text-ink">Frank Vomberg</p>
-          <p>MVC – Hamburg</p>
+          <p className="font-medium text-ink">PROMOTION UNION GMBH</p>
+          <p>vertreten durch Herrn Frank Vomberg</p>
           <p>Hellgrundweg 109</p>
           <p>22525 Hamburg</p>
           <p>Deutschland</p>
