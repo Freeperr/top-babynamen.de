@@ -3,29 +3,16 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import type { DailyTopNames } from '@/lib/gemini';
 import { getDailyNames } from '@/lib/nameService';
 import { genderNoun } from '@/lib/format';
+import { useFavorites } from '@/context/FavoritesContext';
+import FavoriteButton from '@/components/FavoriteButton';
+import { BabyName } from '@/types/name';
 import { fadeUp, staggerContainer } from '@/lib/motion';
 
-function buildDailyList(): DailyTopNames {
-  const now = new Date();
-  const picks = getDailyNames(now, 5);
-  return {
-    date: now.toISOString().slice(0, 10),
-    generated: false,
-    names: picks.map((n, i) => ({
-      name: n.name,
-      gender: n.gender,
-      rank: i + 1,
-      change: n.weeklyChange ?? '→',
-      reason: n.meaning.split(',')[0] ?? '',
-    })),
-  };
-}
-
 export default function DailyTrendBox() {
-  const [data] = useState<DailyTopNames>(buildDailyList);
+  const [picks] = useState<BabyName[]>(() => getDailyNames(new Date(), 5));
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   return (
     <section className="pb-2">
@@ -48,21 +35,16 @@ export default function DailyTrendBox() {
             initial="hidden"
             animate="visible"
           >
-            {data.names.map((item, index) => {
-              const falling = item.change.startsWith('-');
-              const changeColor = falling
-                ? 'text-warn'
-                : item.change === '→'
-                  ? 'text-fade'
-                  : 'text-go';
+            {picks.map((item, index) => {
+              const reason = item.meaning.split(',')[0] ?? '';
               return (
                 <motion.li
-                  key={`${item.name}-${index}`}
+                  key={`${item.id}-${index}`}
                   variants={fadeUp}
                   className="flex items-start gap-4 sm:gap-6 px-5 sm:px-8 py-4 border-b border-line last:border-b-0 transition-colors hover:bg-blue-pale"
                 >
                   <span className="font-editorial text-gold text-xl tabular-nums leading-none pt-1 w-7 shrink-0">
-                    {String(item.rank).padStart(2, '0')}
+                    {String(index + 1).padStart(2, '0')}
                   </span>
 
                   <Link
@@ -77,16 +59,19 @@ export default function DailyTrendBox() {
                         {genderNoun(item.gender)}
                       </span>
                     </span>
-                    {item.reason && (
+                    {reason && (
                       <span className="block text-sm text-ink-soft truncate">
-                        {item.reason}
+                        {reason}
                       </span>
                     )}
                   </Link>
 
-                  <span className={`text-xs shrink-0 pt-1.5 ${changeColor}`}>
-                    {item.change}
-                  </span>
+                  <FavoriteButton
+                    name={item}
+                    favorited={isFavorite(item.id)}
+                    onToggle={(e) => toggleFavorite(item, e)}
+                    className="mt-1"
+                  />
                 </motion.li>
               );
             })}

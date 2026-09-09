@@ -96,7 +96,6 @@ export default function SwipeGame() {
             >
               <div className="flex items-center justify-between text-sm">
                 <span className="text-ink-soft">{genderLabel(currentName.gender)}</span>
-                <span className="text-fade">Rang {currentName.popularityRank}</span>
               </div>
 
               <div className="text-center my-auto py-4">

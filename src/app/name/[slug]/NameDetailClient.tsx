@@ -40,77 +40,6 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
     }
   };
 
-  const renderPopularityChart = () => {
-    if (!name.popularityHistory || name.popularityHistory.length === 0) return null;
-
-    const data = name.popularityHistory;
-    const minRank = 1;
-    const maxRank = Math.max(...data.map((d) => d.rank), 25);
-
-    const width = 600;
-    const height = 180;
-    const padding = 35;
-
-    const getX = (index: number) => padding + (index * (width - 2 * padding)) / (data.length - 1);
-    const getY = (rank: number) => padding + ((rank - minRank) / (maxRank - minRank)) * (height - 2 * padding);
-
-    const points = data.map((d, i) => `${getX(i)},${getY(d.rank)}`).join(' ');
-
-    return (
-      <div className="w-full overflow-x-auto">
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-44 overflow-visible">
-          <line
-            x1={padding}
-            y1={padding}
-            x2={width - padding}
-            y2={padding}
-            stroke="var(--color-line)"
-            strokeDasharray="4 4"
-          />
-          <line
-            x1={padding}
-            y1={height - padding}
-            x2={width - padding}
-            y2={height - padding}
-            stroke="var(--color-line)"
-            strokeDasharray="4 4"
-          />
-
-          <polygon
-            points={`${getX(0)},${height - padding} ${points} ${getX(data.length - 1)},${height - padding}`}
-            fill="var(--color-blue)"
-            opacity="0.08"
-          />
-
-          <polyline
-            fill="none"
-            stroke="var(--color-blue)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            points={points}
-          />
-
-          {data.map((d, i) => {
-            const x = getX(i);
-            const y = getY(d.rank);
-            return (
-              <g key={d.year}>
-                <circle cx={x} cy={y} r="4" fill="var(--color-surface)" stroke="var(--color-blue)" strokeWidth="2" />
-                <text x={x} y={y - 10} textAnchor="middle" fill="var(--color-ink-soft)" fontSize="11">
-                  #{d.rank}
-                </text>
-                <text x={x} y={height - 10} textAnchor="middle" fill="var(--color-fade)" fontSize="11">
-                  {d.year}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-    );
-  };
-
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       {/* Back link */}
@@ -130,8 +59,6 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           <span className="text-sm text-ink-soft">
             {originPhrase(name.origin, name.gender)}
           </span>
-          <span className="w-px h-3.5 bg-line" aria-hidden="true" />
-          <span className="text-sm text-ink-soft">Rang {name.popularityRank}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -207,16 +134,6 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
               ))}
             </div>
           )}
-
-          {renderPopularityChart() && (
-            <section>
-              <h2 className="text-lg text-ink mb-1">Beliebtheit über die Jahre</h2>
-              <p className="text-xs text-fade mb-4">
-                Rang-Entwicklung in den deutschen Namensstatistiken.
-              </p>
-              {renderPopularityChart()}
-            </section>
-          )}
         </div>
 
         <aside className="md:border-l md:border-line md:pl-8">
@@ -231,10 +148,6 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
               <dd className="text-ink text-right">
                 {name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex'}
               </dd>
-            </div>
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="text-fade">Beliebtheit</dt>
-              <dd className="text-ink text-right">Rang #{name.popularityRank}</dd>
             </div>
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-fade">Buchstaben</dt>
