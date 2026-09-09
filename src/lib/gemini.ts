@@ -37,7 +37,7 @@ function buildFallback(): DailyTopNames {
       gender: name.gender,
       rank: name.popularityRank,
       change: name.weeklyChange ?? '→',
-      reason: `${name.origin} · ${name.meaning.split(',')[0]}`,
+      reason: name.meaning.split(',')[0],
     })),
   };
 }

@@ -7,6 +7,8 @@ import { ArrowRight } from 'lucide-react';
 import { getTopNames } from '@/lib/nameService';
 import { Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import { originPhrase } from '@/lib/format';
+import FavoriteButton from '@/components/FavoriteButton';
 import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
 type Tab = 'all' | Gender;
@@ -17,9 +19,6 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'boy', label: 'Jungen' },
 ];
 
-const genderLabel = (gender: Gender) =>
-  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
-
 export default function TopNamesSection() {
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -27,7 +26,7 @@ export default function TopNamesSection() {
   const names = getTopNames(5, activeTab === 'all' ? undefined : activeTab);
 
   return (
-    <section className="py-10 sm:py-14">
+    <section className="py-12 sm:py-16">
       <motion.div
         className="max-w-4xl mx-auto px-4 sm:px-6"
         variants={staggerContainer}
@@ -36,12 +35,15 @@ export default function TopNamesSection() {
         viewport={viewportOnce}
       >
         <motion.div
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2"
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
           variants={fadeUp}
         >
-          <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
-            Unsere beliebtesten Namen
-          </h2>
+          <div>
+            <p className="kicker mb-2">Beliebt bei Eltern</p>
+            <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
+              Die Top-Namen der Woche
+            </h2>
+          </div>
 
           <div className="flex items-center gap-4 text-sm">
             {TABS.map((tab) => (
@@ -50,7 +52,7 @@ export default function TopNamesSection() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-1 border-b-2 transition-colors ${
                   activeTab === tab.id
-                    ? 'border-accent text-ink font-medium'
+                    ? 'border-blue text-ink font-medium'
                     : 'border-transparent text-ink-soft hover:text-ink'
                 }`}
               >
@@ -59,69 +61,82 @@ export default function TopNamesSection() {
             ))}
           </div>
         </motion.div>
-        <motion.p
-          className="font-editorial text-xl sm:text-2xl text-accent-deep mb-6"
-          variants={fadeUp}
-        >
-          Gerade viel gesehen – von Eltern wie dir.
-        </motion.p>
 
-        <motion.div className="border-t border-line" variants={fadeUp}>
-          {names.map((name, index) => {
-            const favorited = isFavorite(name.id);
-            return (
-              <div
-                key={name.id}
-                className="flex items-center gap-3 sm:gap-5 py-4 border-b border-line group transition-colors hover:bg-accent-pale px-2 -mx-2 rounded-lg"
-              >
-                <span className="font-mono text-xs text-fade w-7 shrink-0">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-
-                <Link
-                  href={`/name/${name.id}`}
-                  className="flex-1 min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-0.5"
-                >
-                  <span className="font-editorial text-[1.6rem] leading-tight text-ink group-hover:text-accent-deep transition-colors">
-                    {name.name}
+        {names.length === 0 ? null : (
+          <motion.div variants={fadeUp}>
+            {/* Rang 1 – der klare Favorit als blaue Fläche */}
+            <div className="bg-blue text-white">
+              <div className="flex items-start justify-between gap-5 px-6 sm:px-9 py-7 sm:py-9">
+                <Link href={`/name/${names[0].id}`} className="min-w-0 group">
+                  <span className="font-editorial text-gold text-3xl sm:text-4xl tabular-nums leading-none">
+                    01
                   </span>
-                  <span className="text-sm text-fade truncate">
-                    {genderLabel(name.gender)} · {name.origin}
+                  <span className="mt-3 block font-editorial text-4xl sm:text-5xl leading-tight group-hover:underline decoration-white/70 underline-offset-4">
+                    {names[0].name}
+                  </span>
+                  <span className="mt-2 block text-sm text-white/85">
+                    {originPhrase(names[0].origin, names[0].gender)}
+                  </span>
+                  {names[0].weeklyChange && (
+                    <span className="mt-0.5 block text-xs text-gold">
+                      {names[0].weeklyChange}
+                    </span>
+                  )}
+                  <span className="mt-2 block text-sm text-white/75">
+                    &bdquo;{names[0].meaning}&ldquo;
                   </span>
                 </Link>
 
-                {name.weeklyChange && (
-                  <span
-                    className={`text-xs hidden sm:inline shrink-0 ${
-                      name.trendDirection === 'down'
-                        ? 'text-warn'
-                        : 'text-go'
-                    }`}
-                  >
-                    {name.weeklyChange}
-                  </span>
-                )}
-
-                <button
-                  onClick={(e) => toggleFavorite(name, e)}
-                  className={`shrink-0 flex items-center justify-center w-9 h-9 rounded-full border transition-colors active:scale-90 ${
-                    favorited
-                      ? 'bg-accent-soft border-line-strong text-accent-deep'
-                      : 'border-transparent text-fade hover:text-accent-deep hover:bg-accent-soft'
-                  }`}
-                  aria-label={favorited ? `${name.name} von Favoriten entfernen` : `${name.name} zu Favoriten hinzufügen`}
-                >
-                  <HeartIcon filled={favorited} />
-                </button>
+                <FavoriteButton
+                  className="mt-2"
+                  name={names[0]}
+                  favorited={isFavorite(names[0].id)}
+                  onToggle={(e) => toggleFavorite(names[0], e)}
+                  tone="dark"
+                />
               </div>
-            );
-          })}
-        </motion.div>
+            </div>
 
-        <motion.div className="mt-6 flex justify-end" variants={fadeUp}>
+            {/* Rang 2 + 3 – mittelgroß, zweispaltig */}
+            <div className="grid gap-x-12 sm:grid-cols-2 sm:divide-x divide-line">
+              {names.slice(1, 3).map((name, i) => (
+                <RankRow
+                  key={name.id}
+                  name={name}
+                  rank={i + 2}
+                  favorited={isFavorite(name.id)}
+                  onToggle={(e) => toggleFavorite(name, e)}
+                  className="py-6 border-t border-line"
+                  nameSize="text-2xl sm:text-3xl"
+                  rankColor="text-blue"
+                  showMeaning
+                />
+              ))}
+            </div>
+
+            {/* Rang 4 + 5 – kompakt, zweispaltig */}
+            <div className="grid gap-x-12 sm:grid-cols-2 sm:divide-x divide-line">
+              {names.slice(3).map((name, i) => (
+                <RankRow
+                  key={name.id}
+                  name={name}
+                  rank={i + 4}
+                  favorited={isFavorite(name.id)}
+                  onToggle={(e) => toggleFavorite(name, e)}
+                  className="py-4 border-t border-line"
+                  nameSize="text-xl sm:text-2xl"
+                  rankColor="text-fade"
+                  showMeaning={false}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        <motion.div className="mt-8 flex justify-end" variants={fadeUp}>
           <Link
             href="/babynamen"
-            className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
           >
             Alle Namen durchstöbern
             <ArrowRight className="w-3.5 h-3.5" />
@@ -132,17 +147,53 @@ export default function TopNamesSection() {
   );
 }
 
-function HeartIcon({ filled }: { filled: boolean }) {
+interface RankRowProps {
+  name: ReturnType<typeof getTopNames>[number];
+  rank: number;
+  favorited: boolean;
+  onToggle: (e: React.MouseEvent) => void;
+  className?: string;
+  nameSize: string;
+  rankColor: string;
+  showMeaning: boolean;
+}
+
+function RankRow({
+  name,
+  rank,
+  favorited,
+  onToggle,
+  className = '',
+  nameSize,
+  rankColor,
+  showMeaning,
+}: RankRowProps) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      className={`w-4 h-4 ${filled ? 'fill-accent-deep text-accent-deep' : 'fill-none text-current'}`}
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>
+    <div className={`flex items-start gap-4 group ${className}`}>
+      <span className={`font-editorial ${rankColor} tabular-nums leading-none pt-2 w-8 shrink-0`}>
+        {String(rank).padStart(2, '0')}
+      </span>
+      <Link href={`/name/${name.id}`} className="min-w-0 flex-1">
+        <span
+          className={`block font-editorial ${nameSize} leading-tight text-ink group-hover:text-blue-deep transition-colors`}
+        >
+          {name.name}
+        </span>
+        <span className="mt-1 block text-sm text-ink-soft">
+          {originPhrase(name.origin, name.gender)}
+        </span>
+        {showMeaning && (
+          <span className="mt-0.5 block text-sm text-fade truncate">
+            &bdquo;{name.meaning}&ldquo;
+          </span>
+        )}
+      </Link>
+      <FavoriteButton
+        name={name}
+        favorited={favorited}
+        onToggle={onToggle}
+        className="mt-1"
+      />
+    </div>
   );
 }

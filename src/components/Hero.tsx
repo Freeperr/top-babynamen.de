@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Search, Heart } from 'lucide-react';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
 import { fadeUp, staggerContainer } from '@/lib/motion';
 
@@ -21,15 +21,15 @@ export default function Hero() {
   };
 
   return (
-    <section className="pt-12 sm:pt-16 pb-10 sm:pb-12">
+    <section className="pt-14 sm:pt-20 pb-10 sm:pb-12">
       <motion.div
-        className="max-w-3xl mx-auto px-4 sm:px-6 text-left sm:-translate-x-8"
+        className="max-w-3xl mx-auto px-4 sm:px-6"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
       >
         <motion.h1
-          className="font-editorial text-[2.25rem] leading-[1.12] sm:text-6xl text-ink"
+          className="font-editorial text-[2.4rem] leading-[1.12] sm:text-6xl text-ink"
           variants={fadeUp}
         >
           Finde einen Namen,
@@ -38,17 +38,17 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="mt-4 text-ink-soft max-w-md text-[0.95rem]"
+          className="mt-5 text-ink-soft max-w-xl text-[1rem]"
           variants={fadeUp}
         >
-          Entdecke beliebte Namen, zeitlose Klassiker und besondere Namen, die
-          man nicht jeden Tag hört.
+          Beliebte Namen, zeitlose Klassiker und seltene Entdeckungen – mit
+          Herkunft, Bedeutung und ein wenig Zeit zum Stöbern.
         </motion.p>
 
         {/* Suche */}
         <motion.form
           onSubmit={handleSearchSubmit}
-          className="mt-8 flex items-stretch gap-2 max-w-md"
+          className="mt-8 flex items-stretch gap-2 max-w-xl"
           role="search"
           variants={fadeUp}
         >
@@ -72,21 +72,30 @@ export default function Hero() {
           </button>
         </motion.form>
 
-        <motion.p
-          className="mt-6 text-sm text-fade flex items-center gap-x-6 gap-y-1 flex-wrap"
+        <motion.nav
+          className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2"
+          aria-label="Namenslisten"
           variants={fadeUp}
         >
-          <Link href="/maedchennamen" className="hover:text-ink transition-colors">
+          <Link
+            href="/maedchennamen"
+            className="text-sm text-fade hover:text-ink transition-colors underline underline-offset-[6px] decoration-line-strong hover:decoration-blue"
+          >
             Mädchennamen
           </Link>
-          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
-          <Link href="/jungennamen" className="hover:text-ink transition-colors">
+          <Link
+            href="/jungennamen"
+            className="text-sm text-fade hover:text-ink transition-colors underline underline-offset-[6px] decoration-line-strong hover:decoration-blue"
+          >
             Jungennamen
           </Link>
-          <Link href="/babynamen" className="hover:text-ink transition-colors">
+          <Link
+            href="/babynamen"
+            className="text-sm text-fade hover:text-ink transition-colors underline underline-offset-[6px] decoration-line-strong hover:decoration-blue"
+          >
             Alle Namen
           </Link>
-        </motion.p>
+        </motion.nav>
       </motion.div>
     </section>
   );

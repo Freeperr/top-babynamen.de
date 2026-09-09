@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <p className="font-editorial text-xl text-ink">
-              Top-Babynamen<span className="text-accent">.de</span>
+              Top-Babynamen<span className="text-blue">.de</span>
             </p>
             <p className="text-sm text-fade mt-1">
               Namen mit Herkunft, Bedeutung und ein wenig Zeit zum Stöbern.
@@ -51,7 +51,7 @@ export default function Footer() {
             © {new Date().getFullYear()} top-babynamen.de
             <Link
               href="/impressum"
-              className="inline-flex items-center px-3 py-1.5 rounded-lg border border-line-strong text-xs text-ink-soft hover:border-accent hover:text-accent-deep transition-colors"
+              className="inline-flex items-center px-3 py-1.5 rounded-lg border border-line-strong text-xs text-ink-soft hover:border-blue hover:text-blue-deep transition-colors"
             >
               Impressum
             </Link>

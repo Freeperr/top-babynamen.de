@@ -1,19 +1,19 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans, Newsreader } from 'next/font/google';
+import { Spectral, Schibsted_Grotesk } from 'next/font/google';
 import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
 
-const plusJakarta = Plus_Jakarta_Sans({
+const schibsted = Schibsted_Grotesk({
   variable: '--font-sans',
   subsets: ['latin'],
   display: 'swap',
   weight: ['400', '500', '600', '700'],
 });
 
-const newsreader = Newsreader({
+const spectral = Spectral({
   variable: '--font-serif',
   subsets: ['latin'],
   display: 'swap',
@@ -53,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={`${plusJakarta.variable} ${newsreader.variable} h-full antialiased`}>
+    <html lang="de" className={`${schibsted.variable} ${spectral.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
         <FavoritesProvider>
           <Navbar />

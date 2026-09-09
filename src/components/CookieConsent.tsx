@@ -70,7 +70,7 @@ export default function CookieConsent() {
                 Details zu den einzelnen Cookies findest du in unserer{' '}
                 <Link
                   href="/datenschutz"
-                  className="underline underline-offset-2 hover:text-accent-deep"
+                  className="underline underline-offset-2 hover:text-blue-deep"
                   onClick={() => save('essential')}
                 >
                   Datenschutzerklärung

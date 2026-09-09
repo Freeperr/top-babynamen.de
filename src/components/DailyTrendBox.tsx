@@ -3,12 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Heart, Sparkles } from 'lucide-react';
 import type { DailyTopNames } from '@/lib/gemini';
+import { genderNoun } from '@/lib/format';
 import { fadeUp, staggerContainer } from '@/lib/motion';
-
-const genderLabel = (gender: string) =>
-  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
 
 export default function DailyTrendBox() {
   const [data, setData] = useState<DailyTopNames | null>(null);
@@ -30,10 +27,7 @@ export default function DailyTrendBox() {
     return (
       <section className="pb-2">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div
-            className="rounded-2xl border border-line bg-paper-warm h-64 animate-pulse"
-            aria-hidden="true"
-          />
+          <div className="border border-line bg-panel h-64 animate-pulse" aria-hidden="true" />
         </div>
       </section>
     );
@@ -47,20 +41,12 @@ export default function DailyTrendBox() {
         initial="hidden"
         animate="visible"
       >
-        <div className="rounded-2xl border border-line bg-surface shadow-[0_1px_0_0_#f0e9e1] overflow-hidden">
-          <div className="px-5 sm:px-7 pt-6 pb-4 border-b border-line bg-paper-warm/60 flex flex-wrap items-center justify-between gap-2">
-            <p className="flex items-center gap-2">
-              <Heart className="w-4 h-4 text-accent fill-accent" aria-hidden="true" />
-              <span className="font-editorial text-2xl text-accent-deep leading-none">
-                Heute im Trend
-              </span>
-            </p>
-            {data.generated && (
-              <span className="inline-flex items-center gap-1 text-xs text-fade">
-                <Sparkles className="w-3 h-3" aria-hidden="true" />
-                täglich frisch zusammengestellt
-              </span>
-            )}
+        <div className="border border-line bg-panel">
+          <div className="px-5 sm:px-8 py-5 flex flex-wrap items-end justify-between gap-2 border-b border-line">
+            <p className="kicker mb-0.5">Täglich frisch zusammengestellt</p>
+            <h2 className="font-editorial text-2xl sm:text-3xl text-ink">
+              Heute im Trend
+            </h2>
           </div>
 
           <motion.ul
@@ -79,23 +65,22 @@ export default function DailyTrendBox() {
                 <motion.li
                   key={`${item.name}-${index}`}
                   variants={fadeUp}
-                  className="flex items-center gap-3 sm:gap-4 px-5 sm:px-7 py-3.5 border-b border-line last:border-b-0 transition-colors hover:bg-accent-pale"
+                  className="flex items-start gap-4 sm:gap-6 px-5 sm:px-8 py-4 border-b border-line last:border-b-0 transition-colors hover:bg-blue-pale"
                 >
-                  <Heart
-                    className="w-3 h-3 text-accent fill-accent shrink-0"
-                    aria-hidden="true"
-                  />
+                  <span className="font-editorial text-gold text-xl tabular-nums leading-none pt-1 w-7 shrink-0">
+                    {String(item.rank).padStart(2, '0')}
+                  </span>
 
                   <Link
                     href={`/babynamen?q=${encodeURIComponent(item.name)}`}
-                    className="flex-1 min-w-0 py-1"
+                    className="flex-1 min-w-0"
                   >
                     <span className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-                      <span className="font-editorial text-xl leading-tight text-ink group-hover:text-accent-deep">
+                      <span className="font-editorial text-xl leading-tight text-ink hover:text-blue-deep transition-colors">
                         {item.name}
                       </span>
-                      <span className="text-xs text-fade truncate">
-                        {genderLabel(item.gender)} · {item.rank}. Rang
+                      <span className="text-xs text-ink-soft">
+                        {genderNoun(item.gender)}
                       </span>
                     </span>
                     {item.reason && (
@@ -105,7 +90,7 @@ export default function DailyTrendBox() {
                     )}
                   </Link>
 
-                  <span className={`text-xs shrink-0 ${changeColor}`}>
+                  <span className={`text-xs shrink-0 pt-1.5 ${changeColor}`}>
                     {item.change}
                   </span>
                 </motion.li>
@@ -113,12 +98,12 @@ export default function DailyTrendBox() {
             })}
           </motion.ul>
 
-          <div className="px-5 sm:px-7 py-3.5">
+          <div className="px-5 sm:px-8 py-4">
             <Link
               href="/babynamen"
-              className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
             >
-              Heute weiter stöbern
+              Alle Namen der Woche
               <span aria-hidden="true">→</span>
             </Link>
           </div>

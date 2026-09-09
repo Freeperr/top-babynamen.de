@@ -7,9 +7,7 @@ import { Wand2, Heart, ArrowRight } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName, Gender, NameStyle } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
-
-const genderLabel = (gender: string) =>
-  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
+import { originPhrase } from '@/lib/format';
 
 export default function NameGenerator() {
   const [selectedGender, setSelectedGender] = useState<Gender | 'all'>('all');
@@ -59,14 +57,14 @@ export default function NameGenerator() {
   return (
     <div className="max-w-xl mx-auto">
       {/* Options */}
-      <div className="bg-surface rounded-2xl border border-line p-6 sm:p-8 mb-6">
+      <div className="bg-surface rounded-xl border border-line p-6 sm:p-8 mb-6">
         <h3 className="font-editorial text-xl text-ink mb-5 text-center inline-flex items-center justify-center gap-2 w-full">
-          <Wand2 className="w-5 h-5 text-accent" />
+          <Wand2 className="w-5 h-5 text-blue" />
           Lass dir einen Namen vorschlagen
         </h3>
 
         <div className="mb-5">
-          <label className="eyebrow block mb-2">Geschlecht</label>
+          <label className="label block mb-2">Geschlecht</label>
           <div className="grid grid-cols-4 gap-2">
             {(
               [
@@ -81,8 +79,8 @@ export default function NameGenerator() {
                 onClick={() => setSelectedGender(g.id)}
                 className={`py-2 text-xs font-medium rounded-lg border transition-colors ${
                   selectedGender === g.id
-                    ? 'bg-accent text-white border-accent'
-                    : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
+                    ? 'bg-blue text-white border-blue'
+                    : 'bg-surface text-ink-soft border-line-strong hover:border-blue hover:text-blue-deep'
                 }`}
               >
                 {g.label}
@@ -92,7 +90,7 @@ export default function NameGenerator() {
         </div>
 
         <div className="mb-6">
-          <label className="eyebrow block mb-2">Stil</label>
+          <label className="label block mb-2">Stil</label>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
             {(
               [
@@ -108,8 +106,8 @@ export default function NameGenerator() {
                 onClick={() => setSelectedStyle(s.id)}
                 className={`py-2 text-xs font-medium rounded-lg border transition-colors ${
                   selectedStyle === s.id
-                    ? 'bg-accent text-white border-accent'
-                    : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
+                    ? 'bg-blue text-white border-blue'
+                    : 'bg-surface text-ink-soft border-line-strong hover:border-blue hover:text-blue-deep'
                 }`}
               >
                 {s.label}
@@ -128,8 +126,8 @@ export default function NameGenerator() {
       </div>
 
       {/* Result */}
-      <div className="bg-paper-warm border border-line rounded-2xl p-8 sm:p-12 text-center">
-        <span className="eyebrow">Vorschlag</span>
+      <div className="bg-panel border border-line p-8 sm:p-12 text-center">
+        <span className="kicker">Vorschlag</span>
 
         <div className="my-6 min-h-[70px] flex items-center justify-center">
           <motion.h4
@@ -137,7 +135,7 @@ export default function NameGenerator() {
             initial={{ scale: 0.95, opacity: 0.7 }}
             animate={{ scale: 1, opacity: 1 }}
             className={`font-editorial text-4xl sm:text-6xl tracking-tight break-words ${
-              isGenerating ? 'text-accent' : 'text-ink'
+              isGenerating ? 'text-blue' : 'text-ink'
             }`}
           >
             {displayedName}
@@ -151,7 +149,7 @@ export default function NameGenerator() {
             className="border-t border-line pt-6"
           >
             <p className="text-sm text-ink-soft mb-1">
-              {generatedResult.origin} · {genderLabel(generatedResult.gender)}
+              {originPhrase(generatedResult.origin, generatedResult.gender)}
             </p>
             <p className="text-sm text-ink-soft max-w-sm mx-auto mb-6">
               &bdquo;{generatedResult.meaning}&ldquo;

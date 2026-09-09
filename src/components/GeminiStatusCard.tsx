@@ -53,11 +53,12 @@ export default function GeminiStatusCard() {
   }, []);
 
   useEffect(() => {
-    void load();
+    const t = setTimeout(() => void load(), 0);
+    return () => clearTimeout(t);
   }, [load]);
 
   return (
-    <div className="max-w-md mx-auto bg-surface border border-line rounded-2xl py-6 my-8">
+    <div className="max-w-md mx-auto bg-surface border border-line py-6 my-8">
       {loading && (
         <div className="px-6 text-center">
           <p className="text-sm text-ink-soft">Prüfe Verbindung …</p>
@@ -81,7 +82,7 @@ export default function GeminiStatusCard() {
           <div className="px-6 pb-4 border-b border-line flex items-start gap-3">
             <span
               className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                data.ok ? 'bg-accent-soft text-accent-deep' : 'bg-warn/15 text-warn'
+                data.ok ? 'bg-blue-soft text-blue-deep' : 'bg-warn/15 text-warn'
               }`}
             >
               {data.ok ? <ShieldCheck className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
@@ -95,8 +96,8 @@ export default function GeminiStatusCard() {
           </div>
 
           {data.reply && (
-            <div className="mx-6 mt-4 px-4 py-3 rounded-xl bg-accent-pale border border-line">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-accent-deep mb-1 flex items-center gap-1.5">
+            <div className="mx-6 mt-4 px-4 py-3 bg-blue-pale border border-line">
+              <p className="text-xs text-blue-deep mb-1 flex items-center gap-1.5">
                 <Sparkles className="w-3 h-3" />
                 Antwort der KI (test):
               </p>
@@ -127,7 +128,7 @@ export default function GeminiStatusCard() {
           </ul>
 
           {/* Last update info */}
-          <div className="mx-6 mt-4 px-4 py-3 rounded-xl bg-paper-warm border border-line text-xs text-ink-soft space-y-1">
+          <div className="mx-6 mt-4 px-4 py-3 bg-panel border border-line text-xs text-ink-soft space-y-1">
             <p className="flex items-center justify-between gap-3">
               <span>Zuletzt geprüft:</span>
               <span className="tabular-nums text-ink">

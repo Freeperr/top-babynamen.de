@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -13,7 +13,7 @@ export default function ImpressumPage() {
       <div className="mb-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Zurück zur Startseite
@@ -21,7 +21,7 @@ export default function ImpressumPage() {
       </div>
 
       <header className="mb-10">
-        <p className="eyebrow mb-3">Rechtliches</p>
+        <p className="kicker mb-3">Rechtliches</p>
         <h1 className="font-editorial text-[clamp(2rem,5vw,3rem)] leading-tight text-ink">
           Impressum
         </h1>
@@ -43,7 +43,7 @@ export default function ImpressumPage() {
             </p>
             <p>
               <strong className="text-ink">E-Mail:</strong>{' '}
-              <a href="mailto:info@mvc-hamburg.de" className="underline underline-offset-2 hover:text-accent-deep">
+              <a href="mailto:info@mvc-hamburg.de" className="underline underline-offset-2 hover:text-blue-deep">
                 info@mvc-hamburg.de
               </a>
             </p>
@@ -53,7 +53,7 @@ export default function ImpressumPage() {
                 href="http://www.mvc-hamburg.de"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2 hover:text-accent-deep"
+                className="underline underline-offset-2 hover:text-blue-deep"
               >
                 www.mvc-hamburg.de
               </a>
@@ -85,7 +85,7 @@ export default function ImpressumPage() {
           <p className="font-medium text-ink">Freeperr / freeperr.dev</p>
           <p>
             E-Mail:{' '}
-            <a href="mailto:business@freeperr.dev" className="underline underline-offset-2 hover:text-accent-deep">
+            <a href="mailto:business@freeperr.dev" className="underline underline-offset-2 hover:text-blue-deep">
               business@freeperr.dev
             </a>
           </p>
@@ -107,7 +107,7 @@ export default function ImpressumPage() {
           </p>
           <p>
             <strong className="text-ink">E-Mail:</strong>{' '}
-            <a href="mailto:vermarktung@verticalnetwork.de" className="underline underline-offset-2 hover:text-accent-deep">
+            <a href="mailto:vermarktung@verticalnetwork.de" className="underline underline-offset-2 hover:text-blue-deep">
               vermarktung@verticalnetwork.de
             </a>
           </p>

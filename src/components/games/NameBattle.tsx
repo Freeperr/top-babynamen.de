@@ -7,28 +7,19 @@ import { Trophy, RotateCcw, Heart, ArrowRight } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import { genderNoun, originPhrase } from '@/lib/format';
 
 const TOTAL_ROUNDS = 5;
-type BattleGender = 'girl' | 'boy';
 
-const genderLabel = (name: BabyName) =>
-  name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex';
-
-function getNamesForGender(gender: BattleGender) {
-  return ALL_NAMES.filter((name) => name.gender === gender);
-}
-
-function getRandomChallenger(winnerId: string, gender: BattleGender): BabyName {
-  const remaining = getNamesForGender(gender).filter((n) => n.id !== winnerId);
+function getRandomChallenger(winnerId: string): BabyName {
+  const remaining = ALL_NAMES.filter((n) => n.id !== winnerId);
   return remaining[Math.floor(Math.random() * remaining.length)];
 }
 
 export default function NameBattle() {
-  const [gender, setGender] = useState<BattleGender>('girl');
-  const initialNames = getNamesForGender('girl');
   const [round, setRound] = useState(1);
-  const [candidateA, setCandidateA] = useState<BabyName>(initialNames[0]);
-  const [candidateB, setCandidateB] = useState<BabyName>(initialNames[1]);
+  const [candidateA, setCandidateA] = useState<BabyName>(ALL_NAMES[4]); // Mila
+  const [candidateB, setCandidateB] = useState<BabyName>(ALL_NAMES[3]); // Lina
   const [chosenWinner, setChosenWinner] = useState<'A' | 'B' | null>(null);
   const [historyWins, setHistoryWins] = useState<Record<string, number>>({});
   const [isFinished, setIsFinished] = useState(false);
@@ -37,20 +28,8 @@ export default function NameBattle() {
 
   const getNextPair = (winner: BabyName) => ({
     keep: winner,
-    challenger: getRandomChallenger(winner.id, gender),
+    challenger: getRandomChallenger(winner.id),
   });
-
-  const handleGenderChange = (nextGender: BattleGender) => {
-    const names = getNamesForGender(nextGender);
-    setGender(nextGender);
-    setRound(1);
-    setCandidateA(names[0]);
-    setCandidateB(names[1]);
-    setChosenWinner(null);
-    setHistoryWins({});
-    setIsFinished(false);
-    setChampion(null);
-  };
 
   const handleVote = (selected: 'A' | 'B') => {
     if (chosenWinner !== null) return;
@@ -88,10 +67,9 @@ export default function NameBattle() {
   };
 
   const handleRestart = () => {
-    const names = getNamesForGender(gender);
     setRound(1);
-    setCandidateA(names[0]);
-    setCandidateB(names[1]);
+    setCandidateA(ALL_NAMES[4]);
+    setCandidateB(ALL_NAMES[3]);
     setChosenWinner(null);
     setHistoryWins({});
     setIsFinished(false);
@@ -111,29 +89,29 @@ export default function NameBattle() {
           scale: isWinning ? 1.03 : isLosing ? 0.97 : 1,
           opacity: isLosing ? 0.35 : 1,
           borderColor: isWinning
-            ? 'var(--color-accent)'
+            ? 'var(--color-blue)'
             : isLosing
             ? 'var(--color-line)'
             : 'var(--color-line-strong)',
         }}
         transition={{ duration: 0.25 }}
         onClick={() => handleVote(winner)}
-        className={`bg-surface rounded-2xl border p-5 sm:p-7 text-center cursor-pointer transition-colors select-none group ${
-          chosenWinner === null ? 'hover:border-accent' : ''
+        className={`bg-surface rounded-xl border p-5 sm:p-7 text-center cursor-pointer transition-colors select-none group ${
+          chosenWinner === null ? 'hover:border-blue' : ''
         }`}
       >
-        <span className="eyebrow block mb-1">{label}</span>
-        <h3 className="font-editorial text-3xl sm:text-4xl text-ink group-hover:text-accent-deep transition-colors mb-2">
+        <span className="label block mb-1">{label}</span>
+        <h3 className="font-editorial text-3xl sm:text-4xl text-ink group-hover:text-blue-deep transition-colors mb-2">
           {candidate.name}
         </h3>
         <span className="text-xs text-ink-soft">
-          {genderLabel(candidate)} · {candidate.length} Buchstaben
+          {genderNoun(candidate.gender)}, {candidate.length} Buchstaben
         </span>
         <p className="mt-2 text-sm text-fade line-clamp-2">
           &bdquo;{candidate.meaning}&ldquo;
         </p>
 
-        <span className="mt-4 inline-block text-xs text-accent-deep border border-line-strong rounded-full px-4 py-1.5 group-hover:bg-accent-soft transition-colors">
+        <span className="mt-4 inline-block text-xs text-blue-deep border border-line-strong rounded-full px-4 py-1.5 group-hover:bg-blue-soft transition-colors">
           Diesen Namen wählen
         </span>
       </motion.div>
@@ -142,23 +120,6 @@ export default function NameBattle() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="flex gap-2 mb-6" role="group" aria-label="Namensgeschlecht auswählen">
-        {([
-          ['girl', 'Mädchennamen'],
-          ['boy', 'Jungennamen'],
-        ] as const).map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => handleGenderChange(value)}
-            className={`btn flex-1 ${gender === value ? 'btn-primary' : 'btn-secondary'}`}
-            aria-pressed={gender === value}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
       {!isFinished ? (
         <div>
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-line">
@@ -170,7 +131,7 @@ export default function NameBattle() {
                 <div
                   key={i}
                   className={`w-5 h-1.5 rounded-full transition-colors ${
-                    i < round ? 'bg-accent' : 'bg-line'
+                    i < round ? 'bg-blue' : 'bg-line'
                   }`}
                 />
               ))}
@@ -195,18 +156,18 @@ export default function NameBattle() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-surface rounded-2xl border border-line p-8 sm:p-12 text-center shadow-sm rise"
+            className="bg-surface rounded-xl border border-line p-8 sm:p-12 text-center rise"
           >
-            <div className="w-14 h-14 rounded-full bg-accent-soft border border-line flex items-center justify-center text-accent-deep mx-auto mb-4">
+            <div className="w-14 h-14 rounded-full bg-blue-soft border border-line flex items-center justify-center text-blue-deep mx-auto mb-4">
               <Trophy className="w-6 h-6" />
             </div>
 
-            <p className="eyebrow mb-1">Dein Favorit nach fünf Runden</p>
+            <p className="kicker mb-1">Dein Favorit nach fünf Runden</p>
             <h4 className="font-editorial text-4xl sm:text-5xl text-ink mb-2">
               {champion.name}
             </h4>
             <p className="text-sm text-ink-soft">
-              {champion.origin} · {genderLabel(champion)}
+              {originPhrase(champion.origin, champion.gender)}
             </p>
             <p className="text-base text-ink-soft mt-3 max-w-sm mx-auto">
               &bdquo;{champion.meaning}&ldquo;

@@ -6,19 +6,18 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { getRareNames } from '@/lib/nameService';
 import { useFavorites } from '@/context/FavoritesContext';
+import { originPhrase } from '@/lib/format';
+import FavoriteButton from '@/components/FavoriteButton';
 import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
-
-const genderLabel = (gender: string) =>
-  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
 
 export default function CuratedInspirationSection() {
   const { isFavorite, toggleFavorite } = useFavorites();
   const names = getRareNames(4);
 
   return (
-    <section className="py-12 sm:py-16 border-y border-line bg-paper-warm/40">
+    <section className="py-14 sm:py-20 border-y border-line bg-panel/60">
       <motion.div
-        className="max-w-4xl mx-auto px-4 sm:px-6 grid gap-10 md:grid-cols-[2fr_3fr] md:gap-14"
+        className="max-w-4xl mx-auto px-4 sm:px-6 grid gap-10 md:grid-cols-[2fr_3fr] md:gap-16"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
@@ -26,18 +25,19 @@ export default function CuratedInspirationSection() {
       >
         {/* Editorial intro column */}
         <motion.div variants={fadeUp}>
-          <p className="eyebrow mb-3">Vorschläge der Redaktion</p>
-          <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
-            Namen, die nicht{' '}
-            <em className="italic text-accent">jeder kennt.</em>
+          <p className="kicker mb-3">Vorschläge der Redaktion</p>
+          <h2 className="font-editorial text-3xl sm:text-4xl text-ink leading-tight">
+            Vier Namen,
+            <br />
+            die uns aufgefallen sind.
           </h2>
           <p className="mt-4 text-ink-soft text-[0.95rem]">
             Nicht ganz so häufig, aber mit viel Charakter. Wir stellen dir jeden
-            Monat vier Namen vor, die uns aufgefallen sind.
+            Monat vier Namen vor, die uns überrascht haben.
           </p>
           <Link
             href="/babynamen?style=rare"
-            className="inline-flex items-center gap-1.5 mt-6 text-sm text-ink-soft hover:text-accent-deep transition-colors"
+            className="inline-flex items-center gap-1.5 mt-6 text-sm text-ink-soft hover:text-blue-deep transition-colors"
           >
             Seltene Namen entdecken
             <ArrowRight className="w-3.5 h-3.5" />
@@ -51,49 +51,26 @@ export default function CuratedInspirationSection() {
             return (
               <li
                 key={name.id}
-                className="flex items-center gap-4 border-b border-line py-4 group hover:bg-accent-pale transition-colors px-2 -mx-2 rounded-lg"
+                className="flex items-start gap-4 border-b border-line py-5 group hover:bg-blue-pale transition-colors px-2 -mx-2"
               >
-                <Link
-                  href={`/name/${name.id}`}
-                  className="flex-1 min-w-0"
-                >
-                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-                    <span className="font-editorial text-[1.5rem] leading-tight text-ink group-hover:text-accent-deep transition-colors">
-                      {name.name}
-                    </span>
-                    <span className="text-sm text-ink-soft">
-                      {genderLabel(name.gender)} · {name.origin}
-                    </span>
-                  </div>
-                  <p className="text-sm text-fade truncate mt-0.5">
+                <Link href={`/name/${name.id}`} className="flex-1 min-w-0">
+                  <span className="block font-editorial text-[1.5rem] leading-tight text-ink group-hover:text-blue-deep transition-colors">
+                    {name.name}
+                  </span>
+                  <span className="mt-1 block text-sm text-ink-soft">
+                    {originPhrase(name.origin, name.gender)}
+                  </span>
+                  <span className="mt-0.5 block text-sm text-fade truncate">
                     &bdquo;{name.meaning}&ldquo;
-                  </p>
+                  </span>
                 </Link>
 
-                <button
-                  onClick={(e) => toggleFavorite(name, e)}
-                  className={`shrink-0 flex items-center justify-center w-9 h-9 rounded-full border transition-colors active:scale-90 ${
-                    favorited
-                      ? 'bg-accent-soft border-line-strong text-accent-deep'
-                      : 'border-transparent text-fade hover:text-accent-deep hover:bg-accent-soft'
-                  }`}
-                  aria-label={
-                    favorited
-                      ? `${name.name} von Favoriten entfernen`
-                      : `${name.name} zu Favoriten hinzufügen`
-                  }
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className={`w-4 h-4 ${favorited ? 'fill-accent-deep text-accent-deep' : 'fill-none text-current'}`}
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                  </svg>
-                </button>
+                <FavoriteButton
+                  name={name}
+                  favorited={favorited}
+                  onToggle={(e) => toggleFavorite(name, e)}
+                  className="mt-1"
+                />
               </li>
             );
           })}

@@ -64,7 +64,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
       sortBy,
     };
     return filterNames(filters);
-  }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy]);
+  }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy, isGeminiTest]);
 
   const handleResetFilters = () => {
     setQuery('');
@@ -89,7 +89,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       {/* Header */}
       <div className="max-w-2xl mx-auto text-center mb-10">
-        <p className="eyebrow mb-3">Namenssuche</p>
+        <p className="kicker mb-3">Namensverzeichnis</p>
         <h1 className="font-editorial text-[clamp(1.9rem,4vw,3rem)] leading-tight text-ink">
           {title}
         </h1>
@@ -120,13 +120,13 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
       </div>
 
       {/* Filter panel */}
-      <div className="bg-surface border border-line rounded-2xl p-5 mb-8">
+      <div className="bg-panel border border-line p-5 mb-8">
         {/* Row 1: gender + actions */}
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2 flex-wrap">
             {!fixedGender && (
               <>
-                <span className="eyebrow mr-1">Geschlecht</span>
+                <span className="label mr-1">Geschlecht</span>
                 {[
                   { id: 'all' as const, label: 'Alle' },
                   { id: 'girl' as const, label: 'Mädchen' },
@@ -138,8 +138,8 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
                     onClick={() => setSelectedGender(g.id)}
                     className={`px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                       selectedGender === g.id
-                        ? 'bg-accent text-white border-accent'
-                        : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
+                        ? 'bg-blue text-white border-blue'
+                        : 'bg-surface text-ink-soft border-line-strong hover:border-blue hover:text-blue-deep'
                     }`}
                   >
                     {g.label}
@@ -174,11 +174,11 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
         <div className="flex items-center gap-1 overflow-x-auto pb-1 pt-4 mt-3 border-t border-line scrollbar-none">
           <button
             onClick={() => setSelectedLetter('all')}
-            className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-colors ${
-              selectedLetter === 'all'
-                ? 'bg-ink text-paper'
-                : 'text-fade hover:text-ink hover:bg-paper-warm'
-            }`}
+className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-colors ${
+                selectedLetter === 'all'
+                  ? 'bg-ink text-paper'
+                  : 'text-fade hover:text-ink hover:bg-panel'
+              }`}
           >
             A–Z
           </button>
@@ -189,7 +189,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
               className={`w-8 h-8 rounded-md text-xs font-medium shrink-0 flex items-center justify-center transition-colors ${
                 selectedLetter === letter
                   ? 'bg-ink text-paper'
-                  : 'text-fade hover:text-ink hover:bg-paper-warm'
+                  : 'text-fade hover:text-ink hover:bg-panel'
               }`}
             >
               {letter}
@@ -201,7 +201,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
         {showAdvancedFilters && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 mt-3 border-t border-line rise">
             <div>
-              <label htmlFor={`length-${title}`} className="eyebrow block mb-1.5">
+              <label htmlFor={`length-${title}`} className="label block mb-1.5">
                 Namenslänge
               </label>
               <select
@@ -218,7 +218,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
             </div>
 
             <div>
-              <label htmlFor={`style-${title}`} className="eyebrow block mb-1.5">
+              <label htmlFor={`style-${title}`} className="label block mb-1.5">
                 Stil &amp; Kategorie
               </label>
               <select
@@ -236,7 +236,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
             </div>
 
             <div>
-              <label htmlFor={`origin-${title}`} className="eyebrow block mb-1.5">
+              <label htmlFor={`origin-${title}`} className="label block mb-1.5">
                 Herkunft / Wurzeln
               </label>
               <select
@@ -255,7 +255,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
             </div>
 
             <div>
-              <label htmlFor={`sort-${title}`} className="eyebrow block mb-1.5">
+              <label htmlFor={`sort-${title}`} className="label block mb-1.5">
                 Sortieren nach
               </label>
               <select
@@ -292,7 +292,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
               ))}
             </div>
           ) : (
-            <div className="max-w-md mx-auto bg-surface border border-line rounded-2xl p-10 text-center my-8">
+            <div className="max-w-md mx-auto bg-panel border border-line p-10 text-center my-8">
               <h3 className="text-xl text-ink mb-2">Keine Namen gefunden</h3>
               <p className="text-sm text-ink-soft mb-6">
                 Für diese Kombination gibt es gerade keine Treffer. Versuche, die

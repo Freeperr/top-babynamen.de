@@ -96,8 +96,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
           <span
             className={`flex items-center justify-center w-6 h-6 rounded-full ${
               toastMessage.action === 'add'
-                ? 'bg-accent-soft text-accent-deep'
-                : 'bg-paper-warm text-fade'
+                ? 'bg-blue-soft text-blue-deep'
+                : 'bg-panel text-fade'
             }`}
           >
             {toastMessage.action === 'add' ? (

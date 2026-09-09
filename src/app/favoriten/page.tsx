@@ -39,7 +39,7 @@ export default function FavoritenPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       {/* Header */}
       <div className="mb-10">
-        <p className="eyebrow mb-3">Deine Auswahl</p>
+        <p className="kicker mb-3">Deine Auswahl</p>
         <h1 className="font-editorial text-[clamp(1.9rem,4vw,3rem)] leading-tight text-ink">
           Meine Namen
         </h1>
@@ -63,8 +63,8 @@ export default function FavoritenPage() {
                   onClick={() => setFilterGender(g.id)}
                   className={`px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                     filterGender === g.id
-                      ? 'bg-accent text-white border-accent'
-                      : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
+                      ? 'bg-blue text-white border-blue'
+                      : 'bg-surface text-ink-soft border-line-strong hover:border-blue hover:text-blue-deep'
                   }`}
                 >
                   {g.label} ({g.count})
@@ -121,8 +121,8 @@ export default function FavoritenPage() {
         </div>
       ) : (
         /* Empty state */
-        <div className="max-w-md mx-auto bg-surface border border-line rounded-2xl p-10 sm:p-12 text-center my-6">
-          <div className="w-12 h-12 rounded-full bg-accent-soft text-accent-deep flex items-center justify-center mx-auto mb-4">
+        <div className="max-w-md mx-auto bg-panel border border-line p-10 sm:p-12 text-center my-6">
+          <div className="w-12 h-12 rounded-full bg-blue-soft text-blue-deep flex items-center justify-center mx-auto mb-4">
             <Heart className="w-6 h-6" />
           </div>
           <h3 className="font-editorial text-2xl text-ink mb-2">

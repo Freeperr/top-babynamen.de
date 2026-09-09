@@ -6,15 +6,14 @@ import { Search, X, ArrowRight } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import { originPhrase } from '@/lib/format';
+import FavoriteButton from '@/components/FavoriteButton';
 import GeminiStatusCard from '@/components/GeminiStatusCard';
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const genderLabel = (gender: string) =>
-  gender === 'girl' ? 'Mädchen' : gender === 'boy' ? 'Junge' : 'Unisex';
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
@@ -69,7 +68,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl bg-surface rounded-2xl border border-line shadow-lg overflow-hidden rise"
+        className="w-full max-w-xl bg-surface rounded-xl border border-line overflow-hidden rise"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-label="Namen suchen"
@@ -98,13 +97,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         </div>
 
         {/* Quick filters */}
-        <div className="px-5 py-2.5 flex items-center gap-2 overflow-x-auto border-b border-line bg-paper-warm/60 scrollbar-none">
+        <div className="px-5 py-2.5 flex items-center gap-2 overflow-x-auto border-b border-line bg-panel/60 scrollbar-none">
           <span className="text-xs text-fade shrink-0">Schnellfilter:</span>
           {['Mädchen', 'Jungen', 'Kurz', 'Selten', 'Modern'].map((tag) => (
             <button
               key={tag}
               onClick={() => setQuery(tag)}
-              className="px-3 py-1 rounded-md border border-line-strong bg-surface text-sm text-ink-soft hover:border-accent hover:text-accent-deep transition-colors shrink-0"
+              className="px-3 py-1 rounded-md border border-line-strong bg-surface text-sm text-ink-soft hover:border-blue hover:text-blue-deep transition-colors shrink-0"
             >
               {tag}
             </button>
@@ -121,53 +120,34 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               return (
                 <div
                   key={name.id}
-                  className="flex items-center gap-2 px-5 py-2.5 hover:bg-accent-pale transition-colors group"
+                  className="flex items-start gap-2 px-5 py-2.5 hover:bg-blue-pale transition-colors group"
                 >
                   <Link
                     href={`/name/${name.id}`}
                     onClick={onClose}
                     className="flex-1 min-w-0 py-1"
                   >
-                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                      <span className="font-editorial text-xl text-ink group-hover:text-accent-deep transition-colors">
-                        {name.name}
-                      </span>
-                      <span className="text-xs text-ink-soft">
-                        {genderLabel(name.gender)} · {name.origin}
-                      </span>
-                    </div>
-                    <p className="text-xs text-fade truncate mt-0.5">
+                    <span className="block font-editorial text-xl text-ink group-hover:text-blue-deep transition-colors">
+                      {name.name}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-ink-soft">
+                      {originPhrase(name.origin, name.gender)}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-fade truncate">
                       &bdquo;{name.meaning}&ldquo;
-                    </p>
+                    </span>
                   </Link>
 
-                  <button
-                    onClick={(e) => {
+                  <FavoriteButton
+                    name={name}
+                    favorited={favorited}
+                    onToggle={(e) => {
                       e.stopPropagation();
                       toggleFavorite(name, e);
                     }}
-                    className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-full border transition-colors ${
-                      favorited
-                        ? 'bg-accent-soft border-line-strong text-accent-deep'
-                        : 'border-transparent text-fade hover:text-accent-deep hover:bg-accent-soft'
-                    }`}
-                    aria-label={
-                      favorited
-                        ? `${name.name} von Favoriten entfernen`
-                        : `${name.name} zu Favoriten hinzufügen`
-                    }
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className={`w-4 h-4 ${favorited ? 'fill-accent-deep text-accent-deep' : 'fill-none text-current'}`}
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                    </svg>
-                  </button>
+                    size="sm"
+                    className="mt-1"
+                  />
                 </div>
               );
             })
@@ -189,7 +169,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             <Link
               href={`/babynamen?q=${encodeURIComponent(query)}`}
               onClick={onClose}
-              className="inline-flex items-center gap-1 text-ink-soft hover:text-accent-deep transition-colors"
+              className="inline-flex items-center gap-1 text-ink-soft hover:text-blue-deep transition-colors"
             >
               Alle Suchergebnisse ansehen
               <ArrowRight className="w-3.5 h-3.5" />

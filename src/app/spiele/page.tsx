@@ -13,7 +13,7 @@ const VALID_TABS: GameTab[] = ['swipe', 'battle', 'challenge', 'generator'];
 
 const TABS: { id: GameTab; label: string }[] = [
   { id: 'swipe', label: 'Swipe' },
-  { id: 'battle', label: 'Welcher Name klingt besser?' },
+  { id: 'battle', label: 'Name Battle' },
   { id: 'challenge', label: '10s Challenge' },
   { id: 'generator', label: 'Generator' },
 ];
@@ -34,7 +34,7 @@ function SpieleContent() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
       {/* Header */}
       <div className="max-w-xl mx-auto text-center mb-10">
-        <p className="eyebrow mb-3">Zum Spielen zwischendurch</p>
+        <p className="kicker mb-3">Zum Spielen zwischendurch</p>
         <h1 className="font-editorial text-[clamp(1.9rem,4vw,3rem)] leading-tight text-ink">
           Namen spielerisch finden
         </h1>
@@ -53,7 +53,7 @@ function SpieleContent() {
               onClick={() => handleTabChange(tab.id)}
               className={`px-4 py-1.5 text-sm whitespace-nowrap border-b-2 transition-colors ${
                 isActive
-                  ? 'border-accent text-ink font-medium'
+                  ? 'border-blue text-ink font-medium'
                   : 'border-transparent text-ink-soft hover:text-ink'
               }`}
               aria-current={isActive ? 'page' : undefined}
@@ -65,7 +65,7 @@ function SpieleContent() {
       </div>
 
       {/* Active game */}
-      <div className="bg-surface border border-line rounded-2xl p-5 sm:p-10 min-h-[500px]">
+      <div className="bg-surface border border-line p-5 sm:p-10 min-h-[500px]">
         {activeTab === 'swipe' && <SwipeGame />}
         {activeTab === 'battle' && <NameBattle />}
         {activeTab === 'challenge' && <SpeedChallenge />}

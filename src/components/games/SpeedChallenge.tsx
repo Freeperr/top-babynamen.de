@@ -6,6 +6,7 @@ import { Timer, Heart, X, RotateCcw, ArrowRight } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import { originPhrase } from '@/lib/format';
 
 const CHALLENGE_DURATION = 8;
 const TOTAL_NAMES = 6;
@@ -73,8 +74,8 @@ export default function SpeedChallenge() {
   return (
     <div className="max-w-xl mx-auto text-center">
       {!isPlaying && !isCompleted ? (
-        <div className="bg-surface rounded-2xl border border-line p-8 sm:p-12 shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-accent-soft border border-line flex items-center justify-center text-accent-deep mx-auto mb-4">
+        <div className="bg-surface rounded-xl border border-line p-8 sm:p-12">
+          <div className="w-12 h-12 rounded-full bg-blue-soft border border-line flex items-center justify-center text-blue-deep mx-auto mb-4">
             <Timer className="w-6 h-6" />
           </div>
           <h3 className="font-editorial text-2xl sm:text-3xl text-ink mb-2">
@@ -89,20 +90,20 @@ export default function SpeedChallenge() {
           </button>
         </div>
       ) : isPlaying && currentName ? (
-        <div className="bg-surface rounded-2xl border border-line-strong p-6 sm:p-10 shadow-sm">
+        <div className="bg-surface rounded-xl border border-line-strong p-6 sm:p-10">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs text-fade">
               Name {currentIndex + 1} von {TOTAL_NAMES}
             </span>
             <span className="inline-flex items-center gap-1.5 text-xs text-ink font-medium">
-              <Timer className="w-4 h-4 text-accent" />
+              <Timer className="w-4 h-4 text-blue" />
               {Math.ceil(timeLeft)}s
             </span>
           </div>
 
-          <div className="w-full bg-paper-warm h-1.5 rounded-full overflow-hidden mb-8">
+          <div className="w-full bg-panel h-1.5 rounded-full overflow-hidden mb-8">
             <div
-              className="h-full bg-accent transition-all duration-100 ease-linear"
+              className="h-full bg-blue transition-all duration-100 ease-linear"
               style={{ width: `${(timeLeft / CHALLENGE_DURATION) * 100}%` }}
             />
           </div>
@@ -112,8 +113,7 @@ export default function SpeedChallenge() {
               {currentName.name}
             </h4>
             <span className="text-xs text-ink-soft">
-              {currentName.gender === 'girl' ? 'Mädchen' : currentName.gender === 'boy' ? 'Junge' : 'Unisex'} ·{' '}
-              {currentName.origin}
+              {originPhrase(currentName.origin, currentName.gender)}
             </span>
             <p className="text-sm text-fade mt-3">
               &bdquo;{currentName.meaning}&ldquo;
@@ -138,7 +138,7 @@ export default function SpeedChallenge() {
           </div>
         </div>
       ) : (
-        <div className="bg-surface rounded-2xl border border-line p-8 sm:p-10 shadow-sm text-center rise">
+        <div className="bg-surface rounded-xl border border-line p-8 sm:p-10 text-center rise">
           <h3 className="font-editorial text-2xl sm:text-3xl text-ink mb-2">
             Challenge abgeschlossen!
           </h3>
@@ -155,11 +155,11 @@ export default function SpeedChallenge() {
                 >
                   <div className="flex items-baseline gap-2 min-w-0">
                     <span className="font-editorial text-xl text-ink">{n.name}</span>
-                    <span className="text-xs text-fade truncate">{n.origin}</span>
+                    <span className="text-xs text-fade truncate">{originPhrase(n.origin, n.gender)}</span>
                   </div>
                   <Link
                     href={`/name/${n.id}`}
-                    className="text-xs text-ink-soft hover:text-accent-deep inline-flex items-center gap-1 shrink-0"
+                    className="text-xs text-ink-soft hover:text-blue-deep inline-flex items-center gap-1 shrink-0"
                   >
                     Profil <ArrowRight className="w-3 h-3" />
                   </Link>

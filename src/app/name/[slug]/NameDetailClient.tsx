@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Heart, Volume2, ArrowLeft, Check } from 'lucide-react';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
+import { originPhrase } from '@/lib/format';
 import NameRow from '@/components/NameRow';
 
 interface NameDetailClientProps {
@@ -38,9 +39,6 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
       setTimeout(() => setCopied(false), 2500);
     }
   };
-
-  const genderStr =
-    name.gender === 'girl' ? 'Mädchenname' : name.gender === 'boy' ? 'Jungenname' : 'Unisex-Name';
 
   const renderPopularityChart = () => {
     if (!name.popularityHistory || name.popularityHistory.length === 0) return null;
@@ -80,13 +78,13 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
 
           <polygon
             points={`${getX(0)},${height - padding} ${points} ${getX(data.length - 1)},${height - padding}`}
-            fill="var(--color-accent)"
+            fill="var(--color-blue)"
             opacity="0.08"
           />
 
           <polyline
             fill="none"
-            stroke="var(--color-accent)"
+            stroke="var(--color-blue)"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -98,7 +96,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
             const y = getY(d.rank);
             return (
               <g key={d.year}>
-                <circle cx={x} cy={y} r="4" fill="var(--color-surface)" stroke="var(--color-accent)" strokeWidth="2" />
+                <circle cx={x} cy={y} r="4" fill="var(--color-surface)" stroke="var(--color-blue)" strokeWidth="2" />
                 <text x={x} y={y - 10} textAnchor="middle" fill="var(--color-ink-soft)" fontSize="11">
                   #{d.rank}
                 </text>
@@ -119,7 +117,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
       <div className="mb-6">
         <Link
           href="/babynamen"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-accent-deep transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Zurück zur Übersicht
@@ -128,12 +126,12 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
 
       {/* Header */}
       <header className="border-b border-line pb-8 mb-8">
-        <div className="flex items-center gap-2 flex-wrap mb-3">
-          <span className="text-sm text-ink-soft">{genderStr}</span>
-          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
-          <span className="text-sm text-ink-soft">{name.origin}</span>
-          <Heart className="w-3 h-3 text-accent fill-accent" aria-hidden="true" />
-          <span className="text-sm text-ink-soft">Rang #{name.popularityRank}</span>
+        <div className="flex items-baseline gap-3 flex-wrap mb-3">
+          <span className="text-sm text-ink-soft">
+            {originPhrase(name.origin, name.gender)}
+          </span>
+          <span className="w-px h-3.5 bg-line" aria-hidden="true" />
+          <span className="text-sm text-ink-soft">Rang {name.popularityRank}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -144,15 +142,15 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           <div className="flex items-center gap-2">
             <button
               onClick={handleSpeech}
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-accent-deep hover:border-accent transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-blue-deep hover:border-blue transition-colors"
               title={`Aussprache von ${name.name} anhören`}
             >
-              <Volume2 className={`w-4 h-4 ${isPlayingAudio ? 'animate-pulse text-accent' : ''}`} />
+              <Volume2 className={`w-4 h-4 ${isPlayingAudio ? 'animate-pulse text-blue' : ''}`} />
             </button>
 
             <button
               onClick={handleShare}
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-accent-deep hover:border-accent transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-blue-deep hover:border-blue transition-colors"
               title="Link kopieren"
             >
               {copied ? <Check className="w-4 h-4 text-go" /> : <ShareIcon />}
@@ -160,9 +158,9 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
 
             <button
               onClick={(e) => toggleFavorite(name, e)}
-              className={`btn px-5 py-2.5 ${favorited ? 'bg-accent-soft text-accent-deep border border-line-strong' : 'btn-primary'}`}
+              className={`btn px-5 py-2.5 ${favorited ? 'bg-blue-soft text-blue-deep border border-line-strong' : 'btn-primary'}`}
             >
-              <Heart className={`w-4 h-4 ${favorited ? 'fill-accent-deep' : 'fill-none'}`} />
+              <Heart className={`w-4 h-4 ${favorited ? 'fill-blue-deep' : 'fill-none'}`} />
               {favorited ? 'Gespeichert' : 'Als Favorit speichern'}
             </button>
           </div>
@@ -180,7 +178,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
         <p className="font-editorial text-2xl sm:text-3xl text-ink leading-snug">
           &bdquo;{name.meaning}&ldquo;
         </p>
-        <p className="eyebrow mt-2">Bedeutung</p>
+        <p className="kicker mt-2">Bedeutung</p>
       </blockquote>
 
       {/* Main + aside */}
@@ -194,7 +192,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           </section>
 
           {name.funFact && (
-            <p className="mb-8 text-sm text-ink-soft bg-paper-warm border border-line rounded-xl px-5 py-4">
+            <p className="mb-8 text-sm text-ink-soft bg-panel border border-line px-5 py-4">
               <strong className="text-ink">Schon gewusst?</strong> {name.funFact}
             </p>
           )}

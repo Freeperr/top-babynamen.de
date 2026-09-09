@@ -48,7 +48,7 @@ export default function Navbar() {
           <Link href="/" className="shrink-0 whitespace-nowrap">
             <span className="font-editorial text-[1.25rem] text-ink leading-none">
               Top-Babynamen
-              <span className="text-accent text-[0.95rem]">.de</span>
+              <span className="text-blue text-[0.95rem]">.de</span>
             </span>
           </Link>
 
@@ -60,7 +60,7 @@ export default function Navbar() {
                 href={link.href}
                 className={`text-sm transition-colors py-1 border-b-2 ${
                   isActive(link.href)
-                    ? 'text-ink border-accent font-medium'
+                    ? 'text-ink border-blue font-medium'
                     : 'text-ink-soft border-transparent hover:text-ink'
                 }`}
               >
@@ -84,12 +84,12 @@ export default function Navbar() {
               href="/favoriten"
               className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                 isActive('/favoriten')
-                  ? 'text-accent-deep'
+                  ? 'text-blue-deep'
                   : 'text-ink-soft hover:text-ink'
               }`}
               aria-label="Favoriten ansehen"
             >
-              <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-accent text-accent' : ''}`} />
+              <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-blue text-blue' : ''}`} />
               {favoritesCount > 0 && (
                 <span className="text-xs text-fade">{favoritesCount}</span>
               )}
@@ -99,7 +99,7 @@ export default function Navbar() {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 -mr-1 rounded-lg text-ink-soft hover:text-ink hover:bg-paper-warm transition-colors"
+              className="lg:hidden p-2 -mr-1 rounded-lg text-ink-soft hover:text-ink hover:bg-panel transition-colors"
               aria-label="Menü umschalten"
               aria-expanded={isMobileMenuOpen}
             >
@@ -121,7 +121,7 @@ export default function Navbar() {
                     i === navLinks.length - 1 ? 'border-b-0' : ''
                   } ${
                     isActive(link.href)
-                      ? 'text-accent-deep font-medium'
+                      ? 'text-blue-deep font-medium'
                       : 'text-ink hover:text-ink-soft'
                   }`}
                 >
@@ -133,7 +133,7 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="py-3 text-base text-ink hover:text-ink-soft flex items-center gap-2"
               >
-                <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-accent text-accent' : ''}`} />
+                <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-blue text-blue' : ''}`} />
                 Favoriten
                 {favoritesCount > 0 && (
                   <span className="text-xs text-fade">{favoritesCount}</span>

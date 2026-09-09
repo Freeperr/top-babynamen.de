@@ -64,8 +64,8 @@ export default function SwipeGame() {
             }}
             className={`px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
               selectedGender === g.id
-                ? 'bg-accent text-white border-accent'
-                : 'bg-surface text-ink-soft border-line-strong hover:border-accent hover:text-accent-deep'
+                ? 'bg-blue text-white border-blue'
+                : 'bg-surface text-ink-soft border-line-strong hover:border-blue hover:text-blue-deep'
             }`}
           >
             {g.label}
@@ -92,11 +92,11 @@ export default function SwipeGame() {
                   handleSwipe('left');
                 }
               }}
-              className="absolute inset-0 bg-surface rounded-2xl border border-line-strong p-6 sm:p-8 flex flex-col justify-between shadow-sm cursor-grab active:cursor-grabbing select-none"
+              className="absolute inset-0 bg-surface rounded-xl border border-line-strong p-6 sm:p-8 flex flex-col justify-between cursor-grab active:cursor-grabbing select-none"
             >
               <div className="flex items-center justify-between text-sm">
                 <span className="text-ink-soft">{genderLabel(currentName.gender)}</span>
-                <span className="text-fade">#{currentName.popularityRank} · {currentName.origin}</span>
+                <span className="text-fade">Rang {currentName.popularityRank}</span>
               </div>
 
               <div className="text-center my-auto py-4">
@@ -106,19 +106,19 @@ export default function SwipeGame() {
                 {currentName.pronunciation && (
                   <p className="text-xs text-fade font-mono mb-3">{currentName.pronunciation}</p>
                 )}
-                <div className="p-4 bg-paper-warm rounded-xl border border-line max-w-sm mx-auto">
-                  <p className="text-[11px] eyebrow mb-1">Bedeutung</p>
+                <div className="p-4 bg-panel border border-line max-w-sm mx-auto">
+                  <p className="label mb-1">Bedeutung</p>
                   <p className="text-sm text-ink-soft">&bdquo;{currentName.meaning}&ldquo;</p>
                 </div>
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-line text-sm text-ink-soft">
                 <span className="text-xs">
-                  {currentName.tags.slice(0, 3).join(' · ')}
+                  {currentName.tags.slice(0, 3).join(', ')}
                 </span>
                 <Link
                   href={`/name/${currentName.id}`}
-                  className="inline-flex items-center gap-0.5 text-ink hover:text-accent-deep transition-colors"
+                  className="inline-flex items-center gap-0.5 text-ink hover:text-blue-deep transition-colors"
                 >
                   Profil <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -126,7 +126,7 @@ export default function SwipeGame() {
             </motion.div>
           </AnimatePresence>
         ) : (
-          <div className="bg-surface rounded-2xl border border-line p-8 text-center flex flex-col items-center justify-center h-full w-full shadow-sm">
+          <div className="bg-surface rounded-xl border border-line p-8 text-center flex flex-col items-center justify-center h-full w-full">
             <h3 className="font-editorial text-2xl text-ink mb-2">
               Alle Karten durchgespielt!
             </h3>
@@ -170,7 +170,7 @@ export default function SwipeGame() {
 
           <button
             onClick={() => handleSwipe('right')}
-            className="w-14 h-14 rounded-full bg-accent text-white hover:bg-accent-deep flex items-center justify-center transition-colors active:scale-90"
+            className="w-14 h-14 rounded-full bg-blue text-white hover:bg-blue-deep flex items-center justify-center transition-colors active:scale-90"
             title="Gefällt mir! (nach rechts)"
           >
             <Heart className="w-6 h-6 fill-current" />
