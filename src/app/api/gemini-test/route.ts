@@ -43,7 +43,7 @@ export async function GET() {
       detail: `Gesetzt (${apiKey.length} Zeichen).`,
     });
 
-    const prompt = `Du bist ein Verbindungstest für die Website "top-babynamen.de".
+    const prompt = `Du bist ein Verbindungstest für die Website "babynamen.me".
 
 Antworte NUR mit exakt dem folgenden Text (unverändert, ohne weitere Erklärung, ohne Markdown, ohne zusätzliche Zeichen):
 

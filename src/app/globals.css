@@ -92,6 +92,10 @@ a {
     letter-spacing: -0.015em;
   }
 
+  .font-caveat {
+    font-family: var(--font-caveat), "Caveat", cursive;
+  }
+
   /* Leises, normalgeschriebenes Label mit kleiner Marke davor.
      Bewusst KEIN ALL-CAPS-Eyebrow. */
   .kicker {

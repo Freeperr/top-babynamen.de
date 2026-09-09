@@ -19,7 +19,7 @@ const GAMES: Game[] = [
     cta: 'Swipe starten',
   },
   {
-    title: 'Name Battle',
+    title: 'Welcher Name Passt Besser',
     desc: 'Zwei Namen, eine Entscheidung – du bestimmst, wer aus dem Battle als Favorit hervorgeht.',
     href: '/spiele?tab=battle',
     cta: 'Battle spielen',

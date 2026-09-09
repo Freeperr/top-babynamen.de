@@ -1,34 +1,126 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Trophy, RotateCcw, Heart, ArrowRight } from 'lucide-react';
+import { Trophy, RotateCcw, Heart, ArrowRight, Sparkles } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
-import { BabyName } from '@/types/name';
+import { BabyName, Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 import { genderNoun, originPhrase } from '@/lib/format';
 
 const TOTAL_ROUNDS = 5;
 
-function getRandomChallenger(winnerId: string): BabyName {
-  const remaining = ALL_NAMES.filter((n) => n.id !== winnerId);
+function getRandomFromPool(gender: Gender | 'all'): BabyName {
+  const pool = ALL_NAMES.filter((n) =>
+    gender === 'all' ? true : n.gender === gender || n.gender === 'unisex'
+  );
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function getRandomChallenger(winnerId: string, gender: Gender | 'all'): BabyName {
+  const remaining = ALL_NAMES.filter(
+    (n) => n.id !== winnerId && (gender === 'all' ? true : n.gender === gender || n.gender === 'unisex')
+  );
+  if (remaining.length === 0) return getRandomFromPool(gender);
   return remaining[Math.floor(Math.random() * remaining.length)];
 }
 
 export default function NameBattle() {
+  const [gender, setGender] = useState<Gender | 'all'>('all');
   const [round, setRound] = useState(1);
-  const [candidateA, setCandidateA] = useState<BabyName>(ALL_NAMES[4]); // Mila
-  const [candidateB, setCandidateB] = useState<BabyName>(ALL_NAMES[3]); // Lina
+  const [candidateA, setCandidateA] = useState<BabyName>(() => getRandomFromPool('all'));
+  const [candidateB, setCandidateB] = useState<BabyName>(() => getRandomFromPool('all'));
   const [chosenWinner, setChosenWinner] = useState<'A' | 'B' | null>(null);
   const [historyWins, setHistoryWins] = useState<Record<string, number>>({});
   const [isFinished, setIsFinished] = useState(false);
   const [champion, setChampion] = useState<BabyName | null>(null);
+  const [secretInput, setSecretInput] = useState('');
+  const [showAiButton, setShowAiButton] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
   const { isFavorite, toggleFavorite } = useFavorites();
+
+  const handleSecretInput = (value: string) => {
+    setSecretInput(value);
+    if (value.toLowerCase().includes('geminitest')) {
+      setShowAiButton(true);
+    }
+  };
+
+  const handleAiUpdate = async () => {
+    setAiLoading(true);
+    try {
+      const res = await fetch(`/api/battle-names?gender=${gender}`);
+      const data = await res.json();
+      if (data.ok && data.names?.length === 2) {
+        const fallbackA: BabyName = {
+          name: data.names[0].name,
+          gender: data.names[0].gender,
+          origin: data.names[0].origin,
+          meaning: data.names[0].meaning,
+          length: data.names[0].length,
+          id: data.names[0].id,
+          popularityRank: 50,
+          trendPercentage: 0,
+          trendDirection: 'neutral' as const,
+          styles: [],
+          tags: [],
+          description: '',
+          similarNames: [],
+          compatiblePairs: [],
+          popularityHistory: [],
+          syllables: 1,
+          firstLetter: data.names[0].name[0] ?? 'A',
+        };
+        const fallbackB: BabyName = {
+          ...fallbackA,
+          name: data.names[1].name,
+          gender: data.names[1].gender,
+          origin: data.names[1].origin,
+          meaning: data.names[1].meaning,
+          length: data.names[1].length,
+          id: data.names[1].id,
+          firstLetter: data.names[1].name[0] ?? 'B',
+        };
+
+        const realA = ALL_NAMES.find((n) => n.id === fallbackA.id) ?? fallbackA;
+        const realB = ALL_NAMES.find((n) => n.id === fallbackB.id) ?? fallbackB;
+
+        setCandidateA(realA);
+        setCandidateB(realB);
+        setChosenWinner(null);
+        setRound(1);
+        setHistoryWins({});
+        setIsFinished(false);
+        setChampion(null);
+      }
+    } catch {
+      // silently fail, keep current names
+    }
+    setAiLoading(false);
+  };
+
+  const startFreshBattle = useCallback(() => {
+    const a = getRandomFromPool(gender);
+    let b = getRandomFromPool(gender);
+    while (b.id === a.id) b = getRandomFromPool(gender);
+    setCandidateA(a);
+    setCandidateB(b);
+    setChosenWinner(null);
+    setHistoryWins({});
+    setIsFinished(false);
+    setChampion(null);
+    setRound(1);
+  }, [gender]);
+
+  const handleGenderChange = (g: Gender | 'all') => {
+    setGender(g);
+    startFreshBattle();
+  };
 
   const getNextPair = (winner: BabyName) => ({
     keep: winner,
-    challenger: getRandomChallenger(winner.id),
+    challenger: getRandomChallenger(winner.id, gender),
   });
 
   const handleVote = (selected: 'A' | 'B') => {
@@ -67,13 +159,7 @@ export default function NameBattle() {
   };
 
   const handleRestart = () => {
-    setRound(1);
-    setCandidateA(ALL_NAMES[4]);
-    setCandidateB(ALL_NAMES[3]);
-    setChosenWinner(null);
-    setHistoryWins({});
-    setIsFinished(false);
-    setChampion(null);
+    startFreshBattle();
   };
 
   const renderFighter = (
@@ -122,6 +208,57 @@ export default function NameBattle() {
     <div className="max-w-2xl mx-auto">
       {!isFinished ? (
         <div>
+          {/* Gender filter */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            {(
+              [
+                { id: 'all' as const, label: 'Alle' },
+                { id: 'girl' as const, label: 'Mädchen' },
+                { id: 'boy' as const, label: 'Jungen' },
+              ]
+            ).map((g) => (
+              <button
+                key={g.id}
+                onClick={() => handleGenderChange(g.id)}
+                className={`px-4 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                  gender === g.id
+                    ? 'bg-blue text-white border-blue'
+                    : 'bg-surface text-ink-soft border-line-strong hover:border-blue hover:text-blue-deep'
+                }`}
+              >
+                {g.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Secret AI trigger */}
+          <div className="mb-4">
+            <input
+              type="text"
+              value={secretInput}
+              onChange={(e) => handleSecretInput(e.target.value)}
+              placeholder=""
+              className="w-full text-xs text-fade bg-transparent border-none outline-none text-center placeholder:text-transparent"
+              aria-hidden="true"
+            />
+            {showAiButton && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex justify-center"
+              >
+                <button
+                  onClick={handleAiUpdate}
+                  disabled={aiLoading}
+                  className="btn btn-secondary text-xs gap-1.5 mt-1"
+                >
+                  <Sparkles className={`w-3.5 h-3.5 ${aiLoading ? 'animate-spin' : ''}`} />
+                  {aiLoading ? 'KI lädt neue Namen …' : 'Namen per KI aktualisieren'}
+                </button>
+              </motion.div>
+            )}
+          </div>
+
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-line">
             <span className="text-sm text-ink">
               Duell-Runde {round} von {TOTAL_ROUNDS}

@@ -20,7 +20,7 @@ export default function FavoritenPage() {
 
   const handleShare = () => {
     const list = favorites.map((f) => f.name).join(', ');
-    const textToCopy = `Meine Lieblings-Babynamen von top-babynamen.de: ${list}`;
+    const textToCopy = `Meine Lieblings-Babynamen von babynamen.me: ${list}`;
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(textToCopy);

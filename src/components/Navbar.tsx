@@ -47,8 +47,8 @@ export default function Navbar() {
           {/* Wordmark */}
           <Link href="/" className="shrink-0 whitespace-nowrap">
             <span className="font-editorial text-[1.25rem] text-ink leading-none">
-              Top-Babynamen
-              <span className="text-blue text-[0.95rem]">.de</span>
+              babynamen
+              <span className="font-caveat text-blue text-[1.15rem] font-bold">.me</span>
             </span>
           </Link>
 

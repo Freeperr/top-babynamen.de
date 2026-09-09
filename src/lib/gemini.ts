@@ -170,7 +170,7 @@ function truncateBody(raw: string): string {
 }
 
 async function fetchFromGemini(): Promise<DailyName[] | null> {
-  const prompt = `Heute ist ${today()}. Du bist der tägliche Namens-Redakteur der Website "top-babynamen.de" für deutsche Babynamen.
+  const prompt = `Heute ist ${today()}. Du bist der tägliche Namens-Redakteur der Website "babynamen.me" für deutsche Babynamen.
 
 Wähle die ${NAMES_WANTED} besten Babynamen für diesen Tag aus dem deutschsprachigen Raum. Mische bekannte Favoriten mit interessanten Entdeckungen, achte auf Vielfalt (Mädchen und Jungen, kurze und lange Namen), aktuelle Trends und eine positive Bedeutung.
 

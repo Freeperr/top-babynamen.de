@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata = {
-  title: 'Datenschutzerklärung – top-babynamen.de',
+  title: 'Datenschutzerklärung – babynamen.me',
   description:
-    'Datenschutzerklärung und Informationen zur Datenverarbeitung auf top-babynamen.de',
+    'Datenschutzerklärung und Informationen zur Datenverarbeitung auf babynamen.me',
 };
 
 export default function DatenschutzPage() {
@@ -32,7 +32,7 @@ export default function DatenschutzPage() {
         <section>
           <h2 className="text-base text-ink mb-2">1. Datenschutz auf einen Blick</h2>
           <p>
-            Wir freuen uns über deinen Besuch auf top-babynamen.de. Der Schutz
+            Wir freuen uns über deinen Besuch auf babynamen.me. Der Schutz
             deiner persönlichen Daten hat für uns höchste Priorität.
           </p>
         </section>

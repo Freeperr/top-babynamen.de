@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata = {
-  title: 'Impressum – top-babynamen.de',
-  description: 'Angaben gemäß § 5 DDG für top-babynamen.de',
+  title: 'Impressum – babynamen.me',
+  description: 'Angaben gemäß § 5 DDG für babynamen.me',
 };
 
 export default function ImpressumPage() {
@@ -80,7 +80,7 @@ export default function ImpressumPage() {
           <h2 className="text-base text-ink mb-2">Konzeption, Gestaltung und technische Umsetzung</h2>
           <p className="mb-2">
             Die Konzeption, Gestaltung und technische Umsetzung von{' '}
-            <strong className="text-ink">top-babynamen.de</strong> erfolgte durch:
+            <strong className="text-ink">babynamen.me</strong> erfolgte durch:
           </p>
           <p className="font-medium text-ink">Freeperr / freeperr.dev</p>
           <p>
@@ -98,12 +98,12 @@ export default function ImpressumPage() {
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">Online-Vermarktung</h2>
           <p className="mb-2">
-            Die Online-Vermarktung von <strong className="text-ink">top-babynamen.de</strong> erfolgt
+            Die Online-Vermarktung von <strong className="text-ink">babynamen.me</strong> erfolgt
             durch:
           </p>
           <p className="font-medium text-ink">vertical network media GmbH</p>
           <p className="mb-2">
-            Bei Interesse an Werbemöglichkeiten auf top-babynamen.de oder innerhalb des Netzwerks:
+            Bei Interesse an Werbemöglichkeiten auf babynamen.me oder innerhalb des Netzwerks:
           </p>
           <p>
             <strong className="text-ink">E-Mail:</strong>{' '}
@@ -114,9 +114,9 @@ export default function ImpressumPage() {
         </section>
 
         <section className="pt-6 border-t border-line">
-          <h2 className="text-base text-ink mb-2">Über top-babynamen.de</h2>
+          <h2 className="text-base text-ink mb-2">Über babynamen.me</h2>
           <p className="mb-2">
-            <strong className="text-ink">top-babynamen.de</strong> bietet Informationen und
+            <strong className="text-ink">babynamen.me</strong> bietet Informationen und
             Übersichten rund um Babynamen. Dazu gehören unter anderem beliebte und häufig
             vergebene Vornamen sowie Informationen zu deren Verbreitung und Verwendung.
           </p>

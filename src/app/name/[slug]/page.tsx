@@ -21,14 +21,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!name) {
     return {
-      title: 'Name nicht gefunden – top-babynamen.de',
+      title: 'Name nicht gefunden – babynamen.me',
     };
   }
 
   const genderStr = name.gender === 'girl' ? 'Mädchenname' : name.gender === 'boy' ? 'Jungenname' : 'Unisex-Name';
 
   return {
-    title: `${name.name} – Bedeutung, Herkunft & Beliebtheit | top-babynamen.de`,
+    title: `${name.name} – Bedeutung, Herkunft & Beliebtheit | babynamen.me`,
     description: `Alles über den Vornamen ${name.name} (${genderStr}): Herkunft (${name.origin}), Bedeutung („${name.meaning}“), aktueller Trend und passende Geschwisternamen.`,
   };
 }
