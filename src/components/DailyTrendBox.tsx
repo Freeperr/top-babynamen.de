@@ -1,37 +1,31 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { DailyTopNames } from '@/lib/gemini';
+import { getDailyNames } from '@/lib/nameService';
 import { genderNoun } from '@/lib/format';
 import { fadeUp, staggerContainer } from '@/lib/motion';
 
+function buildDailyList(): DailyTopNames {
+  const now = new Date();
+  const picks = getDailyNames(now, 5);
+  return {
+    date: now.toISOString().slice(0, 10),
+    generated: false,
+    names: picks.map((n, i) => ({
+      name: n.name,
+      gender: n.gender,
+      rank: i + 1,
+      change: n.weeklyChange ?? '→',
+      reason: n.meaning.split(',')[0] ?? '',
+    })),
+  };
+}
+
 export default function DailyTrendBox() {
-  const [data, setData] = useState<DailyTopNames | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch('/api/daily-names')
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error('failed'))))
-      .then((d: DailyTopNames) => {
-        if (!cancelled) setData(d);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (!data) {
-    return (
-      <section className="pb-2">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="border border-line bg-panel h-64 animate-pulse" aria-hidden="true" />
-        </div>
-      </section>
-    );
-  }
+  const [data] = useState<DailyTopNames>(buildDailyList);
 
   return (
     <section className="pb-2">
