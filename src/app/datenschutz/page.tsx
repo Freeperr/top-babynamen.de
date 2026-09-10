@@ -40,19 +40,19 @@ export default function DatenschutzPage() {
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">2. Verantwortlicher</h2>
           <p className="mb-2">Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
-          <p className="font-medium text-ink">MVC – Hamburg</p>
-          <p>Frank Vomberg</p>
+          <p className="font-medium text-ink">PROMOTION UNION GMBH</p>
           <p>Hellgrundweg 109</p>
           <p>22525 Hamburg</p>
           <p>Deutschland</p>
+          <p className="mt-2">Vertreten durch: Herrn Frank Vomberg</p>
           <p className="mt-2">
             <strong className="text-ink">E-Mail:</strong>{' '}
-            <a href="mailto:info@mvc-hamburg.de" className="underline underline-offset-2 hover:text-blue-deep">
-              info@mvc-hamburg.de
+            <a href="mailto:info@promotionunion.de" className="underline underline-offset-2 hover:text-blue-deep">
+              info@promotionunion.de
             </a>
           </p>
           <p>
-            <strong className="text-ink">Telefon:</strong> +49 (0)40 3616679-41
+            <strong className="text-ink">Telefon:</strong> 040 3616679/00
           </p>
         </section>
 
@@ -94,34 +94,43 @@ export default function DatenschutzPage() {
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">5. Server-Log-Dateien</h2>
           <p>
-            Der Provider der Seiten erhebt und speichert automatisch Informationen
-            in so genannten Server-Log-Dateien, die dein Browser automatisch
-            übermittelt (Browsertyp, Betriebssystem, Referrer URL, Hostname des
-            zugreifenden Rechners, Uhrzeit der Serveranfrage).
+            Beim Aufruf dieser Website erhebt und speichert unser
+            Hosting-Provider automatisch Informationen in so genannten
+            Server-Log-Dateien, die dein Browser automatisch übermittelt
+            (Browsertyp, Betriebssystem, Referrer URL, Hostname des
+            zugreifenden Rechners, Uhrzeit der Serveranfrage, gekürzte
+            IP-Adresse).
           </p>
           <p className="mt-3">
             Rechtsgrundlage ist unser berechtigtes Interesse an der
             Bereitstellung und Sicherheit der Website (Art.&nbsp;6 Abs.&nbsp;1
-            lit.&nbsp;f DSGVO). Die Log-Daten werden in der Regel nach Ablauf
-            der gesetzlichen Aufbewahrungsfristen gelöscht und nicht mit anderen
-            Datenquellen zusammengeführt.
+            lit.&nbsp;f DSGVO). Die Log-Daten werden nach [konkrete Frist
+            einfügen] gelöscht und nicht mit anderen Datenquellen
+            zusammengeführt.
           </p>
         </section>
 
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">6. Google Ads / AdSense</h2>
           <p>
-            Diese Website kann Google Ads und Google AdSense zur Einblendung von
-            Werbung verwenden. Google kann dabei Cookies und ähnliche Technologien
-            einsetzen, um Anzeigen bereitzustellen und ihre Leistung zu messen.
-            Die Einbindung erfolgt ausschließlich nach deiner Einwilligung, die im
-            Cookie-Hinweis abgefragt wird.
+            Diese Website kann nach deiner Einwilligung Google Ads und/oder
+            Google AdSense zur Einblendung von Werbung verwenden. Google kann
+            dabei Cookies und ähnliche Technologien einsetzen, um Anzeigen
+            bereitzustellen, zu personalisieren und ihre Leistung zu messen.
+            Die Einbindung erfolgt ausschließlich nach deiner im Cookie-Hinweis
+            erteilten Einwilligung.
           </p>
           <p className="mt-3">
-            Soweit Google-Dienste nach deiner Einwilligung zum Einsatz kommen,
-            ist Google Ireland Limited (Gordon House, Barrow Street, Dublin 4,
-            Irland) gemeinsam mit uns Verantwortlicher für diese Datenverarbeitung.
-            Details hierzu findest du in den{' '}
+            Anbieter dieser Dienste ist Google Ireland Limited, Gordon House,
+            Barrow Street, Dublin 4, Irland (&bdquo;Google&ldquo;). Je nach
+            konkret eingesetztem Dienst ist Google entweder als eigenständiger
+            Verantwortlicher oder &ndash; soweit die Voraussetzungen des
+            Art.&nbsp;26 DSGVO vorliegen &ndash; als gemeinsam Verantwortlicher
+            tätig; die Einzelheiten hierzu ergeben sich aus den
+            Datenschutzhinweisen von Google.
+          </p>
+          <p className="mt-3">
+            Weitere Informationen findest du in den{' '}
             <a
               href="https://business.safety.google/intl/de/privacy/"
               target="_blank"
@@ -130,31 +139,78 @@ export default function DatenschutzPage() {
             >
               Datenschutzhinweisen von Google
             </a>
-            . Eine Datenübermittlung an Server in den USA erfolgt auf Grundlage
-            des EU-US Data Privacy Framework, soweit Google dafür zertifiziert ist.
+            .
+          </p>
+          <p className="mt-3">
+            Eine Datenübermittlung an Server in den USA erfolgt, soweit
+            erforderlich, auf Grundlage des EU-US Data Privacy Framework,
+            sofern Google hierfür zertifiziert ist, bzw. auf Grundlage von
+            EU-Standardvertragsklauseln.
           </p>
         </section>
 
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">7. Deine Rechte</h2>
           <p className="mb-2">
-            Du hast jederzeit das Recht auf unentgeltliche Auskunft über deine
-            gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger
-            und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung
-            oder Löschung dieser Daten.
+            Du hast als betroffene Person folgende Rechte:
           </p>
+          <ul className="list-disc pl-5 space-y-1 mb-2">
+            <li>
+              <strong className="text-ink">Auskunftsrecht</strong> (Art.&nbsp;15
+              DSGVO): unentgeltliche Auskunft über deine gespeicherten
+              personenbezogenen Daten, deren Herkunft, Empfänger und den
+              Zweck der Verarbeitung
+            </li>
+            <li>
+              <strong className="text-ink">Recht auf Berichtigung</strong>{' '}
+              (Art.&nbsp;16 DSGVO)
+            </li>
+            <li>
+              <strong className="text-ink">Recht auf Löschung</strong>{' '}
+              (Art.&nbsp;17 DSGVO)
+            </li>
+            <li>
+              <strong className="text-ink">
+                Recht auf Einschränkung der Verarbeitung
+              </strong>{' '}
+              (Art.&nbsp;18 DSGVO)
+            </li>
+            <li>
+              <strong className="text-ink">
+                Recht auf Datenübertragbarkeit
+              </strong>{' '}
+              (Art.&nbsp;20 DSGVO)
+            </li>
+            <li>
+              <strong className="text-ink">Widerrufsrecht</strong> für erteilte
+              Einwilligungen mit Wirkung für die Zukunft (Art.&nbsp;7
+              Abs.&nbsp;3 DSGVO)
+            </li>
+            <li>
+              <strong className="text-ink">Widerspruchsrecht</strong>{' '}
+              (Art.&nbsp;21 DSGVO): Du kannst der Verarbeitung deiner Daten,
+              die auf Grundlage unseres berechtigten Interesses (Art.&nbsp;6
+              Abs.&nbsp;1 lit.&nbsp;f DSGVO) erfolgt, jederzeit aus Gründen
+              widersprechen, die sich aus deiner besonderen Situation ergeben.
+            </li>
+          </ul>
           <p className="mb-2">
-            Darüber hinaus stehen dir die Rechte auf Einschränkung der
-            Verarbeitung, auf Datenübertragbarkeit und auf Widerruf erteilter
-            Einwilligungen zu. Du kannst dich jederzeit mit Fragen oder
-            Beschwerden an uns (Abschnitt&nbsp;2) oder an eine
-            Datenschutz-Aufsichtsbehörde wenden.
+            Zur Ausübung dieser Rechte kannst du dich jederzeit mit Fragen
+            oder Beschwerden über die in Abschnitt&nbsp;2 genannten
+            Kontaktdaten an uns wenden.
           </p>
           <p>
-            Zuständige Aufsichtsbehörde ist der Hamburgische Beauftragte für
-            Datenschutz und Informationsfreiheit (HmbBfDI).
+            Darüber hinaus steht dir ein Beschwerderecht bei einer
+            Datenschutz-Aufsichtsbehörde zu. Zuständige Aufsichtsbehörde ist
+            der Hamburgische Beauftragte für Datenschutz und
+            Informationsfreiheit (HmbBfDI), Ludwig-Erhard-Straße 22, 7.
+            OG, 20459 Hamburg.
           </p>
         </section>
+
+        <p className="pt-6 border-t border-line text-xs text-ink-soft">
+          Stand: 10.09.2026
+        </p>
       </div>
     </article>
   );
