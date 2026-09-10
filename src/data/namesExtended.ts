@@ -6,6 +6,7 @@ import { PART3 } from './extendedNamesPart3';
 import { PART4 } from './extendedNamesPart4';
 import { PART5 } from './extendedNamesPart5';
 import { PART6 } from './extendedNamesPart6';
+import { PART7 } from './extendedNamesPart7';
 import { makeSeed } from './nameSeed';
 
 export const EXTENDED_NAMES: BabyName[] = [
@@ -15,6 +16,7 @@ export const EXTENDED_NAMES: BabyName[] = [
   ...PART4,
   ...PART5,
   ...PART6,
+  ...PART7,
 ].map((seed) => makeSeed(seed));
 
 export const ALL_NAMES: BabyName[] = [...BABY_NAMES, ...EXTENDED_NAMES];

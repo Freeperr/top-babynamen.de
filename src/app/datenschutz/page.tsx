@@ -108,6 +108,26 @@ export default function DatenschutzPage() {
             einfügen] gelöscht und nicht mit anderen Datenquellen
             zusammengeführt.
           </p>
+          <p className="mt-3">
+            Diese Website wird bei der Vercel Inc., 340 S Lemon Ave #4133,
+            Walnut, CA 91789, USA (&bdquo;Vercel&ldquo;), gehostet. Vercel
+            verarbeitet die oben genannten Server-Log-Daten in unserem
+            Auftrag als Auftragsverarbeiter (Art.&nbsp;28 DSGVO). Da Vercel
+            seinen Sitz in den USA hat, erfolgt eine Datenübermittlung in ein
+            Drittland auf Grundlage des EU-US Data Privacy Framework, soweit
+            Vercel hierfür zertifiziert ist, bzw. auf Grundlage von
+            EU-Standardvertragsklauseln. Weitere Informationen findest du in
+            der{' '}
+            <a
+              href="https://vercel.com/legal/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-blue-deep"
+            >
+              Datenschutzerklärung von Vercel
+            </a>
+            .
+          </p>
         </section>
 
         <section className="pt-6 border-t border-line">
