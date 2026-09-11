@@ -324,7 +324,7 @@ export const PART5: NameSeed[] = [
     id: 'joey',
     name: 'Joey',
     gender: 'unisex',
-    origin: 'Hebräisch/Englisch',
+    origin: 'Hebräisch / Englisch',
     meaning: 'Kurzform von Joseph und Josephine',
     description:
       'Joey ist die freundliche, kumpelige Kurzform, die sich für alle öffnet. Klingt nach Diner, Lachen und guten Geschichten.',

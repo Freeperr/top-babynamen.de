@@ -23,13 +23,13 @@ function NameRow({ name }: { name: BabyName }) {
       transition={{ duration: 0.4 }}
     >
       <Link href={`/name/${name.id}`} className="flex-1 min-w-0">
-        <span className="block font-editorial text-[1.4rem] sm:text-[1.6rem] leading-tight text-ink group-hover:text-blue-deep transition-colors">
+        <span className="block break-words font-editorial text-[1.4rem] sm:text-[1.6rem] leading-tight text-ink group-hover:text-blue-deep transition-colors">
           {name.name}
         </span>
-        <span className="mt-0.5 block text-sm text-ink-soft">
+        <span className="mt-0.5 block break-words text-sm text-ink-soft">
           {originPhrase(name.origin, name.gender)}
         </span>
-        <span className="mt-0.5 block text-sm text-fade truncate">
+        <span className="mt-0.5 block truncate text-sm text-fade">
           &bdquo;{name.meaning}&ldquo;
         </span>
       </Link>
