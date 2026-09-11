@@ -25,7 +25,6 @@ export default function CuratedInspirationSection() {
       >
         {/* Editorial intro column */}
         <motion.div variants={fadeUp}>
-          <p className="kicker mb-3">Vorschläge der Redaktion</p>
           <h2 className="font-editorial text-3xl sm:text-4xl text-ink leading-tight">
             Vier Namen,
             <br />

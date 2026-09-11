@@ -106,7 +106,6 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
         <p className="font-editorial text-2xl sm:text-3xl text-ink leading-snug">
           &bdquo;{name.meaning}&ldquo;
         </p>
-        <p className="kicker mt-2">Bedeutung</p>
       </blockquote>
 
       {/* Main + aside */}

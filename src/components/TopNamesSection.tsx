@@ -39,7 +39,6 @@ export default function TopNamesSection() {
           variants={fadeUp}
         >
           <div>
-            <p className="kicker mb-2">Beliebt bei Eltern</p>
             <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
               Die Top-Namen der Woche
             </h2>

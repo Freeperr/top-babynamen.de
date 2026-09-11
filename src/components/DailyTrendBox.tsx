@@ -63,8 +63,7 @@ export default function DailyTrendBox() {
         animate="visible"
       >
         <div className="border border-line bg-panel">
-          <div className="px-5 sm:px-8 py-5 flex flex-wrap items-end justify-between gap-2 border-b border-line">
-            <p className="kicker mb-0.5">Täglich frisch zusammengestellt</p>
+          <div className="px-5 sm:px-8 py-5 flex flex-wrap items-end gap-2 border-b border-line">
             <h2 className="font-editorial text-2xl sm:text-3xl text-ink">
               Heute im Trend
             </h2>

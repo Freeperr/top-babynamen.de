@@ -38,7 +38,6 @@ export default function GamesTeaser() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-9">
           <div>
-            <p className="kicker mb-2">Kleine Entscheidungshilfen</p>
             <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
               Namen spielerisch finden
             </h2>
