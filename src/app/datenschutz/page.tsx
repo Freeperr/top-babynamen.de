@@ -101,13 +101,7 @@ export default function DatenschutzPage() {
             zugreifenden Rechners, Uhrzeit der Serveranfrage, gekürzte
             IP-Adresse).
           </p>
-          <p className="mt-3">
-            Rechtsgrundlage ist unser berechtigtes Interesse an der
-            Bereitstellung und Sicherheit der Website (Art.&nbsp;6 Abs.&nbsp;1
-            lit.&nbsp;f DSGVO). Die Log-Daten werden nach [konkrete Frist
-            einfügen] gelöscht und nicht mit anderen Datenquellen
-            zusammengeführt.
-          </p>
+
           <p className="mt-3">
             Diese Website wird bei der Vercel Inc., 340 S Lemon Ave #4133,
             Walnut, CA 91789, USA (&bdquo;Vercel&ldquo;), gehostet. Vercel
