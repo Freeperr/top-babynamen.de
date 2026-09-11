@@ -201,12 +201,7 @@ Verwende echte, verbreitete deutschsprachige Vornamen.
   }
 }
 
-export async function getDailyTopNames(): Promise<DailyTopNames> {
-  const now = Date.now();
-  if (cache && now - cache.at < CACHE_TTL_MS) {
-    return cache.data;
-  }
-
+async function generateDailyTopNames(): Promise<DailyTopNames> {
   const fallback = buildFallback();
   const ai = await fetchFromGemini().catch(() => null);
 
@@ -219,12 +214,27 @@ export async function getDailyTopNames(): Promise<DailyTopNames> {
   }
   if (names.length === 0) names = fallback.names;
 
-  const data: DailyTopNames = {
+  return {
     date: today(),
     generated: ai !== null && ai.length > 0,
     names: names.slice(0, NAMES_WANTED),
   };
+}
 
+export async function getDailyTopNames(): Promise<DailyTopNames> {
+  const now = Date.now();
+  if (cache && now - cache.at < CACHE_TTL_MS) {
+    return cache.data;
+  }
+
+  const data = await generateDailyTopNames();
   cache = { at: now, data };
+  return data;
+}
+
+/** Bypasses the 24h cache and forces a fresh Gemini pick. */
+export async function refreshDailyTopNames(): Promise<DailyTopNames> {
+  const data = await generateDailyTopNames();
+  cache = { at: Date.now(), data };
   return data;
 }

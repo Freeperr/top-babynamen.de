@@ -55,9 +55,9 @@ export default function Navbar() {
             : 'bg-paper'
         }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center h-16">
           {/* Wordmark */}
-          <Link href="/" className="shrink-0 whitespace-nowrap">
+          <Link href="/" className="shrink-0 whitespace-nowrap justify-self-start">
             <span className="font-editorial text-[1.25rem] text-ink leading-none">
               babynamen
               <span className="font-caveat text-blue text-[1.15rem] font-bold">.me</span>
@@ -65,7 +65,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6 justify-self-center">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -82,7 +82,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 justify-self-end">
             <button
               onClick={() => setIsSearchOpen(true)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-ink-soft hover:text-ink transition-colors"
@@ -102,9 +102,13 @@ export default function Navbar() {
               aria-label="Favoriten ansehen"
             >
               <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-blue text-blue' : ''}`} />
-              {favoritesCount > 0 && (
-                <span className="text-xs text-fade">{favoritesCount}</span>
-              )}
+              <span
+                className={`text-xs text-fade tabular-nums w-[1.4ch] text-center transition-opacity ${
+                  favoritesCount > 0 ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {favoritesCount}
+              </span>
               <span className="hidden sm:inline">Favoriten</span>
             </Link>
 
@@ -147,9 +151,13 @@ export default function Navbar() {
               >
                 <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-blue text-blue' : ''}`} />
                 Favoriten
-                {favoritesCount > 0 && (
-                  <span className="text-xs text-fade">{favoritesCount}</span>
-                )}
+                <span
+                  className={`text-xs text-fade tabular-nums w-[1.4ch] text-center transition-opacity ${
+                    favoritesCount > 0 ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  {favoritesCount}
+                </span>
               </Link>
             </div>
           </nav>

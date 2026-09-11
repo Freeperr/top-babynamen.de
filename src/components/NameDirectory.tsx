@@ -191,7 +191,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
         </div>
 
         {/* Row 2: alphabet */}
-        <div className="flex items-center gap-1 overflow-x-auto pb-1 pt-4 mt-3 border-t border-line scrollbar-none">
+        <div className="flex items-center flex-wrap gap-1 pb-1 pt-4 mt-3 border-t border-line">
           <button
             onClick={() => setSelectedLetter('all')}
 className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-colors ${

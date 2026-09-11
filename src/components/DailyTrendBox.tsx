@@ -1,18 +1,58 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getDailyNames } from '@/lib/nameService';
+import { ALL_NAMES } from '@/data/namesExtended';
 import { genderNoun } from '@/lib/format';
 import { useFavorites } from '@/context/FavoritesContext';
 import FavoriteButton from '@/components/FavoriteButton';
 import { BabyName } from '@/types/name';
 import { fadeUp, staggerContainer } from '@/lib/motion';
 
+interface DailyApiName {
+  name: string;
+  reason?: string;
+}
+
 export default function DailyTrendBox() {
-  const [picks] = useState<BabyName[]>(() => getDailyNames(new Date(), 5));
+  const [picks, setPicks] = useState<BabyName[]>(() => getDailyNames(new Date(), 5));
+  const [reasons, setReasons] = useState<Record<string, string>>({});
   const { isFavorite, toggleFavorite } = useFavorites();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch('/api/daily-names')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { names?: DailyApiName[] } | null) => {
+        if (cancelled || !data?.names) return;
+
+        const resolved: BabyName[] = [];
+        const reasonMap: Record<string, string> = {};
+
+        for (const entry of data.names) {
+          const match = ALL_NAMES.find(
+            (n) => n.name.toLowerCase() === entry.name.toLowerCase()
+          );
+          if (match) {
+            resolved.push(match);
+            if (entry.reason) reasonMap[match.id] = entry.reason;
+          }
+        }
+
+        if (resolved.length > 0) {
+          setPicks(resolved);
+          setReasons(reasonMap);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <section className="pb-2">
@@ -36,7 +76,7 @@ export default function DailyTrendBox() {
             animate="visible"
           >
             {picks.map((item, index) => {
-              const reason = item.meaning.split(',')[0] ?? '';
+              const reason = reasons[item.id] ?? item.meaning.split(',')[0] ?? '';
               return (
                 <motion.li
                   key={`${item.id}-${index}`}

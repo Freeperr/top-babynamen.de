@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { RefreshCw, ShieldCheck, Sparkles } from 'lucide-react';
+import { RefreshCw, ShieldCheck, Sparkles, Lock } from 'lucide-react';
 
 interface StatusCheck {
   key: string;
@@ -37,6 +37,11 @@ export default function GeminiStatusCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [password, setPassword] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshError, setRefreshError] = useState<string | null>(null);
+  const [refreshDone, setRefreshDone] = useState(false);
+
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -56,6 +61,34 @@ export default function GeminiStatusCard() {
     const t = setTimeout(() => void load(), 0);
     return () => clearTimeout(t);
   }, [load]);
+
+  const handleRefreshTrend = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setRefreshing(true);
+      setRefreshError(null);
+      setRefreshDone(false);
+      try {
+        const res = await fetch('/api/daily-names/refresh', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        });
+        const body = await res.json().catch(() => null);
+        if (!res.ok) {
+          throw new Error(body?.error || `HTTP ${res.status}`);
+        }
+        setRefreshDone(true);
+        setPassword('');
+        void load();
+      } catch (e) {
+        setRefreshError(e instanceof Error ? e.message : 'Unbekannter Fehler');
+      } finally {
+        setRefreshing(false);
+      }
+    },
+    [password, load]
+  );
 
   return (
     <div className="max-w-md mx-auto bg-surface border border-line py-6 my-8">
@@ -151,6 +184,40 @@ export default function GeminiStatusCard() {
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               Erneut testen
             </button>
+          </div>
+
+          {/* Trend refresh (password-protected) */}
+          <div className="mx-6 mt-4 px-4 py-4 bg-panel border border-line">
+            <p className="text-sm font-medium text-ink flex items-center gap-1.5 mb-3">
+              <Lock className="w-3.5 h-3.5" />
+              „Heute im Trend“ manuell aktualisieren
+            </p>
+            <form onSubmit={handleRefreshTrend} className="flex flex-wrap items-center gap-2">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Passwort"
+                autoComplete="off"
+                className="input flex-1 min-w-[10rem] text-sm"
+              />
+              <button
+                type="submit"
+                disabled={refreshing || !password}
+                className="btn btn-primary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+                Aktualisieren
+              </button>
+            </form>
+            {refreshError && (
+              <p className="text-xs text-warn mt-2">{refreshError}</p>
+            )}
+            {refreshDone && !refreshError && (
+              <p className="text-xs text-go mt-2">
+                „Heute im Trend“ wurde neu generiert.
+              </p>
+            )}
           </div>
         </>
       )}
