@@ -181,7 +181,7 @@ export default function NameBattle() {
 
     const updatedWins = {
       ...historyWins,
-      [winnerName.name]: (historyWins[winnerName.name] || 0) + 1,
+      [winnerName.id]: (historyWins[winnerName.id] || 0) + 1,
     };
     setHistoryWins(updatedWins);
 
@@ -189,10 +189,10 @@ export default function NameBattle() {
       if (round >= TOTAL_ROUNDS) {
         let topName = winnerName;
         let maxVotes = 0;
-        for (const [nameStr, count] of Object.entries(updatedWins)) {
+        for (const [nameId, count] of Object.entries(updatedWins)) {
           if (count > maxVotes) {
             maxVotes = count;
-            const found = ALL_NAMES.find((n) => n.name === nameStr);
+            const found = ALL_NAMES.find((n) => n.id === nameId);
             if (found) topName = found;
           }
         }

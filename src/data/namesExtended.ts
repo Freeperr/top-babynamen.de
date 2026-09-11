@@ -19,4 +19,13 @@ export const EXTENDED_NAMES: BabyName[] = [
   ...PART7,
 ].map((seed) => makeSeed(seed));
 
-export const ALL_NAMES: BabyName[] = [...BABY_NAMES, ...EXTENDED_NAMES];
+function dedupeById(names: BabyName[]): BabyName[] {
+  const seen = new Set<string>();
+  return names.filter((n) => {
+    if (seen.has(n.id)) return false;
+    seen.add(n.id);
+    return true;
+  });
+}
+
+export const ALL_NAMES: BabyName[] = dedupeById([...BABY_NAMES, ...EXTENDED_NAMES]);

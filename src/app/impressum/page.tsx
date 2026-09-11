@@ -143,6 +143,23 @@ export default function ImpressumPage() {
         </section>
 
         <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">Urheberrecht</h2>
+          <p className="mb-2">
+            Die durch die Betreiber dieser Website erstellten Inhalte und Werke unterliegen dem
+            deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der
+            Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen
+            Zustimmung des jeweiligen Autors bzw. Erstellers.
+          </p>
+          <p>
+            Soweit Inhalte auf dieser Website nicht vom Betreiber erstellt wurden, werden die
+            Urheberrechte Dritter beachtet. Solltest du trotzdem auf eine Urheberrechtsverletzung
+            aufmerksam werden, bitten wir um einen entsprechenden Hinweis an die oben genannten
+            Kontaktdaten. Bei Bekanntwerden von Rechtsverletzungen werden entsprechende Inhalte
+            umgehend entfernt.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">Haftung für externe Links</h2>
           <p className="mb-2">
             Diese Website kann Links zu externen Websites Dritter enthalten. Auf deren Inhalte

@@ -34,9 +34,13 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
 
   const handleShare = () => {
     if (typeof window !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        })
+        .catch(() => {});
     }
   };
 
@@ -140,8 +144,8 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           <h2 className="text-lg text-ink mb-4">Steckbrief</h2>
           <dl className="space-y-3 text-sm">
             <div className="flex items-baseline justify-between gap-4">
-              <dt className="text-fade">Herkunft</dt>
-              <dd className="text-ink text-right">{name.origin}</dd>
+              <dt className="text-fade shrink-0">Herkunft</dt>
+              <dd className="text-ink text-right min-w-0 truncate">{name.origin}</dd>
             </div>
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-fade">Geschlecht</dt>

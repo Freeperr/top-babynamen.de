@@ -94,7 +94,7 @@ export default function NameCard({ name, rankBadge, showTrend }: NameCardProps) 
 
       {/* Bottom row: Clean text tags without bubble pills */}
       <div className="pt-3 border-t border-[#F2EBED] flex items-center justify-between gap-2 mt-auto text-xs">
-        <div className="text-[#888888] truncate">
+        <div className="min-w-0 flex-1 text-[#888888] truncate">
           {name.tags.slice(0, 2).join(' · ')}
         </div>
 

@@ -251,6 +251,192 @@ const countries: Country[] = [
     },
   },
   {
+    code: 'FR',
+    name: 'Frankreich',
+    years: {
+      2024: {
+        girls: [
+          { rank: 1, name: 'Jade', slug: 'jade' },
+          { rank: 2, name: 'Louise', slug: 'louise' },
+          { rank: 3, name: 'Alba', slug: 'alba' },
+          { rank: 4, name: 'Ambre', slug: 'ambre' },
+          { rank: 5, name: 'Alice', slug: 'alice' },
+          { rank: 6, name: 'Emma', slug: 'emma' },
+          { rank: 7, name: 'Julia', slug: 'julia' },
+          { rank: 8, name: 'Léa', slug: 'lea' },
+          { rank: 9, name: 'Mia', slug: 'mia' },
+          { rank: 10, name: 'Rose', slug: 'rose' },
+        ],
+        boys: [
+          { rank: 1, name: 'Gabriel', slug: 'gabriel' },
+          { rank: 2, name: 'Léo', slug: 'leo' },
+          { rank: 3, name: 'Raphaël', slug: 'raphael' },
+          { rank: 4, name: 'Arthur', slug: 'arthur' },
+          { rank: 5, name: 'Louis', slug: 'louis' },
+          { rank: 6, name: 'Maël', slug: 'mael' },
+          { rank: 7, name: 'Jules', slug: 'jules' },
+          { rank: 8, name: 'Adam', slug: 'adam' },
+          { rank: 9, name: 'Noah', slug: 'noah' },
+          { rank: 10, name: 'Liam', slug: 'liam' },
+        ],
+      },
+      2023: {
+        girls: [
+          { rank: 1, name: 'Jade', slug: 'jade' },
+          { rank: 2, name: 'Louise', slug: 'louise' },
+          { rank: 3, name: 'Emma', slug: 'emma' },
+          { rank: 4, name: 'Alba', slug: 'alba' },
+          { rank: 5, name: 'Alice', slug: 'alice' },
+          { rank: 6, name: 'Ambre', slug: 'ambre' },
+          { rank: 7, name: 'Julia', slug: 'julia' },
+          { rank: 8, name: 'Mia', slug: 'mia' },
+          { rank: 9, name: 'Léa', slug: 'lea' },
+          { rank: 10, name: 'Anna', slug: 'anna' },
+        ],
+        boys: [
+          { rank: 1, name: 'Gabriel', slug: 'gabriel' },
+          { rank: 2, name: 'Léo', slug: 'leo' },
+          { rank: 3, name: 'Raphaël', slug: 'raphael' },
+          { rank: 4, name: 'Louis', slug: 'louis' },
+          { rank: 5, name: 'Arthur', slug: 'arthur' },
+          { rank: 6, name: 'Jules', slug: 'jules' },
+          { rank: 7, name: 'Adam', slug: 'adam' },
+          { rank: 8, name: 'Maël', slug: 'mael' },
+          { rank: 9, name: 'Sacha', slug: 'sacha' },
+          { rank: 10, name: 'Noah', slug: 'noah' },
+        ],
+      },
+    },
+  },
+  {
+    code: 'ES',
+    name: 'Spanien',
+    years: {
+      2024: {
+        girls: [
+          { rank: 1, name: 'Lucía', slug: 'lucia' },
+          { rank: 2, name: 'Sofía', slug: 'sofia' },
+          { rank: 3, name: 'Martina', slug: 'martina' },
+          { rank: 4, name: 'María', slug: 'maria' },
+          { rank: 5, name: 'Julia', slug: 'julia' },
+          { rank: 6, name: 'Paula', slug: 'paula' },
+          { rank: 7, name: 'Vega', slug: 'vega' },
+          { rank: 8, name: 'Valeria', slug: 'valeria' },
+          { rank: 9, name: 'Emma', slug: 'emma' },
+          { rank: 10, name: 'Daniela', slug: 'daniela' },
+        ],
+        boys: [
+          { rank: 1, name: 'Hugo', slug: 'hugo' },
+          { rank: 2, name: 'Martín', slug: 'martin' },
+          { rank: 3, name: 'Lucas', slug: 'lucas' },
+          { rank: 4, name: 'Mateo', slug: 'mateo' },
+          { rank: 5, name: 'Leo', slug: 'leo' },
+          { rank: 6, name: 'Daniel', slug: 'daniel' },
+          { rank: 7, name: 'Enzo', slug: 'enzo' },
+          { rank: 8, name: 'Alejandro', slug: 'alejandro' },
+          { rank: 9, name: 'Pablo', slug: 'pablo' },
+          { rank: 10, name: 'Marco', slug: 'marco' },
+        ],
+      },
+    },
+  },
+  {
+    code: 'GB',
+    name: 'Vereinigtes Königreich',
+    years: {
+      2024: {
+        girls: [
+          { rank: 1, name: 'Olivia', slug: 'olivia' },
+          { rank: 2, name: 'Amelia', slug: 'amelia' },
+          { rank: 3, name: 'Isla', slug: 'isla' },
+          { rank: 4, name: 'Ivy', slug: 'ivy' },
+          { rank: 5, name: 'Florence', slug: 'florence' },
+          { rank: 6, name: 'Lily', slug: 'lily' },
+          { rank: 7, name: 'Freya', slug: 'freya' },
+          { rank: 8, name: 'Willow', slug: 'willow' },
+          { rank: 9, name: 'Isabella', slug: 'isabella' },
+          { rank: 10, name: 'Ava', slug: 'ava' },
+        ],
+        boys: [
+          { rank: 1, name: 'Muhammad', slug: 'muhammad' },
+          { rank: 2, name: 'Noah', slug: 'noah' },
+          { rank: 3, name: 'Oliver', slug: 'oliver' },
+          { rank: 4, name: 'Arthur', slug: 'arthur' },
+          { rank: 5, name: 'George', slug: 'george' },
+          { rank: 6, name: 'Leo', slug: 'leo' },
+          { rank: 7, name: 'Theodore', slug: 'theodore' },
+          { rank: 8, name: 'Oscar', slug: 'oscar' },
+          { rank: 9, name: 'Henry', slug: 'henry' },
+          { rank: 10, name: 'Freddie', slug: 'freddie' },
+        ],
+      },
+    },
+  },
+  {
+    code: 'SE',
+    name: 'Schweden',
+    years: {
+      2024: {
+        girls: [
+          { rank: 1, name: 'Alice', slug: 'alice' },
+          { rank: 2, name: 'Vera', slug: 'vera' },
+          { rank: 3, name: 'Astrid', slug: 'astrid' },
+          { rank: 4, name: 'Freja', slug: 'freja' },
+          { rank: 5, name: 'Maja', slug: 'maja' },
+          { rank: 6, name: 'Elsa', slug: 'elsa' },
+          { rank: 7, name: 'Ella', slug: 'ella' },
+          { rank: 8, name: 'Olivia', slug: 'olivia' },
+          { rank: 9, name: 'Wilma', slug: 'wilma' },
+          { rank: 10, name: 'Ines', slug: 'ines' },
+        ],
+        boys: [
+          { rank: 1, name: 'William', slug: 'william' },
+          { rank: 2, name: 'Noah', slug: 'noah' },
+          { rank: 3, name: 'Hugo', slug: 'hugo' },
+          { rank: 4, name: 'Liam', slug: 'liam' },
+          { rank: 5, name: 'Oscar', slug: 'oscar' },
+          { rank: 6, name: 'Elias', slug: 'elias' },
+          { rank: 7, name: 'Leo', slug: 'leo' },
+          { rank: 8, name: 'Axel', slug: 'axel' },
+          { rank: 9, name: 'Melvin', slug: 'melvin' },
+          { rank: 10, name: 'Oliver', slug: 'oliver' },
+        ],
+      },
+    },
+  },
+  {
+    code: 'NL',
+    name: 'Niederlande',
+    years: {
+      2024: {
+        girls: [
+          { rank: 1, name: 'Luna', slug: 'luna' },
+          { rank: 2, name: 'Sophie', slug: 'sophie' },
+          { rank: 3, name: 'Julia', slug: 'julia' },
+          { rank: 4, name: 'Mila', slug: 'mila' },
+          { rank: 5, name: 'Emma', slug: 'emma' },
+          { rank: 6, name: 'Zoë', slug: 'zoe' },
+          { rank: 7, name: 'Noor', slug: 'noor' },
+          { rank: 8, name: 'Olivia', slug: 'olivia' },
+          { rank: 9, name: 'Saar', slug: 'saar' },
+          { rank: 10, name: 'Evi', slug: 'evi' },
+        ],
+        boys: [
+          { rank: 1, name: 'Noah', slug: 'noah' },
+          { rank: 2, name: 'Sem', slug: 'sem' },
+          { rank: 3, name: 'Levi', slug: 'levi' },
+          { rank: 4, name: 'Luca', slug: 'luca' },
+          { rank: 5, name: 'James', slug: 'james' },
+          { rank: 6, name: 'Milan', slug: 'milan' },
+          { rank: 7, name: 'Finn', slug: 'finn' },
+          { rank: 8, name: 'Liam', slug: 'liam' },
+          { rank: 9, name: 'Adam', slug: 'adam' },
+          { rank: 10, name: 'Daan', slug: 'daan' },
+        ],
+      },
+    },
+  },
+  {
     code: 'US',
     name: 'USA',
     years: {
@@ -517,7 +703,12 @@ export default function BeliebteNamenWeltweitPage() {
           Deutschland – GfdS / schmatzepuffer.de / echtemamas.de;
           Italien – ISTAT;
           Polen – Ministerstwo Cyfryzacji;
-          USA – Social Security Administration (SSA).
+          USA – Social Security Administration (SSA);
+          Frankreich – INSEE;
+          Spanien – INE;
+          Vereinigtes Königreich – ONS (England &amp; Wales);
+          Schweden – Statistiska centralbyrån (SCB);
+          Niederlande – Sociale Verzekeringsbank (SVB).
         </p>
       </motion.div>
     </article>

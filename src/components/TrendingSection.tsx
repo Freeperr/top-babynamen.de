@@ -85,12 +85,12 @@ export default function TrendingSection() {
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-[11px] text-[#777777]">
                         #{name.popularityRank} · {name.gender === 'girl' ? 'Mädchen' : name.gender === 'boy' ? 'Junge' : 'Unisex'}
                       </span>
                       <Link href={`/name/${name.id}`}>
-                        <h3 className="font-editorial text-2xl sm:text-3xl font-normal text-[#171717] group-hover:text-[#FF4F87] transition-colors mt-0.5">
+                        <h3 className="font-editorial text-2xl sm:text-3xl font-normal text-[#171717] group-hover:text-[#FF4F87] transition-colors mt-0.5 truncate">
                           {name.name}
                         </h3>
                       </Link>

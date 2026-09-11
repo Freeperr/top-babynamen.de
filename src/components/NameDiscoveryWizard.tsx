@@ -239,7 +239,7 @@ export default function NameDiscoveryWizard() {
                         </span>
                       </Link>
 
-                      <span className="shrink-0 text-xs text-blue-deep bg-blue-pale border border-line rounded-full px-2.5 py-1">
+                      <span className="shrink-0 text-xs text-fade">
                         {matchLabel(score)}
                       </span>
 

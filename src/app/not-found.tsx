@@ -1,24 +1,33 @@
+import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
+
+export const metadata = {
+  title: 'Seite nicht gefunden – babynamen.me',
+};
 
 export default function NotFound() {
   return (
-    <main className="flex-1">
-      <section className="max-w-2xl mx-auto px-4 sm:px-6 py-24 sm:py-32 text-center">
-        <p className="font-editorial text-[5rem] sm:text-[7rem] leading-none text-blue-soft">
-          404
-        </p>
-        <h1 className="font-editorial text-[clamp(1.8rem,4vw,2.6rem)] leading-tight text-ink mt-6 mb-4">
-          Diese Seite gibt es leider nicht.
-        </h1>
-        <p className="text-ink-soft text-[0.95rem] max-w-md mx-auto mb-10">
-          Der gesuchte Name oder Link existiert nicht (mehr).
-        </p>
+    <article className="max-w-lg mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
+      <p className="kicker mb-3">Fehler 404</p>
+      <h1 className="font-editorial text-[clamp(2.5rem,10vw,4rem)] leading-none text-ink mb-4">
+        Diesen Namen kennen wir nicht
+      </h1>
+      <p className="text-ink-soft text-[0.975rem] leading-relaxed mb-8">
+        Die Seite, die du suchst, gibt es nicht &ndash; oder sie ist umgezogen.
+        Vielleicht findest du, wonach du suchst, in unserer Namensübersicht.
+      </p>
+
+      <div className="flex items-center justify-center gap-3 flex-wrap">
         <Link href="/" className="btn btn-primary">
           <ArrowLeft className="w-4 h-4" />
-          Zurück zur Startseite
+          Zur Startseite
         </Link>
-      </section>
-    </main>
+        <Link href="/babynamen" className="btn btn-secondary">
+          <Search className="w-4 h-4" />
+          Namen durchsuchen
+        </Link>
+      </div>
+    </article>
   );
 }

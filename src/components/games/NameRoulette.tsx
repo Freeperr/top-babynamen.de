@@ -129,7 +129,7 @@ export default function NameRoulette() {
                     transform={`rotate(${midAngle + 90}, 200, 200)`}
                     textAnchor="middle"
                     fill="#171717"
-                    fontSize="15"
+                    fontSize={name.name.length > 7 ? '11' : name.name.length > 5 ? '13' : '15'}
                     fontWeight="700"
                     fontFamily="sans-serif"
                   >
