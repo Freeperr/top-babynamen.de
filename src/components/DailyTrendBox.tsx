@@ -24,7 +24,7 @@ export default function DailyTrendBox() {
   useEffect(() => {
     let cancelled = false;
 
-    fetch('/api/daily-names')
+    fetch('/api/daily-names', { cache: 'no-store' })
       .then((res) => (res.ok ? res.json() : null))
       .then((data: { names?: DailyApiName[] } | null) => {
         if (cancelled || !data?.names) return;

@@ -7,6 +7,6 @@ export const maxDuration = 60;
 export async function GET() {
   const data = await getDailyTopNames();
   return NextResponse.json(data, {
-    headers: { 'Cache-Control': 'private, max-age=3600' },
+    headers: { 'Cache-Control': 'no-store' },
   });
 }
