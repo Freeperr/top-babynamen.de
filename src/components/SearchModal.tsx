@@ -15,8 +15,17 @@ interface SearchModalProps {
   onClose: () => void;
 }
 
+const QUICK_FILTERS: { label: string; gender?: 'girl' | 'boy'; tag?: string }[] = [
+  { label: 'Mädchen', gender: 'girl' },
+  { label: 'Jungen', gender: 'boy' },
+  { label: 'Kurz', tag: 'Kurz' },
+  { label: 'Selten', tag: 'Selten' },
+  { label: 'Modern', tag: 'Modern' },
+];
+
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<(typeof QUICK_FILTERS)[number] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -46,17 +55,27 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   const isGeminiTest = query.trim().toLowerCase() === 'geminitest';
 
+  const filteredByQuickFilter = activeFilter
+    ? ALL_NAMES.filter((n) =>
+        activeFilter.gender
+          ? n.gender === activeFilter.gender || n.gender === 'unisex'
+          : n.tags.some((t) => t.toLowerCase() === activeFilter.tag!.toLowerCase())
+      )
+    : ALL_NAMES;
+
   const results: BabyName[] = isGeminiTest
     ? []
     : query.trim()
-      ? ALL_NAMES.filter(
-          (n) =>
-            n.name.toLowerCase().includes(query.toLowerCase()) ||
-            n.meaning.toLowerCase().includes(query.toLowerCase()) ||
-            n.origin.toLowerCase().includes(query.toLowerCase()) ||
-            n.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
-        ).slice(0, 8)
-      : ALL_NAMES.slice(0, 6);
+      ? filteredByQuickFilter
+          .filter(
+            (n) =>
+              n.name.toLowerCase().includes(query.toLowerCase()) ||
+              n.meaning.toLowerCase().includes(query.toLowerCase()) ||
+              n.origin.toLowerCase().includes(query.toLowerCase()) ||
+              n.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
+          )
+          .slice(0, 8)
+      : filteredByQuickFilter.slice(0, activeFilter ? 8 : 6);
 
   return (
     <div
@@ -76,14 +95,20 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setActiveFilter(null);
+            }}
             placeholder="Name, Bedeutung oder Herkunft …"
-            className="w-full bg-transparent pl-11 pr-11 py-4 text-base text-ink placeholder:text-fade focus:outline-none"
+            className="w-full bg-transparent pl-11 pr-11 py-4 text-base text-ink placeholder:text-fade focus:outline-none no-focus-outline"
             autoComplete="off"
           />
           {query && (
             <button
-              onClick={() => setQuery('')}
+              onClick={() => {
+                setQuery('');
+                setActiveFilter(null);
+              }}
               className="p-1.5 mr-1 text-fade hover:text-ink transition-colors"
               aria-label="Sucheingabe löschen"
             >
@@ -95,13 +120,20 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         {/* Quick filters */}
         <div className="px-5 py-2.5 flex items-center gap-2 overflow-x-auto border-b border-line bg-panel/60 scrollbar-none">
           <span className="text-xs text-fade shrink-0">Schnellfilter:</span>
-          {['Mädchen', 'Jungen', 'Kurz', 'Selten', 'Modern'].map((tag) => (
+          {QUICK_FILTERS.map((filter) => (
             <button
-              key={tag}
-              onClick={() => setQuery(tag)}
-              className="px-3 py-1 rounded-md border border-line-strong bg-surface text-sm text-ink-soft hover:border-blue hover:text-blue-deep transition-colors shrink-0"
+              key={filter.label}
+              onClick={() => {
+                setQuery('');
+                setActiveFilter(activeFilter?.label === filter.label ? null : filter);
+              }}
+              className={`px-3 py-1 rounded-md border text-sm transition-colors shrink-0 ${
+                activeFilter?.label === filter.label
+                  ? 'border-blue bg-blue-pale text-blue-deep'
+                  : 'border-line-strong bg-surface text-ink-soft hover:border-blue hover:text-blue-deep'
+              }`}
             >
-              {tag}
+              {filter.label}
             </button>
           ))}
         </div>
@@ -160,8 +192,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-line flex items-center justify-between text-sm">
-          {!isGeminiTest && (
+        {!isGeminiTest && (
+          <div className="px-5 py-3 border-t border-line flex items-center text-sm">
             <Link
               href={`/babynamen?q=${encodeURIComponent(query)}`}
               onClick={onClose}
@@ -170,9 +202,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               Alle Suchergebnisse ansehen
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-          )}
-          <span className="text-xs text-fade hidden sm:inline">Tipp: ESC schließt</span>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

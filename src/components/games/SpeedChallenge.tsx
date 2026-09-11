@@ -8,7 +8,7 @@ import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 import { originPhrase } from '@/lib/format';
 
-const CHALLENGE_DURATION = 8;
+const CHALLENGE_DURATION = 10;
 const TOTAL_NAMES = 6;
 
 export default function SpeedChallenge() {

@@ -14,7 +14,7 @@ const VALID_TABS: GameTab[] = ['swipe', 'battle', 'challenge', 'generator'];
 const TABS: { id: GameTab; label: string }[] = [
   { id: 'swipe', label: 'Swipe' },
   { id: 'battle', label: 'Welcher Name Passt Besser' },
-  { id: 'challenge', label: '8s Challenge' },
+  { id: 'challenge', label: '10s Challenge' },
   { id: 'generator', label: 'Generator' },
 ];
 
