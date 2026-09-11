@@ -9,7 +9,7 @@ import { originPhrase } from '@/lib/format';
 import FavoriteButton from '@/components/FavoriteButton';
 import { fadeUp, viewportOnce } from '@/lib/motion';
 
-export default function NameRow({ name }: { name: BabyName }) {
+function NameRow({ name }: { name: BabyName }) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(name.id);
 
@@ -43,3 +43,5 @@ export default function NameRow({ name }: { name: BabyName }) {
     </motion.div>
   );
 }
+
+export default React.memo(NameRow);

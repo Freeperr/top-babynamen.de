@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Search, SlidersHorizontal, RotateCcw } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
@@ -30,7 +30,15 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
     : 'all';
   const rawGender = searchParams.get('gender') as Gender | 'all';
 
+  const [inputValue, setInputValue] = useState(searchParams.get('q') || '');
   const [query, setQuery] = useState(searchParams.get('q') || '');
+
+  // Debounce the search input so filtering (over 1000+ names) doesn't
+  // run on every keystroke, which would jank on slower devices.
+  useEffect(() => {
+    const t = setTimeout(() => setQuery(inputValue), 200);
+    return () => clearTimeout(t);
+  }, [inputValue]);
   const [selectedGender, setSelectedGender] = useState<Gender | 'all'>(
     fixedGender ??
       (rawGender && ['all', 'girl', 'boy', 'unisex'].includes(rawGender) ? rawGender : 'all')
@@ -66,7 +74,19 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
     return filterNames(filters);
   }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy, isGeminiTest]);
 
+  // Render results in pages instead of dumping the whole filtered list into
+  // the DOM at once — cheap for a handful of matches, not for hundreds.
+  const PAGE_SIZE = 60;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy]);
+
+  const visibleNames = filtered.slice(0, visibleCount);
+
   const handleResetFilters = () => {
+    setInputValue('');
     setQuery('');
     setSelectedLetter('all');
     setSelectedLength('all');
@@ -102,15 +122,15 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
           <Search className="w-4 h-4 text-fade absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder="Name, Bedeutung oder Herkunft suchen …"
             className="input pl-10"
             autoComplete="off"
           />
-          {query && (
+          {inputValue && (
             <button
-              onClick={() => setQuery('')}
+              onClick={() => setInputValue('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-fade hover:text-ink transition-colors"
             >
               Löschen
@@ -286,11 +306,23 @@ className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-color
           </div>
 
           {filtered.length > 0 ? (
-            <div className="border-t border-line">
-              {filtered.map((name) => (
-                <NameRow key={name.id} name={name} />
-              ))}
-            </div>
+            <>
+              <div className="border-t border-line">
+                {visibleNames.map((name) => (
+                  <NameRow key={name.id} name={name} />
+                ))}
+              </div>
+              {visibleCount < filtered.length && (
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                    className="btn btn-secondary"
+                  >
+                    Weitere Namen laden ({filtered.length - visibleCount} übrig)
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <div className="max-w-md mx-auto bg-panel border border-line p-10 text-center my-8">
               <h3 className="text-xl text-ink mb-2">Keine Namen gefunden</h3>
