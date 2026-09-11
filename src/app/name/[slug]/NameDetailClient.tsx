@@ -6,6 +6,7 @@ import { Heart, Volume2, ArrowLeft, Check } from 'lucide-react';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 import { originPhrase } from '@/lib/format';
+import { speakName } from '@/lib/speech';
 import NameRow from '@/components/NameRow';
 
 interface NameDetailClientProps {
@@ -20,16 +21,12 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const handleSpeech = () => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(name.name);
-      utterance.lang = 'de-DE';
-      utterance.rate = 0.9;
-      setIsPlayingAudio(true);
-      utterance.onend = () => setIsPlayingAudio(false);
-      utterance.onerror = () => setIsPlayingAudio(false);
-      window.speechSynthesis.speak(utterance);
-    }
+    setIsPlayingAudio(true);
+    void speakName(
+      name.name,
+      () => setIsPlayingAudio(false),
+      () => setIsPlayingAudio(false)
+    );
   };
 
   const handleShare = () => {
