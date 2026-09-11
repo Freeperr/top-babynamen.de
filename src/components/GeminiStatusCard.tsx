@@ -129,13 +129,13 @@ export default function GeminiStatusCard() {
 
           {/* Last update info */}
           <div className="mx-6 mt-4 px-4 py-3 bg-panel border border-line text-xs text-ink-soft space-y-1">
-            <p className="flex items-center justify-between gap-3">
+            <p className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5">
               <span>Zuletzt geprüft:</span>
               <span className="tabular-nums text-ink">
                 {formatDate(data.checkedAt)}, {formatTime(data.checkedAt)} Uhr
               </span>
             </p>
-            <p className="flex items-center justify-between gap-3">
+            <p className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5">
               <span>„Heute im Trend“ aktualisiert:</span>
               <span className="tabular-nums text-ink">
                 {data.lastDailyUpdate

@@ -136,7 +136,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
           )}
         </div>
 
-        <aside className="md:border-l md:border-line md:pl-8">
+        <aside className="pt-8 border-t border-line md:border-t-0 md:pt-0 md:border-l md:border-line md:pl-8">
           <h2 className="text-lg text-ink mb-4">Steckbrief</h2>
           <dl className="space-y-3 text-sm">
             <div className="flex items-baseline justify-between gap-4">

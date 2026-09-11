@@ -111,13 +111,13 @@ export default function SwipeGame() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-line text-sm text-ink-soft">
-                <span className="text-xs">
+              <div className="flex items-center justify-between gap-3 pt-3 border-t border-line text-sm text-ink-soft">
+                <span className="text-xs truncate min-w-0">
                   {currentName.tags.slice(0, 3).join(', ')}
                 </span>
                 <Link
                   href={`/name/${currentName.id}`}
-                  className="inline-flex items-center gap-0.5 text-ink hover:text-blue-deep transition-colors"
+                  className="shrink-0 inline-flex items-center gap-0.5 text-ink hover:text-blue-deep transition-colors"
                 >
                   Profil <ArrowRight className="w-3 h-3" />
                 </Link>

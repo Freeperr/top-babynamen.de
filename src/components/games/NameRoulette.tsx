@@ -82,7 +82,7 @@ export default function NameRoulette() {
       </p>
 
       {/* Wheel Container */}
-      <div className="relative w-[320px] h-[320px] sm:w-[380px] sm:h-[380px] flex items-center justify-center select-none">
+      <div className="relative w-[min(280px,88vw)] h-[min(280px,88vw)] sm:w-[380px] sm:h-[380px] flex items-center justify-center select-none">
         {/* Needle / Indicator at top */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none drop-shadow-md">
           <div className="w-5 h-7 bg-[#FF4F87] rounded-b-md clip-polygon" style={{ clipPath: 'polygon(50% 100%, 0 0, 100% 0)' }} />

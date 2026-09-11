@@ -71,7 +71,7 @@ export default function TopNamesSection() {
                   <span className="font-editorial text-gold text-3xl sm:text-4xl tabular-nums leading-none">
                     01
                   </span>
-                  <span className="mt-3 block font-editorial text-4xl sm:text-5xl leading-tight group-hover:underline decoration-white/70 underline-offset-4">
+                  <span className="mt-3 block font-editorial text-3xl sm:text-4xl leading-tight break-words group-hover:underline decoration-white/70 underline-offset-4">
                     {names[0].name}
                   </span>
                   <span className="mt-2 block text-sm text-white/85">
