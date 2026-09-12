@@ -1,267 +1,91 @@
 @import "tailwindcss";
 
-@theme {
-  /* Muted baby-blue editorial palette (kein Creme, kein Terrakotta) */
-  --color-paper: #f2f6fa;
-  --color-panel: #e8f0f7;
-  --color-surface: #ffffff;
-  --color-ink: #1b2f44;
-  --color-ink-soft: #47596c;
-  --color-fade: #708399;
-  --color-line: #d9e4ed;
-  --color-line-strong: #c6d5e2;
-  --color-blue: #3e78b2;
-  --color-blue-deep: #2a587f;
-  --color-blue-soft: #dceaf6;
-  --color-blue-pale: #eef5fb;
-  --color-gold: #c0a053;
-  --color-go: #52886b;
-  --color-warn: #967e4f;
-}
-
-/* next/font defined these as --font-sans / --font-serif on <html>.
-   @theme inline keeps the values inlined into utilities so there is no
-   self-referencing CSS variable. */
-@theme inline {
-  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-serif), "Spectral", Georgia, "Times New Roman", serif;
-}
-
 :root {
-  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #111111;
+  --muted: #f5f5f5;
+  --border: #e5e5e5;
+  --border-light: #f0f0f0;
+  --muted-foreground: #737373;
+  --accent: #111111;
+  --accent-foreground: #ffffff;
 }
 
-html {
-  scroll-behavior: smooth;
-  scrollbar-gutter: stable;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans), sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  overflow-x: clip;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  text-wrap: balance;
-}
-
-p {
-  text-wrap: pretty;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: #c2dcf2;
-  color: #143245;
+  background: rgba(17, 17, 17, 0.1);
 }
 
-:where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-blue);
-  outline-offset: 2px;
-  border-radius: 6px;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.no-focus-outline:focus-visible {
-  outline: none;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-a {
-  text-underline-offset: 3px;
+::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 3px;
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #a3a3a3;
 }
 
-@layer components {
-  /* ------- Editorial helpers ------- */
-
-  .font-editorial {
-    font-family: var(--font-serif), "Spectral", Georgia, serif;
-    font-weight: 400;
-    letter-spacing: -0.015em;
+/* Typing indicator animation */
+@keyframes bounce-dot {
+  0%, 60%, 100% {
+    transform: translateY(0);
   }
-
-  .font-caveat {
-    font-family: var(--font-caveat), "Caveat", cursive;
-  }
-
-  /* Leises, normalgeschriebenes Label. Bewusst KEIN ALL-CAPS-Eyebrow. */
-  .kicker {
-    font-size: 0.82rem;
-    letter-spacing: 0.02em;
-    text-transform: none;
-    color: var(--color-fade);
-    font-weight: 500;
-  }
-
-  .label {
-    font-size: 0.82rem;
-    letter-spacing: 0.01em;
-    text-transform: none;
-    color: var(--color-ink-soft);
-    font-weight: 500;
-  }
-
-  .rise {
-    animation: rise 0.45s ease both;
-  }
-
-  .scrollbar-none {
-    scrollbar-width: none;
-  }
-
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* ------- Buttons ------- */
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.35;
-    padding: 0.55rem 1.05rem;
-    cursor: pointer;
-    transition:
-      background-color 0.18s ease,
-      border-color 0.18s ease,
-      color 0.18s ease,
-      transform 0.18s ease;
-    white-space: nowrap;
-  }
-
-  .btn:active {
-    transform: scale(0.98);
-  }
-
-  .btn-primary {
-    background-color: var(--color-blue);
-    color: #ffffff;
-  }
-
-  .btn-primary:hover {
-    background-color: var(--color-blue-deep);
-  }
-
-  .btn-secondary {
-    background-color: var(--color-surface);
-    color: var(--color-ink);
-    border: 1px solid var(--color-line-strong);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--color-blue);
-    color: var(--color-blue-deep);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--color-fade);
-    padding: 0.4rem 0.6rem;
-  }
-
-  .btn-ghost:hover {
-    color: var(--color-ink);
-  }
-
-  /* ------- Inputs & selects ------- */
-
-  .input {
-    width: 100%;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-line-strong);
-    border-radius: 8px;
-    padding-inline: 0.9rem;
-    padding-block: 0.55rem;
-    font-size: 0.925rem;
-    color: var(--color-ink);
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
-  }
-
-  .input:focus {
-    outline: none;
-    border-color: var(--color-blue);
-    box-shadow: 0 0 0 3px rgba(62, 120, 178, 0.14);
-  }
-
-  .input::placeholder {
-    color: var(--color-fade);
-  }
-
-  select.input {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23708399' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.85rem center;
-    padding-right: 2.25rem;
-    cursor: pointer;
-  }
-
-  /* ------- Small tactile details ------- */
-
-  /* Nudges a trailing arrow glyph/icon on hover of the parent link/button. */
-  .link-arrow {
-    display: inline-block;
-    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-
-  :is(a, button):hover .link-arrow {
-    transform: translateX(3px);
-  }
-
-  /* Soft lift for rows/cards where a translate reads better than a border shift. */
-  .lift-on-hover {
-    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-
-  :is(a, button):hover > .lift-on-hover,
-  .lift-on-hover:hover {
-    transform: translateY(-2px);
+  30% {
+    transform: translateY(-4px);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+.typing-dot {
+  animation: bounce-dot 1.2s infinite;
+}
 
-  .rise {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
 
-  .link-arrow,
-  .lift-on-hover {
-    transition: none !important;
-  }
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
