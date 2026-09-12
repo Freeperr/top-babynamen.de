@@ -122,7 +122,7 @@ export default function DailyTrendBox() {
               className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
             >
               Alle Namen der Woche
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true" className="link-arrow">→</span>
             </Link>
           </div>
         </div>

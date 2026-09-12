@@ -24,6 +24,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
     setIsPlayingAudio(true);
     void speakName(
       name.name,
+      name.origin,
       () => setIsPlayingAudio(false),
       () => setIsPlayingAudio(false)
     );
@@ -67,7 +68,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
             {name.name}
           </h1>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={handleSpeech}
               className="flex items-center justify-center w-10 h-10 rounded-full border border-line-strong text-ink-soft hover:text-blue-deep hover:border-blue transition-colors"
@@ -109,7 +110,7 @@ export default function NameDetailClient({ name, similarNames }: NameDetailClien
       </blockquote>
 
       {/* Main + aside */}
-      <div className="grid gap-10 md:grid-cols-[1fr_240px] md:gap-12">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-[1fr_240px] md:gap-12">
         <div className="min-w-0">
           <section className="mb-8">
             <h2 className="text-lg text-ink mb-2">Über den Namen {name.name}</h2>

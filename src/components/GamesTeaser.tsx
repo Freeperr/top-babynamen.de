@@ -2,7 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
 interface Game {
   title: string;
@@ -20,7 +22,7 @@ const GAMES: Game[] = [
   },
   {
     title: 'Welcher Name Passt Besser',
-    desc: 'Zwei Namen, eine Entscheidung – du bestimmst, wer aus dem Battle als Favorit hervorgeht.',
+    desc: 'Zwei Namen, eine Entscheidung: Du bestimmst, wer aus dem Battle als Favorit hervorgeht.',
     href: '/spiele?tab=battle',
     cta: 'Battle spielen',
   },
@@ -35,8 +37,17 @@ const GAMES: Game[] = [
 export default function GamesTeaser() {
   return (
     <section className="py-14 sm:py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-9">
+      <motion.div
+        className="max-w-4xl mx-auto px-4 sm:px-6"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+      >
+        <motion.div
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-9"
+          variants={fadeUp}
+        >
           <div>
             <h2 className="font-editorial text-3xl sm:text-4xl text-ink">
               Namen spielerisch finden
@@ -48,11 +59,14 @@ export default function GamesTeaser() {
             className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
           >
             Alle Spiele ansehen
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 link-arrow" />
           </Link>
-        </div>
+        </motion.div>
 
-        <ol className="grid sm:grid-cols-2 gap-px border border-line bg-line">
+        <motion.ol
+          className="grid grid-cols-1 sm:grid-cols-2 gap-px border border-line bg-line"
+          variants={fadeUp}
+        >
           {GAMES.map((game) => {
             const featured = game.title === 'Swipe';
             return (
@@ -72,7 +86,7 @@ export default function GamesTeaser() {
                       aria-hidden="true"
                     >
                       {game.cta}
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5 link-arrow" />
                     </span>
                   </span>
                   <h3
@@ -93,8 +107,8 @@ export default function GamesTeaser() {
               </li>
             );
           })}
-        </ol>
-      </div>
+        </motion.ol>
+      </motion.div>
     </section>
   );
 }

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata = {
-  title: 'Datenschutzerklärung – babynamen.me',
+  title: 'Datenschutzerklärung | babynamen.me',
   description:
     'Datenschutzerklärung und Informationen zur Datenverarbeitung auf babynamen.me',
 };

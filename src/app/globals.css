@@ -101,21 +101,13 @@ a {
     font-family: var(--font-caveat), "Caveat", cursive;
   }
 
-  /* Leises, normalgeschriebenes Label mit kleiner Marke davor.
-     Bewusst KEIN ALL-CAPS-Eyebrow. */
+  /* Leises, normalgeschriebenes Label. Bewusst KEIN ALL-CAPS-Eyebrow. */
   .kicker {
     font-size: 0.82rem;
     letter-spacing: 0.02em;
     text-transform: none;
     color: var(--color-fade);
     font-weight: 500;
-  }
-
-  .kicker::before {
-    content: "—";
-    color: var(--color-gold);
-    font-weight: 600;
-    margin-right: 0.55rem;
   }
 
   .label {
@@ -224,5 +216,52 @@ a {
     background-position: right 0.85rem center;
     padding-right: 2.25rem;
     cursor: pointer;
+  }
+
+  /* ------- Small tactile details ------- */
+
+  /* Nudges a trailing arrow glyph/icon on hover of the parent link/button. */
+  .link-arrow {
+    display: inline-block;
+    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  :is(a, button):hover .link-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Soft lift for rows/cards where a translate reads better than a border shift. */
+  .lift-on-hover {
+    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  :is(a, button):hover > .lift-on-hover,
+  .lift-on-hover:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .rise {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .link-arrow,
+  .lift-on-hover {
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

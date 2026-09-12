@@ -7,7 +7,7 @@ function BabynamenContent() {
   return (
     <NameDirectory
       title="Alle Babynamen"
-      description="Beliebte, klassische und seltene Namen durchstöbern – nach Herkunft, Anfangsbuchstabe, Länge und Klang."
+      description="Beliebte, klassische und seltene Namen durchstöbern, nach Herkunft, Anfangsbuchstabe, Länge und Klang."
     />
   );
 }

@@ -194,13 +194,13 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
         <div className="flex items-center flex-wrap gap-1 pb-1 pt-4 mt-3 border-t border-line">
           <button
             onClick={() => setSelectedLetter('all')}
-className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-colors ${
-                selectedLetter === 'all'
-                  ? 'bg-ink text-paper'
-                  : 'text-fade hover:text-ink hover:bg-panel'
-              }`}
+            className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-colors ${
+              selectedLetter === 'all'
+                ? 'bg-ink text-paper'
+                : 'text-fade hover:text-ink hover:bg-panel'
+            }`}
           >
-            A–Z
+            A-Z
           </button>
           {ALPHABET.map((letter) => (
             <button
@@ -232,7 +232,7 @@ className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-color
               >
                 <option value="all">Beliebige Länge</option>
                 <option value="short">Kurz (bis 4 Buchstaben)</option>
-                <option value="medium">Mittel (5–6 Buchstaben)</option>
+                <option value="medium">Mittel (5-6 Buchstaben)</option>
                 <option value="long">Lang (ab 7 Buchstaben)</option>
               </select>
             </div>
@@ -286,7 +286,7 @@ className={`px-2.5 py-1 rounded-md text-xs font-medium shrink-0 transition-color
               >
                 <option value="popularity">Beliebtheit (Rank)</option>
                 <option value="trend">Höchster Trend (%)</option>
-                <option value="alphabetical">Alphabetisch (A–Z)</option>
+                <option value="alphabetical">Alphabetisch (A-Z)</option>
                 <option value="length">Länge (Kürzeste zuerst)</option>
               </select>
             </div>

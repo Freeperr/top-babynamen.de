@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Heart, Search, Menu, X } from 'lucide-react';
 import { useFavorites } from '@/context/FavoritesContext';
 import SearchModal from './SearchModal';
@@ -13,15 +14,11 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
   const { favoritesCount } = useFavorites();
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 24);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setIsScrolled(latest > 24);
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -55,7 +52,7 @@ export default function Navbar() {
             : 'bg-paper'
         }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center h-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-[auto_1fr_auto] items-center h-16 gap-2">
           {/* Wordmark */}
           <Link href="/" className="shrink-0 whitespace-nowrap justify-self-start">
             <span className="font-editorial text-[1.25rem] text-ink leading-none">
@@ -125,43 +122,51 @@ export default function Navbar() {
         </div>
 
         {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <nav className="lg:hidden border-t border-line bg-paper">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col">
-              {navLinks.map((link, i) => (
+        <AnimatePresence initial={false}>
+          {isMobileMenuOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+              className="lg:hidden border-t border-line bg-paper overflow-hidden"
+            >
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col">
+                {navLinks.map((link, i) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`py-3 text-base border-b border-line/60 ${
+                      i === navLinks.length - 1 ? 'border-b-0' : ''
+                    } ${
+                      isActive(link.href)
+                        ? 'text-blue-deep font-medium'
+                        : 'text-ink hover:text-ink-soft'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  href="/favoriten"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`py-3 text-base border-b border-line/60 ${
-                    i === navLinks.length - 1 ? 'border-b-0' : ''
-                  } ${
-                    isActive(link.href)
-                      ? 'text-blue-deep font-medium'
-                      : 'text-ink hover:text-ink-soft'
-                  }`}
+                  className="py-3 text-base text-ink hover:text-ink-soft flex items-center gap-2"
                 >
-                  {link.name}
+                  <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-blue text-blue' : ''}`} />
+                  Favoriten
+                  <span
+                    className={`text-xs text-fade tabular-nums w-[1.4ch] text-center transition-opacity ${
+                      favoritesCount > 0 ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    {favoritesCount}
+                  </span>
                 </Link>
-              ))}
-              <Link
-                href="/favoriten"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="py-3 text-base text-ink hover:text-ink-soft flex items-center gap-2"
-              >
-                <Heart className={`w-4 h-4 ${favoritesCount > 0 ? 'fill-blue text-blue' : ''}`} />
-                Favoriten
-                <span
-                  className={`text-xs text-fade tabular-nums w-[1.4ch] text-center transition-opacity ${
-                    favoritesCount > 0 ? 'opacity-100' : 'opacity-0'
-                  }`}
-                >
-                  {favoritesCount}
-                </span>
-              </Link>
-            </div>
-          </nav>
-        )}
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

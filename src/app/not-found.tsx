@@ -14,7 +14,7 @@ export default function NotFound() {
         Diesen Namen kennen wir nicht
       </h1>
       <p className="text-ink-soft text-[0.975rem] leading-relaxed mb-8">
-        Die Seite, die du suchst, gibt es nicht &ndash; oder sie ist umgezogen.
+        Die Seite, die du suchst, gibt es nicht mehr oder sie ist umgezogen.
         Vielleicht findest du, wonach du suchst, in unserer Namensübersicht.
       </p>
 

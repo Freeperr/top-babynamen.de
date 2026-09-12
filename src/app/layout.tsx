@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { Spectral, Schibsted_Grotesk, Caveat } from 'next/font/google';
 import './globals.css';
 import { FavoritesProvider } from '@/context/FavoritesContext';
+import MotionProvider from '@/components/MotionProvider';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
@@ -30,9 +31,9 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: 'babynamen.me – Beliebte und besondere Babynamen',
+  title: 'babynamen.me | Beliebte und besondere Babynamen',
   description:
-    'Beliebte Babynamen, schöne Klassiker und seltene Entdeckungen – mit Herkunft, Bedeutung und kleinen Namensspielen zum Stöbern.',
+    'Beliebte Babynamen, schöne Klassiker und seltene Entdeckungen, mit Herkunft, Bedeutung und kleinen Namensspielen zum Stöbern.',
   keywords: [
     'Babynamen',
     'Mädchennamen',
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     'Vornamen mit Bedeutung',
   ],
   openGraph: {
-    title: 'babynamen.me – Namen, die man sich merkt',
+    title: 'babynamen.me | Namen, die man sich merkt',
     description:
       'Von beliebten Klassikern bis zu seltenen Entdeckungen: Stöbere durch Namen, schau dir Bedeutung und Herkunft an und speichere deine Favoriten.',
     url: 'https://babynamen.me',
@@ -77,12 +78,14 @@ export default function RootLayout({
             });
           `}
         </Script>
-        <FavoritesProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <CookieConsent />
-        </FavoritesProvider>
+        <MotionProvider>
+          <FavoritesProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <CookieConsent />
+          </FavoritesProvider>
+        </MotionProvider>
       </body>
     </html>
   );

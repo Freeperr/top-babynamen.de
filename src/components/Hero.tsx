@@ -41,7 +41,7 @@ export default function Hero() {
           className="mt-5 text-ink-soft max-w-xl text-[1rem]"
           variants={fadeUp}
         >
-          Beliebte Namen, zeitlose Klassiker und seltene Entdeckungen – mit
+          Beliebte Namen, zeitlose Klassiker und seltene Entdeckungen, mit
           Herkunft, Bedeutung und ein wenig Zeit zum Stöbern.
         </motion.p>
 

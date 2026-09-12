@@ -97,7 +97,7 @@ export default function TopNamesSection() {
             </div>
 
             {/* Rang 2 + 3 – mittelgroß, zweispaltig */}
-            <div className="grid gap-x-12 sm:grid-cols-2 sm:divide-x divide-line">
+            <div className="grid grid-cols-1 gap-x-12 sm:grid-cols-2 sm:divide-x divide-line">
               {names.slice(1, 3).map((name, i) => (
                 <RankRow
                   key={name.id}
@@ -114,7 +114,7 @@ export default function TopNamesSection() {
             </div>
 
             {/* Rang 4 + 5 – kompakt, zweispaltig */}
-            <div className="grid gap-x-12 sm:grid-cols-2 sm:divide-x divide-line">
+            <div className="grid grid-cols-1 gap-x-12 sm:grid-cols-2 sm:divide-x divide-line">
               {names.slice(3).map((name, i) => (
                 <RankRow
                   key={name.id}
@@ -138,7 +138,7 @@ export default function TopNamesSection() {
             className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-blue-deep transition-colors"
           >
             Alle Namen durchstöbern
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 link-arrow" />
           </Link>
         </motion.div>
       </motion.div>

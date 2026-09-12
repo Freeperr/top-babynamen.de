@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { BabyName } from '@/types/name';
 
 interface FavoriteButtonProps {
@@ -42,7 +43,7 @@ export default function FavoriteButton({
           : `${name.name} zu Favoriten hinzufügen`
       }
     >
-      <svg
+      <motion.svg
         viewBox="0 0 24 24"
         className={`w-4 h-4 ${favorited ? 'fill-current text-current' : 'fill-none text-current'}`}
         stroke="currentColor"
@@ -50,9 +51,11 @@ export default function FavoriteButton({
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden="true"
+        animate={favorited ? { scale: [1, 1.35, 1] } : { scale: 1 }}
+        transition={{ duration: 0.35, ease: [0.34, 1.56, 0.64, 1] }}
       >
         <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-      </svg>
+      </motion.svg>
     </button>
   );
 }

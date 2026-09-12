@@ -66,8 +66,8 @@ export default function NameDiscoveryWizard() {
       id: 'length',
       title: 'Wie lang darf der Name sein?',
       options: [
-        { label: 'Kurz (3–4 Buchstaben)', value: 'short', hint: 'Emma, Noah, Mia' },
-        { label: 'Mittellang (5–6 Buchstaben)', value: 'medium', hint: 'Emilia, Elias, Clara' },
+        { label: 'Kurz (3-4 Buchstaben)', value: 'short', hint: 'Emma, Noah, Mia' },
+        { label: 'Mittellang (5-6 Buchstaben)', value: 'medium', hint: 'Emilia, Elias, Clara' },
         { label: 'Egal', value: 'any', hint: 'Der Klang zählt' },
       ],
     },
@@ -159,7 +159,7 @@ export default function NameDiscoveryWizard() {
                 Fünf Fragen zur Namenswahl
               </h2>
               <p className="text-ink-soft text-[0.95rem] mb-8">
-                Beantworte ein paar kurze Fragen – als Inspiration, nicht als Regel.
+                Beantworte ein paar kurze Fragen, als Inspiration, nicht als Regel.
               </p>
               <button onClick={() => setIsOpen(true)} className="btn btn-primary px-7 py-2.5">
                 Namen für mich finden

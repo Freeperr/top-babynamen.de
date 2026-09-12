@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata = {
-  title: 'Impressum – babynamen.me',
+  title: 'Impressum | babynamen.me',
   description: 'Angaben gemäß § 5 DDG für babynamen.me',
 };
 

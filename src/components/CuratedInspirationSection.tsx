@@ -17,7 +17,7 @@ export default function CuratedInspirationSection() {
   return (
     <section className="py-14 sm:py-20 border-y border-line bg-panel/60">
       <motion.div
-        className="max-w-4xl mx-auto px-4 sm:px-6 grid gap-10 md:grid-cols-[2fr_3fr] md:gap-16"
+        className="max-w-4xl mx-auto px-4 sm:px-6 grid grid-cols-1 gap-10 md:grid-cols-[2fr_3fr] md:gap-16"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
@@ -39,7 +39,7 @@ export default function CuratedInspirationSection() {
             className="inline-flex items-center gap-1.5 mt-6 text-sm text-ink-soft hover:text-blue-deep transition-colors"
           >
             Seltene Namen entdecken
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 link-arrow" />
           </Link>
         </motion.div>
 
