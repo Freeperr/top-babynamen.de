@@ -1,27 +1,27 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
     <footer className="relative border-t border-line mt-16">
-      <a
+      <Link
         href="https://fynnpetersen.de"
         target="_blank"
         rel="noopener noreferrer"
-        className="hidden md:block absolute bottom-4 right-4 h-9 w-9 overflow-hidden rounded-full transition-transform hover:scale-105"
-        aria-label="Zu fynnpetersen.de"
+        className="hidden md:inline-flex absolute bottom-6 right-6 items-center opacity-80 hover:opacity-100 transition-opacity"
       >
         <Image
           src="/fynnpetersen-logo.png"
           alt="Fynn Petersen"
-          width={36}
-          height={36}
-          className="h-full w-full object-cover"
+          width={44}
+          height={44}
+          className="h-11 w-auto"
         />
-      </a>
+      </Link>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
@@ -72,6 +72,20 @@ export default function Footer() {
           <p>
             © {new Date().getFullYear()} babynamen.me
           </p>
+          <Link
+            href="https://fynnpetersen.de"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="md:hidden inline-flex items-center opacity-80 hover:opacity-100 transition-opacity"
+          >
+            <Image
+              src="/fynnpetersen-logo.png"
+              alt="Fynn Petersen"
+              width={40}
+              height={40}
+              className="h-10 w-auto"
+            />
+          </Link>
         </div>
       </div>
     </footer>

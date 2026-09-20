@@ -82,11 +82,11 @@ export default function ImpressumPage() {
             Die Konzeption, Gestaltung und technische Umsetzung von{' '}
             <strong className="text-ink">babynamen.me</strong> erfolgte durch:
           </p>
-          <p className="font-medium text-ink">Freeperr / freeperr.dev</p>
+          <p className="font-medium text-ink">Fynn Petersen / fynnpetersen.de</p>
           <p>
             E-Mail:{' '}
-            <a href="mailto:business@freeperr.dev" className="underline underline-offset-2 hover:text-blue-deep">
-              business@freeperr.dev
+            <a href="mailto:info@fynnpetersen.de" className="underline underline-offset-2 hover:text-blue-deep">
+              info@fynnpetersen.de
             </a>
           </p>
           <p className="mt-2">

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Heart, Search, Menu, X } from 'lucide-react';
@@ -54,11 +55,18 @@ export default function Navbar() {
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-[auto_1fr_auto] items-center h-16 gap-2">
           {/* Wordmark */}
-          <Link href="/" className="shrink-0 whitespace-nowrap justify-self-start">
-            <span className="font-editorial text-[1.25rem] text-ink leading-none">
-              babynamen
-              <span className="font-caveat text-blue text-[1.15rem] font-bold">.me</span>
-            </span>
+          <Link
+            href="/"
+            className="shrink-0 whitespace-nowrap justify-self-start inline-flex items-center"
+          >
+            <Image
+              src="/babynamen-wordmark.png"
+              alt="babynamen.me"
+              width={1453}
+              height={267}
+              className="h-[21px] w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}
