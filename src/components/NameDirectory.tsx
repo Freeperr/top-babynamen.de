@@ -58,10 +58,10 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
     return Array.from(set).sort();
   }, []);
 
-  const isGeminiTest = query.trim().toLowerCase() === 'geminitest';
+  const isKitest = query.trim().toLowerCase() === 'kitest';
 
   const filtered = useMemo(() => {
-    if (isGeminiTest) return [];
+    if (isKitest) return [];
     const filters: NameFilters = {
       query,
       gender: selectedGender,
@@ -72,7 +72,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
       sortBy,
     };
     return filterNames(filters);
-  }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy, isGeminiTest]);
+  }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy, isKitest]);
 
   // Render results in pages instead of dumping the whole filtered list into
   // the DOM at once — cheap for a handful of matches, not for hundreds.
@@ -298,7 +298,7 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
       </div>
 
       {/* Results */}
-      {isGeminiTest ? (
+      {isKitest ? (
         <GeminiStatusCard />
       ) : (
         <>

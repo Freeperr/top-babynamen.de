@@ -3,7 +3,7 @@
 import React, { useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ALL_NAMES } from '@/data/namesExtended';
+import { resolveCatalogName } from '@/lib/aiNameCatalog';
 import { genderNoun } from '@/lib/format';
 import { useFavorites } from '@/context/FavoritesContext';
 import FavoriteButton from '@/components/FavoriteButton';
@@ -19,6 +19,11 @@ export default function DailyTrendBox() {
   useEffect(() => {
     void loadDailyNames().catch(() => { /* Error is rendered below. */ });
   }, []);
+
+  const dailyEntries = data?.names.flatMap((item) => {
+    const match = resolveCatalogName(item);
+    return match ? [{ item, match }] : [];
+  }) ?? [];
 
   return (
     <section className="pb-2">
@@ -54,12 +59,11 @@ export default function DailyTrendBox() {
             initial="hidden"
             animate="visible"
           >
-            {data?.names.map((item, index) => {
-              const match = ALL_NAMES.find((name) => name.name.toLowerCase() === item.name.toLowerCase() && name.gender === item.gender);
+            {dailyEntries.map(({ item, match }, index) => {
               const reason = item.reason;
               return (
                 <motion.li
-                  key={`${item.name}-${index}`}
+                  key={match.id}
                   variants={fadeUp}
                   className="flex items-start gap-4 sm:gap-6 px-5 sm:px-8 py-4 border-b border-line last:border-b-0 transition-colors hover:bg-blue-pale"
                 >
@@ -68,15 +72,15 @@ export default function DailyTrendBox() {
                   </span>
 
                   <Link
-                    href={`/babynamen?q=${encodeURIComponent(item.name)}`}
+                    href={`/name/${match.id}`}
                     className="flex-1 min-w-0"
                   >
                     <span className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
                       <span className="font-editorial text-xl leading-tight text-ink hover:text-blue-deep transition-colors">
-                        {item.name}
+                        {match.name}
                       </span>
                       <span className="text-xs text-ink-soft">
-                        {genderNoun(item.gender)}
+                        {genderNoun(match.gender)}
                       </span>
                     </span>
                     {reason && (
@@ -86,14 +90,12 @@ export default function DailyTrendBox() {
                     )}
                   </Link>
 
-                  {match && (
-                    <FavoriteButton
-                      name={match}
-                      favorited={isFavorite(match.id)}
-                      onToggle={(e) => toggleFavorite(match, e)}
-                      className="mt-1"
-                    />
-                  )}
+                  <FavoriteButton
+                    name={match}
+                    favorited={isFavorite(match.id)}
+                    onToggle={(e) => toggleFavorite(match, e)}
+                    className="mt-1"
+                  />
                 </motion.li>
               );
             })}

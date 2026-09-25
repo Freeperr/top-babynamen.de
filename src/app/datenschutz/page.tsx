@@ -243,11 +243,11 @@ export default function DatenschutzPage() {
             Die Namenssuche und die Filterung erfolgen im Browser. Suchbegriffe
             können Bestandteil der Seitenadresse sein und beim Aufruf dieser
             Adresse an den Hosting-Anbieter übermittelt werden. Suchbegriffe
-            und Favoriten werden nicht an Google Gemini gesendet. Für tägliche
-            Namensvorschläge und KI-Namensduelle fragt unser Server Google Gemini
+            und Favoriten werden nicht an Groq gesendet. Für tägliche
+            Namensvorschläge und KI-Namensduelle fragt unser Server Groq
             mit allgemeinen Anweisungen und gegebenenfalls dem gewählten
             Namensgeschlecht an. Der Anwendungscode übermittelt dabei keine
-            Besucher-IP-Adresse, Merkliste oder Suchhistorie an Gemini.
+            Besucher-IP-Adresse, Merkliste oder Suchhistorie an Groq.
           </p>
           <p className="mt-3">
             Die Aussprachefunktion verwendet ausschließlich Stimmen, die dein

@@ -53,7 +53,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   if (!isOpen) return null;
 
-  const isGeminiTest = query.trim().toLowerCase() === 'geminitest';
+  const isKitest = query.trim().toLowerCase() === 'kitest';
 
   const filteredByQuickFilter = activeFilter
     ? ALL_NAMES.filter((n) =>
@@ -63,7 +63,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       )
     : ALL_NAMES;
 
-  const results: BabyName[] = isGeminiTest
+  const results: BabyName[] = isKitest
     ? []
     : query.trim()
       ? filteredByQuickFilter
@@ -140,7 +140,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
         {/* Results */}
         <div className="max-h-[380px] overflow-y-auto py-1">
-          {isGeminiTest ? (
+          {isKitest ? (
             <GeminiStatusCard />
           ) : results.length > 0 ? (
             results.map((name) => {
@@ -192,7 +192,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         </div>
 
         {/* Footer */}
-        {!isGeminiTest && (
+        {!isKitest && (
           <div className="px-5 py-3 border-t border-line flex items-center text-sm">
             <Link
               href={`/babynamen?q=${encodeURIComponent(query)}`}

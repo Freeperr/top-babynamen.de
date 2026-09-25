@@ -5,43 +5,20 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Trophy, RotateCcw, Heart, ArrowRight, Sparkles, CalendarDays } from 'lucide-react';
 import { ALL_NAMES } from '@/data/namesExtended';
+import { resolveCatalogName } from '@/lib/aiNameCatalog';
 import { BabyName, Gender } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';
 import { genderNoun, originPhrase } from '@/lib/format';
 
 const TOTAL_ROUNDS = 5;
 
-interface BattleNamePayload {
-  name: string;
-  gender: Gender;
-  origin: string;
-  meaning: string;
-  length: number;
-  id: string;
-}
-
-function toBabyName(n: BattleNamePayload): BabyName {
-  const existing = ALL_NAMES.find((x) => x.id === n.id);
-  if (existing) return existing;
-  return {
-    name: n.name,
-    gender: n.gender,
-    origin: n.origin ?? '',
-    meaning: n.meaning ?? '',
-    length: n.length,
-    id: n.id,
-    popularityRank: 50,
-    trendPercentage: 0,
-    trendDirection: 'neutral' as const,
-    styles: [],
-    tags: [],
-    description: '',
-    similarNames: [],
-    compatiblePairs: [],
-    popularityHistory: [],
-    syllables: 1,
-    firstLetter: n.name[0] ?? 'A',
-  };
+function resolveBattleNames(value: unknown): BabyName[] {
+  if (!Array.isArray(value)) return [];
+  const names = value.flatMap((entry) => {
+    const match = resolveCatalogName(entry);
+    return match ? [match] : [];
+  });
+  return names.filter((name, index) => names.findIndex((other) => other.id === name.id) === index);
 }
 
 function getRandomFromPool(gender: Gender | 'all'): BabyName {
@@ -88,7 +65,7 @@ export default function NameBattle() {
 
   const handleSecretInput = (value: string) => {
     setSecretInput(value);
-    if (value.toLowerCase().includes('geminitest')) {
+    if (value.toLowerCase().includes('kitest')) {
       setShowAiButtons(true);
     }
   };
@@ -125,12 +102,13 @@ export default function NameBattle() {
     try {
       const res = await fetch(`/api/battle-names?gender=${gender}`);
       const data = await res.json();
-      if (data.ok && Array.isArray(data.names) && data.names.length >= 2) {
+      const pool = resolveBattleNames(data.names);
+      if (data.ok && pool.length >= 2) {
         setIsDailyMode(false);
         setDailyNames([]);
         setDailyDate('');
-        setCandidateA(toBabyName(data.names[0]));
-        setCandidateB(toBabyName(data.names[1]));
+        setCandidateA(pool[0]);
+        setCandidateB(pool[1]);
         setChosenWinner(null);
         setRound(1);
         setHistoryWins({});
@@ -148,8 +126,8 @@ export default function NameBattle() {
     try {
       const res = await fetch(`/api/battle-names?source=daily&gender=${gender}`);
       const data = await res.json();
-      if (data.ok && Array.isArray(data.names) && data.names.length >= 2) {
-        const pool = data.names.map(toBabyName);
+      const pool = resolveBattleNames(data.names);
+      if (data.ok && pool.length >= 2) {
         setDailyNames(pool);
         setIsDailyMode(true);
         setDailyDate(data.date ?? '');

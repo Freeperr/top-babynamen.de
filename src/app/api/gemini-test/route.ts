@@ -33,14 +33,14 @@ export async function GET() {
       key: 'env',
       label: 'GEMINI_API_KEY',
       ok: false,
-      detail: 'Nicht gesetzt – bitte in .env.local hinterlegen.',
+      detail: 'Nicht gesetzt – bitte den Groq-Key als GEMINI_API_KEY hinterlegen.',
     });
   } else {
     checks.push({
       key: 'env',
       label: 'GEMINI_API_KEY',
       ok: true,
-      detail: `Gesetzt (${apiKey.length} Zeichen).`,
+      detail: 'Groq-Key unter GEMINI_API_KEY gesetzt.',
     });
 
     const prompt = `Du bist ein Verbindungstest für die Website "babynamen.me".

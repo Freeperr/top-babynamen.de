@@ -11,8 +11,8 @@ interface StatusCheck {
   detail: string;
 }
 
-interface GeminiModel {
-  name?: string;
+interface GroqModel {
+  id?: string;
 }
 
 export async function GET() {
@@ -25,31 +25,34 @@ export async function GET() {
       key: 'env',
       label: 'GEMINI_API_KEY',
       ok: false,
-      detail: 'Nicht gesetzt – bitte in .env.local hinterlegen.',
+      detail: 'Nicht gesetzt – bitte den Groq-Key als GEMINI_API_KEY hinterlegen.',
     });
   } else {
     checks.push({
       key: 'env',
       label: 'GEMINI_API_KEY',
       ok: true,
-      detail: `Gesetzt (${apiKey.length} Zeichen).`,
+      detail: 'Groq-Key unter GEMINI_API_KEY gesetzt.',
     });
 
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-      const res = await fetch(url, { cache: 'no-store' });
+      const res = await fetch('https://api.groq.com/openai/v1/models', {
+        headers: { Authorization: `Bearer ${apiKey}` },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(10_000),
+      });
 
       if (res.ok) {
         checks.push({
           key: 'api',
           label: 'API-Verbindung',
           ok: true,
-          detail: `Google erreichbar (HTTP ${res.status}).`,
+          detail: `Groq erreichbar (HTTP ${res.status}).`,
         });
 
-        const body = (await res.json().catch(() => null)) as { models?: GeminiModel[] } | null;
-        const modelNames = (body?.models ?? []).map((m) => m.name ?? '');
-        const available = candidates.filter((c) => modelNames.some((n) => n.includes(c)));
+        const body = (await res.json().catch(() => null)) as { data?: GroqModel[] } | null;
+        const modelNames = (body?.data ?? []).map((m) => m.id ?? '');
+        const available = candidates.filter((c) => modelNames.includes(c));
         checks.push({
           key: 'model',
           label: 'Verfügbare Modelle',

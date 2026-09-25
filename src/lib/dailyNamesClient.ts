@@ -1,4 +1,5 @@
 import type { DailyTopNames } from '@/lib/gemini';
+import { resolveCatalogName } from '@/lib/aiNameCatalog';
 
 interface DailyNamesState {
   data: DailyTopNames | null;
@@ -27,12 +28,17 @@ function publish(next: DailyNamesState) {
 export function isDailyNamesResponse(value: unknown): value is DailyTopNames {
   if (!value || typeof value !== 'object') return false;
   const data = value as DailyTopNames;
-  return data.generated === true && typeof data.date === 'string' &&
+  if (!(data.generated === true && typeof data.date === 'string' &&
     Array.isArray(data.names) && data.names.length === 5 &&
     data.names.every((entry) => entry && typeof entry.name === 'string' &&
       entry.name.trim().length > 0 && ['girl', 'boy', 'unisex'].includes(entry.gender) &&
       typeof entry.reason === 'string') &&
-    new Set(data.names.map((entry) => entry.name.trim().toLowerCase())).size === 5;
+    new Set(data.names.map((entry) => entry.name.trim().toLowerCase())).size === 5)) {
+    return false;
+  }
+  const catalogNames = data.names.map((entry) => resolveCatalogName(entry));
+  return catalogNames.every((name) => name !== undefined) &&
+    new Set(catalogNames.map((name) => name?.id)).size === 5;
 }
 
 // Shared within this browser session: navigation does not reset successful picks.

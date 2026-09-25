@@ -2,17 +2,10 @@ import { NextResponse } from 'next/server';
 import { callGemini, getDailyTopNames } from '@/lib/gemini';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { BabyName, Gender } from '@/types/name';
+import { catalogPrompt, getAiNameCatalog, resolveCatalogName } from '@/lib/aiNameCatalog';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
-
-interface BattleNameSuggestion {
-  name: string;
-  gender: Gender;
-  origin: string;
-  meaning: string;
-  length: number;
-}
 
 interface BattleNameResponse {
   name: string;
@@ -21,12 +14,6 @@ interface BattleNameResponse {
   meaning: string;
   length: number;
   id: string;
-}
-
-function findByName(name: string, gender?: Gender): BabyName | undefined {
-  return ALL_NAMES.find(
-    (n) => n.name.toLowerCase() === name.toLowerCase() && (!gender || n.gender === gender)
-  );
 }
 
 function randomFromPool(gender: Gender | 'all'): BabyName {
@@ -66,18 +53,9 @@ export async function GET(request: Request) {
       (n) => gender === 'all' || n.gender === gender || n.gender === 'unisex'
     );
 
-    const resolved: BattleNameResponse[] = matching.map((d) => {
-      const existing = findByName(d.name, d.gender);
-      if (existing) return toBattleResponse(existing);
-      const g = d.gender === 'girl' || d.gender === 'boy' ? d.gender : 'unisex';
-      return {
-        name: d.name,
-        gender: g,
-        origin: '',
-        meaning: d.reason || d.name,
-        length: d.name.length,
-        id: d.name.toLowerCase(),
-      };
+    const resolved: BattleNameResponse[] = matching.flatMap((entry) => {
+      const existing = resolveCatalogName(entry);
+      return existing ? [toBattleResponse(existing)] : [];
     });
 
     while (resolved.length < 2) {
@@ -112,17 +90,17 @@ export async function GET(request: Request) {
         ? 'Jungennamen'
         : 'Jungen- und Mädchennamen';
 
+  const catalog = getAiNameCatalog(String(Date.now()), gender);
   const prompt = `Du bist ein Babynamen-Experte für die Website "babynamen.me".
-Schlage 2 verschiedene, echte deutschsprachige Vornamen vor (${genderHint}).
+Wähle 2 verschiedene Namen (${genderHint}) ausschließlich aus diesem Website-Katalog:
+${catalogPrompt(catalog)}
 Achte auf Vielfalt: unterschiedliche Buchstabenzahlen, verschiedene Herkünfte, positive Bedeutungen.
 Der erste Name soll modern/trendig sein, der zweite klassisch/zeitlos.
 
 Antworte NUR mit einem gültigen JSON-Objekt und ohne weitere Erklärung. Format:
-{"names":[{"name":"Lina","gender":"girl","origin":"Germanisch","meaning":"die Kraftvolle","length":4},{"name":"Finn","gender":"boy","origin":"Irisch","meaning":"der Weiße","length":4}]}
+{"names":[{"id":"${catalog[0].id}"},{"id":"${catalog[1].id}"}]}
 
-- gender: nur "girl", "boy" oder "unisex"
-- length: exakte Anzahl der Buchstaben
-- meaning: kurze deutsche Bedeutung`;
+Verwende ausschließlich die IDs aus dem Katalog. Erfinde keine Namen oder IDs.`;
 
   const result = await callGemini(prompt, {
     responseMimeType: 'application/json',
@@ -145,28 +123,13 @@ Antworte NUR mit einem gültigen JSON-Objekt und ohne weitere Erklärung. Format
     .trim();
 
   try {
-    const parsed = JSON.parse(jsonText) as { names?: BattleNameSuggestion[] };
-    const suggestions = (parsed.names ?? [])
-      .filter((n) => typeof n.name === 'string' && n.name.length > 0)
-      .slice(0, 2);
-
-    const resolved = suggestions.map((s) => {
-      const existing = findByName(s.name, s.gender);
-      if (existing) return toBattleResponse(existing);
-      return {
-        name: s.name,
-        gender: s.gender === 'girl' || s.gender === 'boy' ? s.gender : 'unisex',
-        origin: s.origin ?? '',
-        meaning: s.meaning ?? '',
-        length: s.name.length,
-        id: s.name.toLowerCase(),
-      };
-    });
-
-    while (resolved.length < 2) {
-      const fb = randomFromPool(gender);
-      resolved.push(toBattleResponse(fb));
-    }
+    const parsed = JSON.parse(jsonText) as { names?: unknown };
+    if (!Array.isArray(parsed.names)) throw new Error('Ungültige Namensliste');
+    const selected = parsed.names.map((entry) => resolveCatalogName(entry, catalog))
+      .filter((entry): entry is BabyName => Boolean(entry));
+    const unique = selected.filter((entry, index) => selected.findIndex((other) => other.id === entry.id) === index);
+    if (unique.length !== 2 || parsed.names.length !== 2) throw new Error('Namen fehlen im Katalog oder sind doppelt');
+    const resolved = unique.map(toBattleResponse);
 
     return NextResponse.json({
       ok: true,
@@ -180,7 +143,7 @@ Antworte NUR mit einem gültigen JSON-Objekt und ohne weitere Erklärung. Format
       ok: false,
       generated: false,
       names: pair.map(toBattleResponse),
-      error: 'JSON-Antwort konnte nicht geparst werden.',
+      error: 'Die KI hat keine zwei verschiedenen Namen aus dem Website-Katalog geliefert.',
     });
   }
 }

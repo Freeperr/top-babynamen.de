@@ -1,6 +1,9 @@
 import { unstable_cache, revalidateTag } from 'next/cache';
+import { catalogPrompt, catalogVersion, getAiNameCatalog, resolveCatalogName } from '@/lib/aiNameCatalog';
+import type { BabyName } from '@/types/name';
 
 export interface DailyName {
+  id: string;
   name: string;
   gender: 'girl' | 'boy' | 'unisex';
   rank: number;
@@ -16,7 +19,7 @@ export interface DailyTopNames {
 }
 
 const NAMES_WANTED = 5;
-const DAILY_CACHE_TAG = 'daily-ai-names-v2';
+const DAILY_CACHE_TAG = `daily-groq-catalog-v3-${catalogVersion}`;
 let lastDailyUpdateAt: number | null = null;
 
 export function getLastDailyUpdateAt(): number | null {
@@ -27,31 +30,34 @@ function today(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date());
 }
 
-function normalize(raw: unknown): DailyName[] {
+function normalize(raw: unknown, catalog: BabyName[]): DailyName[] {
   if (!raw || typeof raw !== 'object') return [];
   const list = (raw as { names?: unknown[] }).names;
   if (!Array.isArray(list)) return [];
   return list
     .filter((x): x is Record<string, unknown> => !!x && typeof x === 'object')
     .slice(0, NAMES_WANTED)
-    .map((x, i): DailyName => {
-      const gender = String(x.gender ?? '');
-      return {
-        name: typeof x.name === 'string' ? x.name.trim() : '',
-        gender: gender === 'girl' || gender === 'boy' ? gender : 'unisex',
+    .flatMap((x, i): DailyName[] => {
+      const match = resolveCatalogName(x, catalog);
+      if (!match) return [];
+      return [{
+        id: match.id,
+        name: match.name,
+        gender: match.gender,
         rank: Number.isFinite(Number(x.rank)) ? Number(x.rank) : i + 1,
         change: typeof x.change === 'string' ? x.change : '→',
         reason: typeof x.reason === 'string' ? x.reason : '',
-      };
-    })
-    .filter((x) => x.name.length > 0);
+      }];
+    });
 }
 
-const MODEL_CANDIDATES = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-2.5-flash'];
+// Legacy module/env names stay compatible; all inference now uses Groq.
+const MODEL_CANDIDATES = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'];
 
 export function modelCandidates(): string[] {
   const env = process.env.GEMINI_MODEL?.trim();
-  if (!env) return MODEL_CANDIDATES;
+  // A previous Gemini model setting must not require another deployment change.
+  if (!env || /^(?:models\/)?gemini-/i.test(env)) return MODEL_CANDIDATES;
   return Array.from(new Set([env, ...MODEL_CANDIDATES]));
 }
 
@@ -84,87 +90,66 @@ export async function callGemini(
     ? [workingModel, ...modelCandidates().filter((m) => m !== workingModel)]
     : modelCandidates();
 
+  let lastResult: GeminiCallResult = {
+    ok: false, text: null, model: candidates[0], status: null, error: 'Kein verfügbares Groq-Modell gefunden.',
+  };
   for (const model of candidates) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const res = await fetch(url, {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseMimeType: opts.responseMimeType ?? 'text/plain',
-            temperature: opts.temperature ?? 0.5,
-          },
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          temperature: opts.temperature ?? 0.5,
+          max_completion_tokens: 4096,
+          ...(model.startsWith('openai/gpt-oss-') ? { reasoning_effort: 'low' } : {}),
+          ...(opts.responseMimeType === 'application/json' ? { response_format: { type: 'json_object' } } : {}),
         }),
         cache: 'no-store',
         signal: AbortSignal.timeout(15_000),
       });
-
-      const raw = await res.text();
-
+      const body = await res.json().catch(() => null) as {
+        choices?: { message?: { content?: unknown }; finish_reason?: string }[];
+        error?: { code?: string };
+      } | null;
       if (res.ok) {
-        workingModel = model;
-        let body: { candidates?: { content?: { parts?: { text?: unknown }[] } }[] } | null = null;
-        try {
-          body = JSON.parse(raw);
-        } catch {
-          body = null;
+        const choice = body?.choices?.[0];
+        const text = choice?.message?.content;
+        if (typeof text !== 'string' || !text.trim() || choice?.finish_reason === 'length') {
+          return { ok: false, text: null, model, status: res.status, error: 'Groq hat keine vollständige Antwort geliefert.' };
         }
-        const text = body?.candidates?.[0]?.content?.parts?.[0]?.text;
-        return {
-          ok: true,
-          text: typeof text === 'string' ? text : null,
-          model,
-          status: res.status,
-          error: '',
-        };
+        workingModel = model;
+        return { ok: true, text, model, status: res.status, error: '' };
       }
-
-      if (res.status !== 404) {
-        return {
-          ok: false,
-          text: null,
-          model,
-          status: res.status,
-          error: truncateBody(raw),
-        };
-      }
-    } catch (e) {
-      return {
-        ok: false,
-        text: null,
-        model,
-        status: null,
-        error: e instanceof Error ? e.message : 'unbekannt',
+      lastResult = {
+        ok: false, text: null, model, status: res.status,
+        error: res.status === 401
+          ? 'Groq-Key ungültig. Bitte den Groq-Key in GEMINI_API_KEY hinterlegen.'
+          : res.status === 429 ? 'Groq-Anfragelimit erreicht. Bitte später erneut versuchen.'
+            : `Groq-Anfrage fehlgeschlagen (HTTP ${res.status}).`,
       };
+      const modelUnavailable = ['model_not_found', 'model_decommissioned', 'model_permission_blocked'].includes(body?.error?.code ?? '');
+      if (res.status !== 404 && res.status !== 429 && res.status !== 503 && !modelUnavailable) return lastResult;
+    } catch {
+      return { ok: false, text: null, model, status: null, error: 'Groq ist gerade nicht erreichbar oder die Anfrage hat zu lange gedauert.' };
     }
   }
-
-  return {
-    ok: false,
-    text: null,
-    model: candidates[candidates.length - 1],
-    status: 404,
-    error: 'Kein verfügbares Modell gefunden',
-  };
+  return lastResult;
 }
 
-function truncateBody(raw: string): string {
-  const clean = raw.replace(/\s+/g, ' ').trim();
-  return clean.length > 150 ? `${clean.slice(0, 150)}…` : clean;
-}
-
-async function fetchFromGemini(): Promise<DailyName[] | null> {
+async function fetchFromGroq(): Promise<DailyName[] | null> {
+  const catalog = getAiNameCatalog(today());
   const prompt = `Heute ist ${today()}. Du bist der tägliche Namens-Redakteur der Website "babynamen.me" für deutsche Babynamen.
 
-Wähle die ${NAMES_WANTED} besten Babynamen für diesen Tag aus dem deutschsprachigen Raum. Mische bekannte Favoriten mit interessanten Entdeckungen, achte auf Vielfalt (Mädchen und Jungen, kurze und lange Namen), aktuelle Trends und eine positive Bedeutung.
+Wähle genau ${NAMES_WANTED} verschiedene Babynamen ausschließlich aus dem folgenden Website-Katalog. Mische bekannte Favoriten mit interessanten Entdeckungen und achte auf Vielfalt (Mädchen und Jungen, kurze und lange Namen).
+
+Erlaubter Katalog: ${catalogPrompt(catalog)}
 
 Antworte NUR mit einem gültigen JSON-Objekt und ohne weitere Erklärung. Format:
-{"names":[{"name":"Lina","gender":"girl","rank":1,"change":"+6%","reason":"in einem kurzen deutschen Satz, warum dieser Name heute passt"}]}
+{"names":[{"id":"${catalog[0].id}","rank":1,"change":"→","reason":"in einem kurzen deutschen Satz, warum dieser Name heute passt"}]}
 
-Verwende echte, verbreitete deutschsprachige Vornamen.
-- gender: nur "girl", "boy" oder "unisex"
+Verwende ausschließlich IDs aus dem erlaubten Katalog. Erfinde keine Namen oder IDs.
 - rank: die Platzierung von 1 bis ${NAMES_WANTED}
 - change: Trend als Prozentwert mit Vorzeichen (z. B. "+6%" oder "-2%")`;
 
@@ -181,14 +166,14 @@ Verwende echte, verbreitete deutschsprachige Vornamen.
 
   try {
     const parsed = JSON.parse(jsonText);
-    return normalize(parsed);
+    return normalize(parsed, catalog);
   } catch {
     return null;
   }
 }
 
 async function generateDailyTopNames(): Promise<DailyTopNames> {
-  const ai = await fetchFromGemini();
+  const ai = await fetchFromGroq();
   const names = ai?.filter((entry, index, entries) =>
     entries.findIndex((other) => other.name.toLowerCase() === entry.name.toLowerCase()) === index
   );
