@@ -59,11 +59,16 @@ export default function DatenschutzPage() {
         <section className="pt-6 border-t border-line">
           <h2 className="text-base text-ink mb-2">3. Lokale Speicherung von Favoriten</h2>
           <p>
-            Wenn du Namen favorisierst oder in Spielen abstimmst, werden diese
-            Informationen ausschließlich lokal in deinem Webbrowser
-            (LocalStorage) gespeichert. Es findet keine serverseitige Erfassung,
+            Wenn du Namen favorisierst, speichern wir ausschließlich die Kennungen
+            der gewählten Namen unter „top_babynamen_favorites_v1“ lokal in deinem
+            Webbrowser (LocalStorage). Spielstände und einzelne Abstimmungen
+            bleiben im Arbeitsspeicher der Seite. Es findet keine serverseitige Erfassung,
             Weitergabe oder Verknüpfung mit persönlichen Identitätsdaten statt.
-            Du kannst diese Daten jederzeit leeren.
+            Favoriten bleiben bis zu ihrer Löschung gespeichert. Du kannst sie auf
+            der Favoritenseite oder über die Website-Daten deines Browsers löschen.
+            Die Speicherung dient der von dir gewünschten Merkliste (§ 25 Abs. 2
+            Nr. 2 TDDDG; soweit personenbezogene Daten betroffen sind, Art. 6 Abs. 1
+            lit. b DSGVO).
           </p>
         </section>
 
@@ -73,8 +78,11 @@ export default function DatenschutzPage() {
             Unser Cookie-Hinweis fragt deine Einwilligung ab, bevor Google-Cookies
             (z.&nbsp;B. für Google Ads) gesetzt werden. Deine Entscheidung
             (&bdquo;Alle akzeptieren&ldquo; oder &bdquo;Nur notwendige&ldquo;)
-            wird ebenfalls nur lokal in deinem Browser gespeichert (Art.&nbsp;6
-            Abs.&nbsp;1 lit.&nbsp;a DSGVO, §&nbsp;25 Abs.&nbsp;1 TTDSG).
+            wird unter „top_babynamen_cookie_consent_v1“ lokal bis zur Änderung
+            oder Löschung der Website-Daten gespeichert. Diese Speicherung ist
+            erforderlich, um deine Auswahl zu beachten (§ 25 Abs. 2 Nr. 2 TDDDG).
+            Optionale Werbedienste beruhen auf deiner Einwilligung (Art.&nbsp;6
+            Abs.&nbsp;1 lit.&nbsp;a DSGVO, §&nbsp;25 Abs.&nbsp;1 TDDDG).
           </p>
           <p className="mt-3">
             Ohne deine Einwilligung werden keinerlei Dritt-Cookies gesetzt und
@@ -85,8 +93,10 @@ export default function DatenschutzPage() {
             Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft
             widerrufen &ndash; &uuml;ber die Schaltfl&auml;che &bdquo;Einwilligung verwalten&ldquo; im
             Footer der Website. Durch den Widerruf wird kein bereits erfolgtes
-            Laden von Dritt-Skripten rückgängig gemacht, aber es werden keine
-            weiteren Dienste mehr aktiviert. Alternativ kannst du die Auswahl
+            Laden von Dritt-Skripten rückgängig gemacht. Waren Werbeskripte aktiv,
+            wird die Seite neu geladen, um ihre weitere Ausführung zu beenden.
+            Bereits gespeicherte Drittanbieter-Cookies kannst du über die
+            Einstellungen deines Browsers löschen. Alternativ kannst du die Auswahl
             ändern, indem du die Website-Daten in deinem Browser löschst.
           </p>
         </section>
@@ -98,8 +108,13 @@ export default function DatenschutzPage() {
             Hosting-Provider automatisch Informationen in so genannten
             Server-Log-Dateien, die dein Browser automatisch übermittelt
             (Browsertyp, Betriebssystem, Referrer URL, Hostname des
-            zugreifenden Rechners, Uhrzeit der Serveranfrage, gekürzte
+            zugreifenden Rechners, Uhrzeit der Serveranfrage,
             IP-Adresse).
+          </p>
+          <p className="mt-3">
+            Die Verarbeitung dient der Auslieferung, Sicherheit und Fehleranalyse
+            dieser Website. Rechtsgrundlage ist unser berechtigtes Interesse an
+            einem sicheren und zuverlässigen Betrieb (Art. 6 Abs. 1 lit. f DSGVO).
           </p>
 
           <p className="mt-3">
@@ -222,8 +237,29 @@ export default function DatenschutzPage() {
           </p>
         </section>
 
+        <section className="pt-6 border-t border-line">
+          <h2 className="text-base text-ink mb-2">8. Namenssuche, KI und Sprachausgabe</h2>
+          <p>
+            Die Namenssuche und die Filterung erfolgen im Browser. Suchbegriffe
+            können Bestandteil der Seitenadresse sein und beim Aufruf dieser
+            Adresse an den Hosting-Anbieter übermittelt werden. Suchbegriffe
+            und Favoriten werden nicht an Google Gemini gesendet. Für tägliche
+            Namensvorschläge und KI-Namensduelle fragt unser Server Google Gemini
+            mit allgemeinen Anweisungen und gegebenenfalls dem gewählten
+            Namensgeschlecht an. Der Anwendungscode übermittelt dabei keine
+            Besucher-IP-Adresse, Merkliste oder Suchhistorie an Gemini.
+          </p>
+          <p className="mt-3">
+            Die Aussprachefunktion verwendet ausschließlich Stimmen, die dein
+            Browser als lokal ausweist. Wenn keine passende lokale Stimme
+            verfügbar ist, wird keine Online-Stimme ersatzweise aufgerufen.
+            Bilder und Schriftarten werden über diese Website ausgeliefert;
+            der Browser ruft dafür keine Google-Fonts-Server auf.
+          </p>
+        </section>
+
         <p className="pt-6 border-t border-line text-xs text-ink-soft">
-          Stand: 10.09.2026
+          Stand: 25.09.2026
         </p>
       </div>
     </article>

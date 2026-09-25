@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -8,36 +8,51 @@ import {
   storeConsent,
   revokeConsent,
   applyConsent,
+  CONSENT_KEY,
   type ConsentChoice,
 } from '@/lib/consent';
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const promptTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const open = () => {
+      if (promptTimer.current) clearTimeout(promptTimer.current);
       revokeConsent();
       setShowDetails(false);
       setVisible(true);
     };
 
     window.addEventListener('open-cookie-consent', open);
+    const sync = (event: StorageEvent) => {
+      if (event.key !== CONSENT_KEY && event.key !== null) return;
+      const choice = getStoredConsent();
+      applyConsent(choice ?? 'essential');
+      setVisible(choice === null);
+    };
+    window.addEventListener('storage', sync);
 
     const stored = getStoredConsent();
     if (stored) {
       applyConsent(stored);
-      return () => window.removeEventListener('open-cookie-consent', open);
+      return () => {
+        window.removeEventListener('open-cookie-consent', open);
+        window.removeEventListener('storage', sync);
+      };
     }
 
-    const t = setTimeout(() => setVisible(true), 1200);
+    promptTimer.current = setTimeout(() => setVisible(true), 1200);
     return () => {
-      clearTimeout(t);
+      if (promptTimer.current) clearTimeout(promptTimer.current);
       window.removeEventListener('open-cookie-consent', open);
+      window.removeEventListener('storage', sync);
     };
   }, []);
 
   const save = (value: ConsentChoice) => {
+    if (promptTimer.current) clearTimeout(promptTimer.current);
     storeConsent(value);
     applyConsent(value);
     setVisible(false);
@@ -62,13 +77,13 @@ export default function CookieConsent() {
                   Wir respektieren deine Privatsphäre.
                 </p>
                 <p className="text-sm text-ink-soft mt-0.5">
-                  Notwendige Cookies halten die Website am Laufen. Mit deiner
+                  Wir speichern deine Auswahl lokal in deinem Browser. Mit deiner
                   Zustimmung setzen wir zusätzlich Cookies von Google (z.&nbsp;B.
                   für Google Ads), um dir passende Anzeigen zu zeigen.
                 </p>
                 {showDetails && (
                   <p className="text-sm text-ink-soft mt-1">
-                    Details zu den einzelnen Cookies findest du in unserer{' '}
+                    Informationen zur Datenverarbeitung findest du in unserer{' '}
                     <Link
                       href="/datenschutz"
                       className="underline underline-offset-2 hover:text-blue-deep"
@@ -83,7 +98,7 @@ export default function CookieConsent() {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
                 <button
                   onClick={() => save('all')}
-                  className="btn btn-primary"
+                  className="btn btn-secondary"
                 >
                   Alle akzeptieren
                 </button>
@@ -95,6 +110,7 @@ export default function CookieConsent() {
                 </button>
                 <button
                   onClick={() => setShowDetails(!showDetails)}
+                  aria-expanded={showDetails}
                   className="btn btn-ghost text-sm"
                 >
                   {showDetails ? 'Weniger' : 'Details'}

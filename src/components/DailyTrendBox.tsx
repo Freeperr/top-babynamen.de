@@ -1,57 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getDailyNames } from '@/lib/nameService';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { genderNoun } from '@/lib/format';
 import { useFavorites } from '@/context/FavoritesContext';
 import FavoriteButton from '@/components/FavoriteButton';
-import { BabyName } from '@/types/name';
 import { fadeUp, staggerContainer } from '@/lib/motion';
-
-interface DailyApiName {
-  name: string;
-  reason?: string;
-}
+import { getDailyNamesSnapshot, getDailyNamesServerSnapshot, subscribeDailyNames, loadDailyNames } from '@/lib/dailyNamesClient';
 
 export default function DailyTrendBox() {
-  const [picks, setPicks] = useState<BabyName[]>(() => getDailyNames(new Date(), 5));
-  const [reasons, setReasons] = useState<Record<string, string>>({});
+  const { data, loading, error } = useSyncExternalStore(
+    subscribeDailyNames, getDailyNamesSnapshot, getDailyNamesServerSnapshot,
+  );
   const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
-    let cancelled = false;
-
-    fetch('/api/daily-names', { cache: 'no-store' })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data: { names?: DailyApiName[] } | null) => {
-        if (cancelled || !data?.names) return;
-
-        const resolved: BabyName[] = [];
-        const reasonMap: Record<string, string> = {};
-
-        for (const entry of data.names) {
-          const match = ALL_NAMES.find(
-            (n) => n.name.toLowerCase() === entry.name.toLowerCase()
-          );
-          if (match) {
-            resolved.push(match);
-            if (entry.reason) reasonMap[match.id] = entry.reason;
-          }
-        }
-
-        if (resolved.length > 0) {
-          setPicks(resolved);
-          setReasons(reasonMap);
-        }
-      })
-      .catch(() => {});
-
-    return () => {
-      cancelled = true;
-    };
+    void loadDailyNames().catch(() => { /* Error is rendered below. */ });
   }, []);
 
   return (
@@ -69,16 +35,31 @@ export default function DailyTrendBox() {
             </h2>
           </div>
 
+          {!data && loading && (
+            <p className="px-5 sm:px-8 py-6 text-sm text-ink-soft" role="status">
+              Die heutigen Namen werden geladen …
+            </p>
+          )}
+          {error && (
+            <div className="px-5 sm:px-8 py-4 text-sm text-ink-soft" role="status">
+              <p>{data ? 'Aktualisierung gerade nicht möglich. Die letzte KI-Auswahl bleibt sichtbar.' : error}</p>
+              <button type="button" className="btn btn-secondary mt-2" disabled={loading}
+                onClick={() => void loadDailyNames(true).catch(() => {})}>
+                Erneut versuchen
+              </button>
+            </div>
+          )}
           <motion.ul
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
           >
-            {picks.map((item, index) => {
-              const reason = reasons[item.id] ?? item.meaning.split(',')[0] ?? '';
+            {data?.names.map((item, index) => {
+              const match = ALL_NAMES.find((name) => name.name.toLowerCase() === item.name.toLowerCase() && name.gender === item.gender);
+              const reason = item.reason;
               return (
                 <motion.li
-                  key={`${item.id}-${index}`}
+                  key={`${item.name}-${index}`}
                   variants={fadeUp}
                   className="flex items-start gap-4 sm:gap-6 px-5 sm:px-8 py-4 border-b border-line last:border-b-0 transition-colors hover:bg-blue-pale"
                 >
@@ -105,12 +86,14 @@ export default function DailyTrendBox() {
                     )}
                   </Link>
 
-                  <FavoriteButton
-                    name={item}
-                    favorited={isFavorite(item.id)}
-                    onToggle={(e) => toggleFavorite(item, e)}
-                    className="mt-1"
-                  />
+                  {match && (
+                    <FavoriteButton
+                      name={match}
+                      favorited={isFavorite(match.id)}
+                      onToggle={(e) => toggleFavorite(match, e)}
+                      className="mt-1"
+                    />
+                  )}
                 </motion.li>
               );
             })}

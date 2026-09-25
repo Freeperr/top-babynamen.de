@@ -61,11 +61,19 @@ function getRandomChallenger(winnerId: string, gender: Gender | 'all'): BabyName
   return remaining[Math.floor(Math.random() * remaining.length)];
 }
 
+function getNextPair(winner: BabyName, isDailyMode: boolean, dailyNames: BabyName[], gender: Gender | 'all') {
+  const usable = isDailyMode ? dailyNames.filter((n) => n.id !== winner.id) : [];
+  const challenger = usable.length
+    ? usable[Math.floor(Math.random() * usable.length)]
+    : getRandomChallenger(winner.id, gender);
+  return { keep: winner, challenger };
+}
+
 export default function NameBattle() {
   const [gender, setGender] = useState<Gender | 'all'>('all');
   const [round, setRound] = useState(1);
-  const [candidateA, setCandidateA] = useState<BabyName>(() => getRandomFromPool('all'));
-  const [candidateB, setCandidateB] = useState<BabyName>(() => getRandomFromPool('all'));
+  const [candidateA, setCandidateA] = useState<BabyName>(ALL_NAMES[0]);
+  const [candidateB, setCandidateB] = useState<BabyName>(ALL_NAMES.find((n) => n.id !== ALL_NAMES[0].id)!);
   const [chosenWinner, setChosenWinner] = useState<'A' | 'B' | null>(null);
   const [historyWins, setHistoryWins] = useState<Record<string, number>>({});
   const [isFinished, setIsFinished] = useState(false);
@@ -88,14 +96,12 @@ export default function NameBattle() {
   const startFreshBattle = useCallback(() => {
     if (isDailyMode && dailyNames.length >= 2) {
       const a = dailyNames[Math.floor(Math.random() * dailyNames.length)];
-      let b = dailyNames[Math.floor(Math.random() * dailyNames.length)];
-      while (b.id === a.id) b = dailyNames[Math.floor(Math.random() * dailyNames.length)];
+      const b = getNextPair(a, true, dailyNames, gender).challenger;
       setCandidateA(a);
       setCandidateB(b);
     } else {
       const a = getRandomFromPool(gender);
-      let b = getRandomFromPool(gender);
-      while (b.id === a.id) b = getRandomFromPool(gender);
+      const b = getRandomChallenger(a.id, gender);
       setCandidateA(a);
       setCandidateB(b);
     }
@@ -161,18 +167,6 @@ export default function NameBattle() {
     setAiLoading(false);
   };
 
-  const getNextPair = (winner: BabyName) => {
-    if (isDailyMode && dailyNames.length >= 2) {
-      const usable = dailyNames.filter((n) => n.id !== winner.id);
-      const challenger =
-        usable.length > 0
-          ? usable[Math.floor(Math.random() * usable.length)]
-          : getRandomFromPool(gender);
-      return { keep: winner, challenger };
-    }
-    return { keep: winner, challenger: getRandomChallenger(winner.id, gender) };
-  };
-
   const handleVote = (selected: 'A' | 'B') => {
     if (chosenWinner !== null) return;
 
@@ -199,7 +193,7 @@ export default function NameBattle() {
         setChampion(topName);
         setIsFinished(true);
       } else {
-        const next = getNextPair(winnerName);
+        const next = getNextPair(winnerName, isDailyMode, dailyNames, gender);
         setCandidateA(next.keep);
         setCandidateB(next.challenger);
         setRound((prev) => prev + 1);

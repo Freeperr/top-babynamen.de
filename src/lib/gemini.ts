@@ -1,4 +1,4 @@
-import { getTopNames } from '@/lib/nameService';
+import { unstable_cache, revalidateTag } from 'next/cache';
 
 export interface DailyName {
   name: string;
@@ -11,35 +11,20 @@ export interface DailyName {
 export interface DailyTopNames {
   date: string;
   generated: boolean;
+  updatedAt?: string;
   names: DailyName[];
 }
 
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const NAMES_WANTED = 5;
-
-let cache: { at: number; data: DailyTopNames } | null = null;
+const DAILY_CACHE_TAG = 'daily-ai-names-v2';
+let lastDailyUpdateAt: number | null = null;
 
 export function getLastDailyUpdateAt(): number | null {
-  return cache ? cache.at : null;
+  return lastDailyUpdateAt;
 }
 
 function today(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function buildFallback(): DailyTopNames {
-  const top = getTopNames(NAMES_WANTED);
-  return {
-    date: today(),
-    generated: false,
-    names: top.map((name): DailyName => ({
-      name: name.name,
-      gender: name.gender,
-      rank: name.popularityRank,
-      change: name.weeklyChange ?? '→',
-      reason: name.meaning.split(',')[0],
-    })),
-  };
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date());
 }
 
 function normalize(raw: unknown): DailyName[] {
@@ -52,7 +37,7 @@ function normalize(raw: unknown): DailyName[] {
     .map((x, i): DailyName => {
       const gender = String(x.gender ?? '');
       return {
-        name: String(x.name ?? ''),
+        name: typeof x.name === 'string' ? x.name.trim() : '',
         gender: gender === 'girl' || gender === 'boy' ? gender : 'unisex',
         rank: Number.isFinite(Number(x.rank)) ? Number(x.rank) : i + 1,
         change: typeof x.change === 'string' ? x.change : '→',
@@ -84,7 +69,7 @@ export async function callGemini(
   prompt: string,
   opts: { temperature?: number; responseMimeType?: string } = {}
 ): Promise<GeminiCallResult> {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
     return {
       ok: false,
@@ -113,6 +98,7 @@ export async function callGemini(
           },
         }),
         cache: 'no-store',
+        signal: AbortSignal.timeout(15_000),
       });
 
       const raw = await res.text();
@@ -202,39 +188,46 @@ Verwende echte, verbreitete deutschsprachige Vornamen.
 }
 
 async function generateDailyTopNames(): Promise<DailyTopNames> {
-  const fallback = buildFallback();
-  const ai = await fetchFromGemini().catch(() => null);
-
-  let names = ai && ai.length > 0 ? [...ai] : [];
-  for (const f of fallback.names) {
-    if (names.length >= NAMES_WANTED) break;
-    if (!names.some((n) => n.name.toLowerCase() === f.name.toLowerCase())) {
-      names.push(f);
-    }
+  const ai = await fetchFromGemini();
+  const names = ai?.filter((entry, index, entries) =>
+    entries.findIndex((other) => other.name.toLowerCase() === entry.name.toLowerCase()) === index
+  );
+  // Throw instead of caching standard names. Next keeps successful stale data
+  // when an automatic background revalidation fails.
+  if (!names || names.length !== NAMES_WANTED) {
+    throw new Error('Die täglichen KI-Namen konnten nicht aktualisiert werden. Bitte erneut versuchen.');
   }
-  if (names.length === 0) names = fallback.names;
-
   return {
     date: today(),
-    generated: ai !== null && ai.length > 0,
-    names: names.slice(0, NAMES_WANTED),
+    generated: true,
+    updatedAt: new Date().toISOString(),
+    names: names.map((name, index) => ({ ...name, rank: index + 1 })),
   };
 }
 
-export async function getDailyTopNames(): Promise<DailyTopNames> {
-  const now = Date.now();
-  if (cache && now - cache.at < CACHE_TTL_MS) {
-    return cache.data;
-  }
+// Data Cache is shared by route handlers and persists across server restarts
+// on Next.js/Vercel. No fallback list is ever written into this cache.
+// Keep unstable_cache here until this project enables Cache Components.
+const readDailyNames = unstable_cache(generateDailyTopNames, [DAILY_CACHE_TAG], {
+  revalidate: 24 * 60 * 60,
+  tags: [DAILY_CACHE_TAG],
+});
+let pendingDailyNames: Promise<DailyTopNames> | null = null;
 
-  const data = await generateDailyTopNames();
-  cache = { at: now, data };
-  return data;
+export async function getDailyTopNames(freshRead = false): Promise<DailyTopNames> {
+  if (freshRead || !pendingDailyNames) {
+    const request = readDailyNames().then((data) => {
+      lastDailyUpdateAt = data.updatedAt ? Date.parse(data.updatedAt) : null;
+      return data;
+    }).finally(() => {
+      if (pendingDailyNames === request) pendingDailyNames = null;
+    });
+    pendingDailyNames = request;
+  }
+  return pendingDailyNames;
 }
 
-/** Bypasses the 24h cache and forces a fresh Gemini pick. */
-export async function refreshDailyTopNames(): Promise<DailyTopNames> {
-  const data = await generateDailyTopNames();
-  cache = { at: Date.now(), data };
-  return data;
+/** Invalidation is committed when this route responds; read in the NEXT request. */
+export function invalidateDailyTopNames(): void {
+  revalidateTag(DAILY_CACHE_TAG, { expire: 0 });
 }

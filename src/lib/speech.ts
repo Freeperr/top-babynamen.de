@@ -78,7 +78,7 @@ function pickBestVoice(
   voices: SpeechSynthesisVoice[],
   lang: string
 ): SpeechSynthesisVoice | null {
-  const matches = voices.filter((v) => v.lang.toLowerCase().startsWith(lang));
+  const matches = voices.filter((v) => v.localService && v.lang.toLowerCase().startsWith(lang));
   if (matches.length === 0) return null;
 
   const score = (v: SpeechSynthesisVoice): number => {
@@ -101,7 +101,10 @@ export async function speakName(
   onEnd?: () => void,
   onError?: () => void
 ): Promise<void> {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    onError?.();
+    return;
+  }
 
   window.speechSynthesis.cancel();
   const voices = cachedVoices.length > 0 ? cachedVoices : await loadVoices();
@@ -109,6 +112,10 @@ export async function speakName(
   const originLang = langHintFromOrigin(origin);
   const voice =
     (originLang && pickBestVoice(voices, originLang)) || pickBestVoice(voices, 'de');
+  if (!voice) {
+    onError?.();
+    return;
+  }
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = voice?.lang || originLang || 'de-DE';

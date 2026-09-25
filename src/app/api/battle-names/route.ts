@@ -49,12 +49,19 @@ function toBattleResponse(name: BabyName): BattleNameResponse {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const gender = (searchParams.get('gender') as Gender | 'all') || 'all';
+  const requestedGender = searchParams.get('gender') || 'all';
+  if (!['all', 'girl', 'boy', 'unisex'].includes(requestedGender)) {
+    return NextResponse.json({ error: 'Ungültiger Geschlechtsfilter.' }, { status: 400 });
+  }
+  const gender = requestedGender as Gender | 'all';
   const source = searchParams.get('source');
 
   // Täglich frisch zusammengestellte Namensliste (per KI, gecacht für 24h)
   if (source === 'daily') {
-    const daily = await getDailyTopNames();
+    const daily = await getDailyTopNames().catch(() => null);
+    if (!daily) {
+      return NextResponse.json({ error: 'Die täglichen KI-Namen sind gerade nicht verfügbar.' }, { status: 503 });
+    }
     const matching = daily.names.filter(
       (n) => gender === 'all' || n.gender === gender || n.gender === 'unisex'
     );

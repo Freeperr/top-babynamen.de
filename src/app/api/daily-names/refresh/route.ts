@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { refreshDailyTopNames } from '@/lib/gemini';
+import { invalidateDailyTopNames } from '@/lib/gemini';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Falsches Passwort.' }, { status: 401 });
   }
 
-  const data = await refreshDailyTopNames();
-  return NextResponse.json(data);
+  invalidateDailyTopNames();
+  return NextResponse.json({ revalidated: true }, {
+    headers: { 'Cache-Control': 'no-store' },
+  });
 }

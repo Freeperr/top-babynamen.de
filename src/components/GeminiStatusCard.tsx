@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { RefreshCw, ShieldCheck, Sparkles, Lock } from 'lucide-react';
+import { loadDailyNames } from '@/lib/dailyNamesClient';
 
 interface StatusCheck {
   key: string;
@@ -78,6 +79,7 @@ export default function GeminiStatusCard() {
         if (!res.ok) {
           throw new Error(body?.error || `HTTP ${res.status}`);
         }
+        await loadDailyNames(true);
         setRefreshDone(true);
         setPassword('');
         void load();

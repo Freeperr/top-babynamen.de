@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Sparkles, Heart, RotateCcw, ArrowRight } from 'lucide-react';
+import { Sparkles, Heart, ArrowRight } from 'lucide-react';
 import { BABY_NAMES } from '@/data/names';
 import { BabyName } from '@/types/name';
 import { useFavorites } from '@/context/FavoritesContext';

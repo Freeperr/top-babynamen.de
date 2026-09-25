@@ -79,9 +79,12 @@ export default function NameDirectory({ title, description, fixedGender }: NameD
   const PAGE_SIZE = 60;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  useEffect(() => {
+  const filterKey = JSON.stringify([query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy]);
+  const [previousFilterKey, setPreviousFilterKey] = useState(filterKey);
+  if (filterKey !== previousFilterKey) {
+    setPreviousFilterKey(filterKey);
     setVisibleCount(PAGE_SIZE);
-  }, [query, selectedGender, selectedLetter, selectedLength, selectedOrigin, selectedStyle, sortBy]);
+  }
 
   const visibleNames = filtered.slice(0, visibleCount);
 

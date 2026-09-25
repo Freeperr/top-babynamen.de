@@ -3,8 +3,12 @@ export type ConsentChoice = 'all' | 'essential';
 export const CONSENT_KEY = 'top_babynamen_cookie_consent_v1';
 
 // Publisher-ID aus ads.txt (pub-5816871570097122) bzw. überschrieben per Env
-const ADSENSE_CLIENT =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() || 'pub-5816871570097122';
+const configuredClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
+  process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT?.trim() || 'ca-pub-5816871570097122';
+export const ADSENSE_CLIENT = configuredClient.startsWith('pub-')
+  ? `ca-${configuredClient}` : configuredClient;
+export const CONSENT_EVENT = 'cookie-consent-changed';
+let activeConsent: ConsentChoice | null = null;
 
 const ADSENSE_SRC = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
 
@@ -18,7 +22,7 @@ function consentParams(allowed: boolean): Record<string, string> {
     ad_storage: allowed ? 'granted' : 'denied',
     ad_user_data: allowed ? 'granted' : 'denied',
     ad_personalization: allowed ? 'granted' : 'denied',
-    analytics_storage: allowed ? 'granted' : 'denied',
+    analytics_storage: 'denied',
   };
 }
 
@@ -32,6 +36,7 @@ export function getStoredConsent(): ConsentChoice | null {
 }
 
 export function storeConsent(choice: ConsentChoice): void {
+  activeConsent = choice;
   try {
     localStorage.setItem(CONSENT_KEY, choice);
   } catch {
@@ -40,6 +45,7 @@ export function storeConsent(choice: ConsentChoice): void {
 }
 
 export function clearConsent(): void {
+  activeConsent = null;
   try {
     localStorage.removeItem(CONSENT_KEY);
   } catch {
@@ -78,15 +84,23 @@ function removeAdsense(): void {
   if (script && script.parentNode) script.parentNode.removeChild(script);
 }
 
-// Zustimmung übernehmen: Consent-Mode aktualisieren + AdSense ggf. laden.
-// Ohne Zustimmung wird AdSense nie geladen (Rechtskonform).
+export function getActiveConsent(): ConsentChoice | null {
+  return activeConsent ?? getStoredConsent();
+}
+
+// Removing a script element does not stop code already executed by AdSense.
+// Reload after withdrawal to discard its timers, listeners and injected frames.
 export function applyConsent(choice: ConsentChoice): void {
+  activeConsent = choice;
   updateConsentMode(choice);
   if (choice === 'all') {
     injectAdsense();
   } else {
+    const wasLoaded = Boolean(document.getElementById('adsense-script'));
     removeAdsense();
+    if (wasLoaded) window.location.reload();
   }
+  window.dispatchEvent(new Event(CONSENT_EVENT));
 }
 
 // Widerruf / erneutes Öffnen des Banners: zurück auf "denied", AdSense entfernen.

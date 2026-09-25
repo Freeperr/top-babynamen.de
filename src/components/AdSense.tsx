@@ -1,10 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-const ADSENSE_CLIENT =
-  process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT || 'ca-pub-5816871570097122';
-export const ADS_CONSENT_KEY = 'top-babynamen-ads-consent';
+import { ADSENSE_CLIENT, CONSENT_EVENT, getActiveConsent } from '@/lib/consent';
 
 interface AdSenseProps {
   slot: string;
@@ -17,15 +14,15 @@ export default function AdSense({ slot, format = 'auto', className = '' }: AdSen
 
   useEffect(() => {
     const updateConsent = () => {
-      setConsent(window.localStorage.getItem(ADS_CONSENT_KEY) === 'accepted');
+      setConsent(getActiveConsent() === 'all');
     };
 
     updateConsent();
-    window.addEventListener('ads-consent-changed', updateConsent);
-    return () => window.removeEventListener('ads-consent-changed', updateConsent);
+    window.addEventListener(CONSENT_EVENT, updateConsent);
+    return () => window.removeEventListener(CONSENT_EVENT, updateConsent);
   }, []);
 
-  if (!ADSENSE_CLIENT || !consent) {
+  if (!ADSENSE_CLIENT || !consent || !slot) {
     return null;
   }
 

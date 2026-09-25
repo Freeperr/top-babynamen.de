@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo, useSyncExternalStore, useRef, useEffect } from 'react';
 import { BabyName } from '@/types/name';
 import { ALL_NAMES } from '@/data/namesExtended';
 import { Heart, X } from 'lucide-react';
@@ -18,31 +18,50 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 
 const STORAGE_KEY = 'top_babynamen_favorites_v1';
 
+let memorySnapshot = '[]';
+let storageUnavailable = false;
+const FAVORITES_EVENT = 'favorites-changed';
+function readFavorites() {
+  if (storageUnavailable) return memorySnapshot;
+  try { return localStorage.getItem(STORAGE_KEY) ?? '[]'; }
+  catch { return memorySnapshot; }
+}
+function subscribeFavorites(onChange: () => void) {
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY || event.key === null) onChange();
+  };
+  window.addEventListener('storage', onStorage);
+  window.addEventListener(FAVORITES_EVENT, onChange);
+  return () => {
+    window.removeEventListener('storage', onStorage);
+    window.removeEventListener(FAVORITES_EVENT, onChange);
+  };
+}
+
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          return Array.isArray(parsed) ? parsed : [];
-        }
-      } catch (e) {
-        console.warn('LocalStorage error:', e);
-      }
-    }
-    return [];
-  });
+  const snapshot = useSyncExternalStore(subscribeFavorites, readFavorites, () => '[]');
+  const favoriteIds = useMemo<string[]>(() => {
+    try {
+      const parsed: unknown = JSON.parse(snapshot);
+      return Array.isArray(parsed)
+        ? [...new Set(parsed.filter((id): id is string => typeof id === 'string').map((id) => id.toLowerCase()))]
+        : [];
+    } catch { return []; }
+  }, [snapshot]);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+  }, []);
 
   const [toastMessage, setToastMessage] = useState<{ text: string; action: 'add' | 'remove' } | null>(null);
 
   const saveFavorites = (ids: string[]) => {
-    setFavoriteIds(ids);
+    memorySnapshot = JSON.stringify(ids);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-    } catch (e) {
-      console.warn('Failed to save to localStorage', e);
-    }
+      if (ids.length) localStorage.setItem(STORAGE_KEY, memorySnapshot);
+      else localStorage.removeItem(STORAGE_KEY);
+    } catch { storageUnavailable = true; }
+    window.dispatchEvent(new Event(FAVORITES_EVENT));
   };
 
   const isFavorite = (id: string) => {
@@ -71,7 +90,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
   const showToast = (text: string, action: 'add' | 'remove') => {
     setToastMessage({ text, action });
-    setTimeout(() => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => {
       setToastMessage(null);
     }, 3000);
   };
